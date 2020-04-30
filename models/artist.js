@@ -1,10 +1,11 @@
-import BaseModel from './base'
-import User from './user'
+import { Model } from 'vue-mc'
+import User from './User'
 import Media from './media'
 
-export default class Artist extends BaseModel {
+export default class Artist extends Model {
   defaults() {
     return {
+      id: null,
       user: new User(),
       name: '',
       company_name: '',

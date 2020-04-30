@@ -1,8 +1,9 @@
-import BaseModel from './base'
+import { Model } from 'vue-mc'
 
-export default class Media extends BaseModel {
+export default class Media extends Model {
   defaults() {
     return {
+      id: null,
       type: '',
       name: '',
       subtitle: '',

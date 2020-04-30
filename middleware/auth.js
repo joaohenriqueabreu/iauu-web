@@ -1,5 +1,5 @@
-// import store from '~/store'
-
-export default function({ store }) {
-  console.log(store)
+export default function({ store, redirect }) {
+  if (!store.getters['auth/isLoggedIn']) {
+    redirect('/login')
+  }
 }

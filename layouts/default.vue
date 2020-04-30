@@ -1,55 +1,73 @@
 <template>
-  <div>
-    <nuxt />
+  <div :class="theme" class="app">
+    <header>
+      <nav>
+        <h1>this is a header</h1>
+      </nav>
+    </header>
+    <perfect-scrollbar>
+      <main>
+        <nuxt />
+      </main>
+      <footer>
+        <h1>this is a footer</h1>
+      </footer>
+    </perfect-scrollbar>
   </div>
 </template>
 
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+<script>
+import { mapState } from 'vuex'
+export default {
+  computed: {
+    ...mapState({ theme: (state) => state.layout.theme })
+  }
 }
+</script>
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-}
+<style lang="scss" scoped>
+.app {
+  position: relative;
+  max-height: 100vh;
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
+  header {
+    height: 10vh;
+    position: relative;
+    box-shadow: $shadow;
+    z-index: $above;
+    padding: 10px;
+    nav {
+    }
+  }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
+  main {
+    height: 90vh;
+  }
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
+  .ps {
+    position: relative;
+    max-height: 100vh;
+  }
 
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+  footer {
+    position: absolute;
+    // bottom: 0  ;
+    height: 10vh;
+    width: 100%;
+  }
+
+  &.dark {
+    background: $darkElevated;
+    main {
+      background: $darkBG;
+    }
+  }
+
+  &.bright {
+    background: $brightAlt;
+    main {
+      background: $brightBG;
+    }
+  }
 }
 </style>

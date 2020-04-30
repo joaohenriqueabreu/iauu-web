@@ -1,6 +1,5 @@
 import { Model } from 'vue-mc'
-import Media from './Media'
-import Location from './Location'
+import Media from './media'
 
 export default class User extends Model {
   defaults() {
@@ -9,15 +8,12 @@ export default class User extends Model {
       public_name: '',
       token: '',
       type: '',
-      private: {
-        first_name: '',
-        last_name: '',
-        photo: new Media(),
-        location: new Location(),
-        phone: '',
-        password: '',
-        email: ''
-      }
+      first_name: '',
+      last_name: '',
+      photo: new Media(),
+      phone: '',
+      password: '',
+      email: ''
     }
   }
 }

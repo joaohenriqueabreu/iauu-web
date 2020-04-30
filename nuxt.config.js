@@ -24,14 +24,18 @@ export default {
    ** Global CSS
    */
   css: ['@/assets/scss/main.scss'],
-  modules: ['@nuxtjs/style-resources'],
   styleResources: {
-    scss: ['assets/scss/lib/_colors.scss', 'assets/scss/lib/_variables.scss']
+    scss: [
+      '@/assets/scss/lib/_transitions.scss',
+      '@/assets/scss/lib/_fonts.scss',
+      '@/assets/scss/lib/_colors.scss',
+      '@/assets/scss/lib/_variables.scss'
+    ]
   },
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [{ src: '@/plugins/ui', mode: 'client' }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -47,7 +51,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/style-resources'
   ],
   /*
    ** Axios module configuration
@@ -62,6 +67,5 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  },
-  dev: process.env.NODE_ENV !== 'production'
+  }
 }
