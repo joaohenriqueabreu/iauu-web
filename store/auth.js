@@ -2,15 +2,27 @@ import User from '@/models/user'
 
 export const state = () => ({
   user: new User({
-    id: 123, // TODO temp for now
     type: process.browser ? localStorage.getItem('type') : null,
     token: process.browser ? localStorage.getItem('token') : null
   })
 })
 
-export const mutations = {}
+export const mutations = {
+  set_user(state, userData) {
+    state.user = new User(userData)
+  }
+}
 
-export const actions = {}
+export const actions = {
+  async login({ commit }, credentials) {
+    const response = await this.$http.post('login', credentials)
+    if (process.client) {
+      localStorage.setItem('token', response.data.token)
+    }
+
+    commit('set_user', response.data)
+  }
+}
 
 export const getters = {
   isLoggedIn: (state) => state.user.id !== null,

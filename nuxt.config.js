@@ -26,8 +26,7 @@ export default {
   css: [
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css',
-    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
-    '@/assets/scss/main.scss'
+    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
   ],
   styleResources: {
     scss: [
@@ -35,7 +34,9 @@ export default {
       '@/assets/scss/lib/_fonts.scss',
       '@/assets/scss/lib/_colors.scss',
       '@/assets/scss/lib/_variables.scss',
-      '@/assets/scss/lib/_responsive.scss'
+      '@/assets/scss/lib/_responsive.scss',
+      'bootstrap/scss/bootstrap',
+      '@/assets/scss/main.scss'
     ]
   },
   /*

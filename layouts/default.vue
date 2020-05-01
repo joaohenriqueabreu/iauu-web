@@ -1,7 +1,7 @@
 <template>
-  <div class="theme" class="page">
+  <div :class="theme" class="page">
     <header>
-      <transparent-nav ref="nav"></transparent-nav>
+      <landing-nav ref="nav"></landing-nav>
     </header>
     <main>
       <nuxt />
@@ -14,10 +14,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import TransparentNav from '@/components/menu/transparentNav'
+import LandingNav from '@/components/menu/landingNav'
 export default {
   components: {
-    'transparent-nav': TransparentNav
+    'landing-nav': LandingNav
   },
   computed: {
     ...mapState({ theme: (state) => state.layout.theme })
@@ -31,7 +31,17 @@ header {
   width: 100vw;
   z-index: $above;
 }
+
+header {
+  height: 10vh;
+}
+
 main {
-  min-height: 400vh;
+  height: 100vh;
+  padding-top: 10vh;
+}
+
+footer {
+  height: 20vh;
 }
 </style>

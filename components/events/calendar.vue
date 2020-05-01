@@ -1,19 +1,26 @@
 <template>
   <FullCalendar
+    theme="bootstrap"
     default-view="timeGridWeek"
     locale="pt-br"
     :plugins="calendarPlugins"
     content-height="auto"
     height="parent"
     width="parent"
+    :aspect-ratio="0.5"
+    :select-long-press-delay="250"
+    :events="calendarEvents"
+    slot-duration="02:00:00"
+    slot-label-interval="04:00:00"
     :selectable="true"
     :editable="true"
     :event-overlap="false"
-    :select-long-press-delay="250"
-    :events="calendarEvents"
+    :now-indicator="false"
+    :all-day-slot="false"
+    :show-non-current-dates="false"
+    :column-header-format="columnHeaderFormat"
+    :slot-label-format="slotLabelFormat"
     :event-time-format="eventTimeFormat"
-    slot-duration="02:00:00"
-    :now-indicator="true"
     @dateClick="clickCallback"
   />
 </template>
@@ -23,6 +30,7 @@ import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import bootstrapPlugin from '@fullcalendar/bootstrap'
 import moment from 'moment'
 
 export default {
@@ -35,17 +43,38 @@ export default {
   },
   data() {
     return {
-      calendarPlugins: [interactionPlugin, dayGridPlugin, timeGridPlugin],
+      calendarPlugins: [
+        interactionPlugin,
+        dayGridPlugin,
+        timeGridPlugin,
+        bootstrapPlugin
+      ],
       calendarEvents: []
     }
   },
   computed: {
+    slotLabelFormat: () => {
+      return {
+        hour: 'numeric',
+        minute: '2-digit',
+        omitZeroMinute: false,
+        meridiem: 'short'
+      }
+    },
     eventTimeFormat: () => {
       return {
         hour: 'numeric',
         minute: '2-digit',
-        omitZeroMinute: true,
+        omitZeroMinute: false,
         meridiem: 'short'
+      }
+    },
+    columnHeaderFormat: () => {
+      return {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        omitCommas: 'false'
       }
     }
   },
@@ -56,11 +85,85 @@ export default {
         title: 'some random event',
         start: moment(timeslot.start_dt).toISOString(),
         end: moment(timeslot.end_dt).toISOString(),
-        extendedProps: { id: timeslot.id }
+        extendedProps: { id: timeslot.id },
+        // Layout settings
+        classNames: ['event', timeslot.type]
       })
     })
   }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.event {
+  border: none;
+  box-shadow: $shadow;
+  border-radius: 5px;
+  padding: 5px;
+  background-clip: none;
+  font-size: $small;
+
+  // Make events fill 100% of container
+  margin-right: 5px;
+  margin-bottom: 5px;
+  left: 0% !important;
+  right: 0% !important;
+  &.proposal {
+    background: rgb(100, 100, 200);
+  }
+
+  &.presentation {
+    background: rgb(100, 200, 100);
+  }
+
+  &.unavailable {
+    background: rgb(200, 100, 100);
+  }
+}
+
+// Full calendar overrides
+.fc-view-container {
+  background: $darkComponent;
+  box-shadow: $shadow;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.fc-unthemed {
+  .fc-content,
+  .fc-divider,
+  .fc-list-heading,
+  .fc-list-heading td,
+  .fc-list-view,
+  .fc-popover,
+  .fc-row,
+  .fc-today,
+  tbody,
+  thead,
+  th,
+  tr,
+  td {
+    border: none;
+    box-shadow: none;
+  }
+}
+
+th.fc-axis,
+.fc-axis.fc-time {
+  font-weight: $bold;
+}
+
+.fc-time-grid .fc-slats {
+  border: none;
+}
+
+.fc {
+  .fc-day-header,
+  td {
+    &.fc-today {
+      background: rgb(65, 65, 65);
+      border: none;
+    }
+  }
+}
+</style>

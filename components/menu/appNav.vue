@@ -1,19 +1,17 @@
 <template>
-  <nav class="navbar d-flex justify-content-between">
-    <nuxt-link to="/">
-      <logo :height="50" :width="50"></logo>
-    </nuxt-link>
-
-    <avatar :src="user.photo.url" :username="user.name"></avatar>
+  <nav class="navbar d-flex justify-content-end">
+    <div>
+      <menu-manager></menu-manager>
+    </div>
   </nav>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import logo from '@/components/Logo'
+import MenuManager from '@/components/menu/menuManager'
 export default {
   components: {
-    logo
+    'menu-manager': MenuManager
   },
   computed: {
     ...mapState({ user: (state) => state.auth.user })

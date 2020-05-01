@@ -1,11 +1,56 @@
 <template>
-  <div>
-    <h1>This is a login page</h1>
+  <div class="content">
+    <div class="bg"></div>
+    <form @submit.prevent="submit">
+      <h5>Entre</h5>
+      <form-input v-model="credentials.email"></form-input>
+      <form-input v-model="credentials.password" type="password"></form-input>
+      <submit-button :submit-callback="submit">Login</submit-button>
+    </form>
   </div>
 </template>
 
 <script>
-export default {}
+import { mapActions } from 'vuex'
+export default {
+  data() {
+    return {
+      credentials: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    ...mapActions('auth', ['login']),
+    async submit() {
+      await this.login(this.credentials)
+      this.$router.push('/artist')
+    }
+  }
+}
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.content {
+  @extend .vertical, .middle, .center;
+  position: relative;
+  height: 100%;
+
+  form {
+    z-index: $above;
+  }
+  .bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url('~assets/img/concert.png');
+    height: 100%;
+    width: 100%;
+    opacity: 0.2;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+</style>

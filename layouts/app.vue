@@ -1,29 +1,29 @@
 <template>
   <div :class="theme" class="page">
-    <header>
-      <app-nav></app-nav>
-    </header>
-    <!-- <perfect-scrollbar class="horizontal"> -->
     <div class="horizontal">
       <aside :class="theme">
         <side-menu></side-menu>
       </aside>
-      <main>
-        <nuxt />
-      </main>
+      <div class="vertical">
+        <main>
+          <header class="d-flex justify-content-end">
+            <menu-manager></menu-manager>
+          </header>
+          <nuxt />
+        </main>
+      </div>
     </div>
-    <!-- </perfect-scrollbar> -->
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import AppNav from '@/components/menu/appNav'
+import MenuManager from '@/components/menu/menuManager'
 import SideMenu from '@/components/menu/sideMenu'
 export default {
   components: {
     'side-menu': SideMenu,
-    'app-nav': AppNav
+    'menu-manager': MenuManager
   },
   computed: {
     ...mapState({ theme: (state) => state.layout.theme })
@@ -32,10 +32,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+header {
+  position: relative;
+  height: 10vh;
+  padding: 10px 0;
+}
+
 main {
-  padding: 20px;
+  padding: 0 20px;
   @include desktop {
-    width: 82vw;
+    width: 85vw;
+    min-height: 100vh;
+    overflow: auto;
   }
 
   @include mobile {
@@ -43,9 +51,8 @@ main {
   }
 }
 aside {
-  padding: 50px 10px;
   @include desktop {
-    width: 13vw;
+    width: 15vw;
   }
 
   @include mobile {

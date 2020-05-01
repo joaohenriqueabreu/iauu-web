@@ -1,23 +1,27 @@
 <template>
-  <nav :class="theme">
-    <logo :height="50" :width="50"></logo>
+  <nav :class="theme" class="navbar d-flex justify-content-between">
+    <div>
+      <nuxt-link to="/">
+        <logo :height="50" :width="50"></logo>
+      </nuxt-link>
+    </div>
+    <div>
+      <menu-manager></menu-manager>
+    </div>
   </nav>
 </template>
 
 <script>
 import logo from '@/components/Logo'
+import MenuManager from '@/components/menu/menuManager'
 export default {
   components: {
-    logo
+    logo,
+    'menu-manager': MenuManager
   },
   data() {
     return {
       theme: ''
-    }
-  },
-  methods: {
-    onScroll(event, position) {
-      alert(position)
     }
   }
 }
