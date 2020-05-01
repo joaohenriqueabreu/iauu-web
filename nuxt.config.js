@@ -23,19 +23,30 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['@/assets/scss/main.scss'],
+  css: [
+    'bootstrap/dist/css/bootstrap.css',
+    'bootstrap-vue/dist/bootstrap-vue.css',
+    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
+    '@/assets/scss/main.scss'
+  ],
   styleResources: {
     scss: [
       '@/assets/scss/lib/_transitions.scss',
       '@/assets/scss/lib/_fonts.scss',
       '@/assets/scss/lib/_colors.scss',
-      '@/assets/scss/lib/_variables.scss'
+      '@/assets/scss/lib/_variables.scss',
+      '@/assets/scss/lib/_responsive.scss'
     ]
   },
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '@/plugins/ui', mode: 'client' }],
+  plugins: [
+    { src: '@/plugins/http' },
+    { src: '@/plugins/ui', mode: 'client' },
+    { src: '@/plugins/icons', mode: 'client' },
+    { src: '@/plugins/full-calendar', ssr: false }
+  ],
   /*
    ** Nuxt.js dev-modules
    */

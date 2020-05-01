@@ -13,3 +13,101 @@ html {
 body {
   margin: 0;
 }
+
+header {
+	height: 10vh;
+	position: relative;        	
+}
+
+main {		
+	position: relative;	
+	height: 90vh;		
+	padding: 10px;
+	-moz-box-shadow: 0 0 10px rgb(150, 150, 150);
+	-webkit-box-shadow: 0 0 10px rgb(150, 150, 150);
+	box-shadow: 0 0 10px rgb(10, 10, 10);	
+}
+
+aside {	
+	position: relative;        
+}
+
+a {
+	text-decoration: none;
+	font-weight: $bold;
+	&:hover {
+		transition: $transition;			
+		text-decoration: none;  
+	}                  
+}
+
+[data-icon] {
+	margin-right: $space;
+}
+
+p, span, a {
+	font-size: $regular;
+}
+
+.ps {
+	position: relative;
+	max-height: 100vh;
+}
+
+footer {
+	position: absolute;
+	// bottom: 0  ;
+	height: 10vh;
+	width: 100%;
+}
+
+// General layout setting
+.page {
+  position: relative;
+  max-height: 100vh;
+
+  &.dark {
+    background: $darkBG;
+    main {
+      background: $darkElevated;
+		}		
+
+		h1, h2, h3, h4, h5, h6, p, span, a {
+			color: $brandFont;
+		}				
+  }
+
+  &.light {
+    background: $lightAlt;
+    main {
+      background: $lightBG;
+		}
+  }
+}
+
+// General positioning styles
+.vertical {
+	display: flex;
+	flex-direction: column;
+
+	&.center {
+			align-items: center;
+	}
+
+	&.middle {
+			justify-content: center;
+	}
+}
+
+.horizontal {
+	display: flex;
+	flex-direction: row;
+
+	&.center {
+			justify-content: center;
+	}
+
+	&.middle {
+			align-items: center;
+	}
+}

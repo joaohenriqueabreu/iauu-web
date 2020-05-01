@@ -1,11 +1,10 @@
 import { Model } from 'vue-mc'
 
-export default class Rating extends Model {
+export default class Schedule extends Model {
   defaults() {
     return {
       id: null,
-      rate: 0,
-      feedback: ''
+      timeslots: []
     }
   }
 }

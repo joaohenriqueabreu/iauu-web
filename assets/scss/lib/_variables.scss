@@ -1,11 +1,21 @@
-// For paddings and margins
-$space: 1rem;
-
 // Shadow
 $shadow: 0 6px 8px rgba(0, 0, 0, 0.15); 
 
 // Transition effects
 $transition: all 0.5s ease;
 
-// z-index positioning
-$above: 10;
+// For z-index
+$above:     10;
+$moveToTop: 100;
+$below:     -1;
+
+// Spacing 
+$space: 0.5rem;
+
+// font-sizes
+$small: 10px;
+$regular: 12px;
+$large: 15px;
+$huge: 20px;
+
+$bold: 700;
