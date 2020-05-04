@@ -2,10 +2,12 @@
   <div>
     <h2>Sua Agenda</h2>
     <div v-if="timeslots">
-      <full-calendar
-        :timeslots="timeslots"
-        :click-callback="select"
-      ></full-calendar>
+      <perfect-scrollbar>
+        <full-calendar
+          :timeslots="timeslots"
+          :click-callback="select"
+        ></full-calendar>
+      </perfect-scrollbar>
     </div>
   </div>
 </template>

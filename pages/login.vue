@@ -38,13 +38,24 @@ export default {
   height: 100%;
 
   form {
+    @extend .vertical, .middle;
+    padding: 3 * $space;
     z-index: $above;
+    min-height: 50vh;
+    min-width: 25vw;
+    background: $darkElevated;
+    box-shadow: $shadow;
+
+    input {
+      width: 100%;
+    }
   }
+
   .bg {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/img/concert.png');
+    background-image: url('~assets/imgs/concert.png');
     height: 100%;
     width: 100%;
     opacity: 0.2;

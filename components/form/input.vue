@@ -1,8 +1,11 @@
 <template>
   <div>
+    <label :for="name"></label>
     <input
       :value="value"
       :type="type"
+      :name="name"
+      :placeholder="placeholder"
       @input="$emit('input', $event.target.value)"
     />
   </div>
@@ -12,6 +15,8 @@
 export default {
   props: {
     value: { type: [String, Number], default: '' },
+    name: { type: String, default: '' },
+    placeholder: { type: String, default: '' },
     type: { type: String, default: 'text' }
   }
 }
@@ -26,6 +31,7 @@ label {
 
 input,
 textarea {
+  width: 100%;
   border: 2px solid $white;
   border-radius: 10px;
   outline-color: transparent;

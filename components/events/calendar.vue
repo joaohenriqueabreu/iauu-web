@@ -1,7 +1,7 @@
 <template>
   <FullCalendar
     theme="bootstrap"
-    default-view="timeGridWeek"
+    default-view="dayGridMonth"
     locale="pt-br"
     :plugins="calendarPlugins"
     content-height="auto"
@@ -10,14 +10,16 @@
     :aspect-ratio="0.5"
     :select-long-press-delay="250"
     :events="calendarEvents"
-    slot-duration="02:00:00"
+    slot-duration="01:00:00"
     slot-label-interval="04:00:00"
     :selectable="true"
     :editable="true"
-    :event-overlap="false"
+    :event-overlap="true"
     :now-indicator="false"
     :all-day-slot="false"
     :show-non-current-dates="false"
+    :header="headerButtons"
+    :button-text="buttonText"
     :column-header-format="columnHeaderFormat"
     :slot-label-format="slotLabelFormat"
     :event-time-format="eventTimeFormat"
@@ -53,6 +55,25 @@ export default {
     }
   },
   computed: {
+    headerButtons: () => {
+      return {
+        left: 'title',
+        center: '',
+        right: 'timeWeekGrid, today, prev, next'
+      }
+    },
+    buttonText: () => {
+      return {
+        today: 'Hoje',
+        month: 'Mês',
+        week: 'Semana',
+        day: 'Dia',
+        timeWeekGrid: 'Ver semana'
+      }
+    },
+    titleFormat: () => {
+      return {}
+    },
     slotLabelFormat: () => {
       return {
         hour: 'numeric',
@@ -72,7 +93,7 @@ export default {
     columnHeaderFormat: () => {
       return {
         weekday: 'short',
-        month: 'short',
+        month: 'numeric',
         day: 'numeric',
         omitCommas: 'false'
       }
@@ -97,7 +118,7 @@ export default {
 <style lang="scss">
 .event {
   border: none;
-  box-shadow: $shadow;
+  box-shadow: $lightShadow;
   border-radius: 5px;
   padding: 5px;
   background-clip: none;
@@ -122,6 +143,10 @@ export default {
 }
 
 // Full calendar overrides
+td {
+  cursor: pointer;
+}
+
 .fc-view-container {
   background: $darkComponent;
   box-shadow: $shadow;
@@ -138,6 +163,8 @@ export default {
   .fc-popover,
   .fc-row,
   .fc-today,
+  .fc-widget-header,
+  .fc-axis,
   tbody,
   thead,
   th,
@@ -157,6 +184,18 @@ th.fc-axis,
   border: none;
 }
 
+.fc-time-grid .fc-slats .fc-minor td {
+  // border-top: 0.5px solid rgba(100, 100, 100, 0.2);
+  border: none;
+}
+
+// fc-axis fc-widget-header
+
+td:not(.fc-minor) {
+  border-top: 0.5px solid rgba(100, 100, 100, 0.2);
+  // border: none;
+}
+
 .fc {
   .fc-day-header,
   td {
@@ -165,5 +204,10 @@ th.fc-axis,
       border: none;
     }
   }
+}
+
+.fc-unthemed .fc-disabled-day {
+  background: transparent;
+  cursor: default;
 }
 </style>
