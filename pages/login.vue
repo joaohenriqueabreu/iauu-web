@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="bg"></div>
-    <form @submit.prevent="submit">
+    <form>
       <h5>Entre</h5>
       <form-input v-model="credentials.email"></form-input>
       <form-input v-model="credentials.password" type="password"></form-input>

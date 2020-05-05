@@ -1,5 +1,6 @@
 <template>
   <FullCalendar
+    ref="fullcalendar"
     theme="bootstrap"
     default-view="dayGridMonth"
     locale="pt-br"
@@ -99,18 +100,30 @@ export default {
       }
     }
   },
+  watch: {
+    timeslots(data) {
+      this.calendarEvents.push(
+        this.formatFullcalendarTimeslot(data[data.length - 1])
+      )
+    }
+  },
   mounted() {
     // Convert provided timeslots into full-calender format
     this.timeslots.forEach((timeslot) => {
-      this.calendarEvents.push({
+      this.calendarEvents.push(this.formatFullcalendarTimeslot(timeslot))
+    })
+  },
+  methods: {
+    formatFullcalendarTimeslot: (timeslot) => {
+      return {
         title: 'some random event',
         start: moment(timeslot.start_dt).toISOString(),
         end: moment(timeslot.end_dt).toISOString(),
         extendedProps: { id: timeslot.id },
         // Layout settings
         classNames: ['event', timeslot.type]
-      })
-    })
+      }
+    }
   }
 }
 </script>
@@ -149,9 +162,10 @@ td {
 
 .fc-view-container {
   background: $darkComponent;
-  box-shadow: $shadow;
+  box-shadow: $higherShadow;
   border-radius: 5px;
   padding: 10px;
+  margin-bottom: 3 * $space;
 }
 
 .fc-unthemed {

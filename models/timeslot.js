@@ -6,7 +6,9 @@ export default class Timeslot extends Model {
       id: null,
       start_dt: null,
       end_dt: null,
-      type: null
+      type: null,
+      full_day: false,
+      frequency: null
     }
   }
 }

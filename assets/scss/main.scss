@@ -19,22 +19,13 @@ h1, h2, h3, h4, h5, h6 {
 	text-transform: capitalize;
 }
 
-header {
-	height: 10vh;
-	position: relative;        	
+.content {
+	position: relative;
+	height: 100vh;
 }
 
-main {		
-	position: relative;	
-	height: 90vh;		
-	padding: 10px;
-	-moz-box-shadow: 0 0 10px rgb(150, 150, 150);
-	-webkit-box-shadow: 0 0 10px rgb(150, 150, 150);
-	box-shadow: 0 0 10px rgb(10, 10, 10);	
-}
-
-aside {	
-	position: relative;        
+main {			
+	background: $darkElevated;
 }
 
 a {
@@ -47,7 +38,16 @@ a {
 }
 
 [data-icon] {
-	margin-right: $space;
+	margin-right: 2* $space;
+}
+
+h1, h2, h3, h4, h5, h6, a {
+	color: $brand;
+	font-weight: $bold;
+}				
+
+p, span, small {
+	color: $brand;
 }
 
 p, span, a {
@@ -59,13 +59,6 @@ p, span, a {
 	max-height: 100vh;
 }
 
-footer {
-	position: absolute;
-	// bottom: 0  ;
-	height: 10vh;
-	width: 100%;
-}
-
 // General layout setting
 .page {
   position: relative;
@@ -75,10 +68,6 @@ footer {
     background: $darkBG;
     main {
       background: $darkElevated;
-		}		
-
-		h1, h2, h3, h4, h5, h6, p, span, a, small {
-			color: $brandFont;
 		}				
   }
 
@@ -115,4 +104,8 @@ footer {
 	&.middle {
 			align-items: center;
 	}
+}
+
+.clickable {
+	cursor: pointer;
 }

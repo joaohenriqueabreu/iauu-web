@@ -1,14 +1,11 @@
 <template>
   <div>
-    <label :for="name">{{ label }}</label>
-    <input
-      :value="value"
-      :type="type"
-      :name="name"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      @input="$emit('input', $event.target.value)"
-    />
+    <label :for="name"></label>
+    <select :name="name">
+      <option v-for="(option, index) in options" :key="index">{{
+        option
+      }}</option>
+    </select>
     <font-awesome v-if="icon" icon="icon"></font-awesome>
   </div>
 </template>
@@ -16,13 +13,9 @@
 <script>
 export default {
   props: {
-    value: { type: [String, Number, Boolean], default: null },
+    options: { type: Array, default: () => [] },
     name: { type: String, default: '' },
-    label: { type: String, default: '' },
-    placeholder: { type: String, default: '' },
-    type: { type: String, default: 'text' },
-    icon: { type: String, default: null },
-    disabled: { type: Boolean, default: false }
+    icon: { type: String, default: 'arrow-down' }
   }
 }
 </script>
@@ -34,16 +27,15 @@ label {
   color: $brand;
 }
 
-input,
-textarea {
+select {
   width: 100%;
-  // border: 2px solid $white;
   border: none;
   border-radius: 10px;
   outline-color: transparent;
   font-size: $regular;
   resize: none;
   background-color: $darkBG;
+  cursor: pointer;
   color: $white;
   font-weight: $bold;
   box-shadow: $lightShadow;
@@ -51,7 +43,7 @@ textarea {
   padding: 5px;
   margin-bottom: $space;
   &:focus {
-    outline-color: transparent;
+    outline-color: $darkBG;
   }
   &:hover {
     background-color: $darkBG;

@@ -4,13 +4,13 @@
       <div
         v-if="!submitted"
         key="submitting"
-        class="content"
+        class="button"
         @click="$refs.submit.click()"
       >
         <input ref="submit" type="submit" @click.prevent="submit" />
         <slot></slot>
       </div>
-      <div v-else key="submitted" class="content">
+      <div v-else key="submitted" class="button">
         <font-awesome icon="check"></font-awesome>
       </div>
     </fade-transition>
@@ -46,12 +46,14 @@ export default {
 input {
   display: none;
 }
-.content {
+
+.button {
   @extend .horizontal, .middle, .center;
   cursor: pointer;
   border-radius: $rounded;
   padding: 10px;
   width: 100%;
+  height: 100%;
   box-shadow: $shadow;
   background-color: $white;
   color: black;

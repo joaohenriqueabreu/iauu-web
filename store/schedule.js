@@ -11,6 +11,9 @@ export const mutations = {
     timeslots.forEach((timeslotData) =>
       state.schedule.timeslots.push(new Timeslot(timeslotData))
     )
+  },
+  append_timeslot(state, timeslotData) {
+    state.schedule.timeslots.push(new Timeslot(timeslotData))
   }
 }
 
@@ -18,6 +21,12 @@ export const actions = {
   async load({ commit }, id) {
     const response = await this.$http.get(`schedules/${id}`)
     commit('set_schedule', response.data)
+  },
+  async saveTimeslot({ commit }, { attributes: timeslotData }) {
+    const response = await this.$http.post('schedules', timeslotData)
+
+    // commits timeslot in the correct format
+    commit('append_timeslot', response.data)
   }
 }
 

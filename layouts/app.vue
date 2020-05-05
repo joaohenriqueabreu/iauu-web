@@ -1,17 +1,15 @@
 <template>
-  <div :class="theme" class="page">
-    <div class="horizontal">
-      <aside :class="theme">
-        <side-menu></side-menu>
-      </aside>
-      <div class="vertical">
-        <main>
-          <header class="d-flex justify-content-end">
-            <menu-manager></menu-manager>
-          </header>
-          <nuxt />
-        </main>
-      </div>
+  <div class="content">
+    <aside>
+      <side-menu></side-menu>
+    </aside>
+    <div class="vertical">
+      <main>
+        <header class="d-flex justify-content-end">
+          <menu-manager></menu-manager>
+        </header>
+        <nuxt />
+      </main>
     </div>
   </div>
 </template>
@@ -36,27 +34,39 @@ header {
   position: relative;
   height: 10vh;
   padding: 10px 0;
+  z-index: $moveToTop;
 }
 
 main {
+  position: relative;
   padding: 0 20px;
-  @include desktop {
-    width: 85vw;
-    min-height: 100vh;
-    overflow: auto;
-  }
+  min-height: 100vh;
+  overflow: auto;
 
-  @include mobile {
-    width: 100vw;
+  @include desktop {
+    margin-left: 15vw;
   }
 }
+
 aside {
+  background: $darkBG;
+  position: fixed;
+  left: 0;
+  z-index: $moveToTop;
   @include desktop {
+    display: flex;
+    flex-direction: column;
+    stop: 0;
     width: 15vw;
+    height: 100vh;
   }
 
   @include mobile {
-    display: none;
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    width: 100vw;
+    height: 10vh;
   }
 }
 </style>

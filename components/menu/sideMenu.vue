@@ -1,20 +1,34 @@
 <template>
   <div>
     <header>
-      <nuxt-link :to="scheduleLink" class="horizontal middle">
+      <nuxt-link :to="scheduleLink">
         <logo :height="50" :width="50"></logo>
         <h6>iauu</h6>
       </nuxt-link>
     </header>
     <main>
-      <nuxt-link :to="scheduleLink" class="horizontal">
+      <nuxt-link :to="scheduleLink">
         <font-awesome icon="calendar"></font-awesome>
+        <h6>Agenda</h6>
+      </nuxt-link>
+      <nuxt-link :to="scheduleLink">
+        <font-awesome icon="music"></font-awesome>
+        <h6>Apresentações</h6>
+      </nuxt-link>
+      <nuxt-link :to="scheduleLink">
+        <font-awesome icon="search-dollar"></font-awesome>
+        <h6>Propostas</h6>
       </nuxt-link>
     </main>
     <footer>
       <hr />
+      <nuxt-link :to="scheduleLink">
+        <font-awesome icon="user"></font-awesome>
+        <h6>Perfil</h6>
+      </nuxt-link>
       <nuxt-link to="/logout">
-        Sair
+        <font-awesome icon="times"></font-awesome>
+        <h6>Sair</h6>
       </nuxt-link>
     </footer>
   </div>
@@ -46,18 +60,56 @@ div {
   margin-right: 2 * $space;
 }
 
-header {
-  padding-top: 20px;
-  height: 20vh;
+[data-icon] {
+  color: $brand;
+  font-size: $huge;
 }
 
 main {
-  height: 70vh;
   background: none !important; // override main.scss
   box-shadow: none !important; // override main.scss
 }
 
-footer {
-  height: 10vh;
+@include desktop {
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    padding-top: 20px;
+    height: 20vh;
+  }
+
+  main {
+    height: 70vh;
+  }
+
+  footer {
+    height: 10vh;
+  }
+
+  a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 7 * $space;
+  }
+}
+
+@include mobile {
+  div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  a {
+    margin-right: 4 * $space;
+  }
+
+  h6,
+  hr {
+    display: none;
+  }
 }
 </style>

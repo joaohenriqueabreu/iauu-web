@@ -1,4 +1,25 @@
+body {
+    font-family: Gotham;
+    letter-spacing: -.05em;
+}
+
 @font-face {
     font-family: Gotham;
+    font-weight: regular;
+    font-style: normal;
+    src: url('~static/fonts/gotham/GothamRounded-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: 300;
+    font-style: normal;
     src: url('~static/fonts/gotham/GothamRounded-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: 700;
+    font-style: normal;
+    src: url('~static/fonts/gotham/GothamRounded-Bold.otf');
 }

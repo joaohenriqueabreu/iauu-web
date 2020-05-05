@@ -38,7 +38,9 @@ import {
   faTools,
   faListUl,
   faPhotoVideo,
-  faHeart
+  faHeart,
+  faMusic,
+  faSearchDollar
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope,
@@ -110,7 +112,9 @@ library.add(
   faComment,
   faQuestionCircle,
   faHeart,
-  faFrown
+  faFrown,
+  faMusic,
+  faSearchDollar
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)
