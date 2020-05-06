@@ -1,5 +1,5 @@
 import { Model } from 'vue-mc'
-import User from './User'
+import User from './user'
 import Media from './media'
 
 export default class Artist extends Model {

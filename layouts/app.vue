@@ -1,16 +1,19 @@
 <template>
   <div class="content">
-    <aside>
-      <side-menu></side-menu>
-    </aside>
-    <div class="vertical">
-      <main>
-        <header class="d-flex justify-content-end">
-          <menu-manager></menu-manager>
-        </header>
-        <nuxt />
-      </main>
-    </div>
+    <client-only>
+      <aside>
+        <side-menu></side-menu>
+      </aside>
+      <div class="vertical">
+        <main>
+          <header class="d-flex justify-content-end">
+            <menu-manager></menu-manager>
+          </header>
+
+          <nuxt />
+        </main>
+      </div>
+    </client-only>
   </div>
 </template>
 

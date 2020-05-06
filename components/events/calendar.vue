@@ -1,6 +1,7 @@
 <template>
   <FullCalendar
     ref="fullcalendar"
+    :events="calendarEvents"
     theme="bootstrap"
     default-view="dayGridMonth"
     locale="pt-br"
@@ -10,7 +11,6 @@
     width="parent"
     :aspect-ratio="0.5"
     :select-long-press-delay="250"
-    :events="calendarEvents"
     slot-duration="01:00:00"
     slot-label-interval="04:00:00"
     :selectable="true"
@@ -18,13 +18,15 @@
     :event-overlap="true"
     :now-indicator="false"
     :all-day-slot="false"
+    :all-day-maintain-duration="true"
     :show-non-current-dates="false"
     :header="headerButtons"
     :button-text="buttonText"
     :column-header-format="columnHeaderFormat"
     :slot-label-format="slotLabelFormat"
     :event-time-format="eventTimeFormat"
-    @dateClick="clickCallback"
+    @dateClick="dateClickCallback"
+    @eventClick="eventClickCallback"
   />
 </template>
 
@@ -42,7 +44,8 @@ export default {
   },
   props: {
     timeslots: { type: Array, default: () => [] },
-    clickCallback: { type: Function, default: () => {} }
+    dateClickCallback: { type: Function, default: () => {} },
+    eventClickCallback: { type: Function, default: () => {} }
   },
   data() {
     return {
@@ -115,14 +118,20 @@ export default {
   },
   methods: {
     formatFullcalendarTimeslot: (timeslot) => {
-      return {
+      const fullcalendarEvent = {
         title: 'some random event',
         start: moment(timeslot.start_dt).toISOString(),
-        end: moment(timeslot.end_dt).toISOString(),
-        extendedProps: { id: timeslot.id },
+        extendedProps: { id: timeslot.id, type: timeslot.type },
         // Layout settings
         classNames: ['event', timeslot.type]
       }
+
+      fullcalendarEvent.allDay = timeslot.full_day
+      if (!timeslot.full_day) {
+        fullcalendarEvent.end = moment(timeslot.end_dt).toISOString()
+      }
+
+      return fullcalendarEvent
     }
   }
 }
@@ -151,13 +160,24 @@ export default {
   }
 
   &.unavailable {
-    background: rgb(200, 100, 100);
+    background: $darkElevated;
+    box-shadow: none;
+    margin-right: 0;
+    margin-bottom: 0;
+    span {
+      color: $darkElevated;
+    }
   }
 }
 
 // Full calendar overrides
 td {
   cursor: pointer;
+}
+
+.fc-event-container:has(.unavailable) {
+  background: red;
+  cursor: default;
 }
 
 .fc-view-container {

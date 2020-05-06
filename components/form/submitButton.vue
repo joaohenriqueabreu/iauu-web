@@ -49,6 +49,7 @@ input {
 
 .button {
   @extend .horizontal, .middle, .center;
+  transition: $transition;
   cursor: pointer;
   border-radius: $rounded;
   padding: 10px;
@@ -60,6 +61,7 @@ input {
   font-weight: $bold;
   border: none;
   outline: none;
+  min-width: 150px;
 
   &:focus,
   &:active {
@@ -68,7 +70,8 @@ input {
 
   &:hover {
     transition: $transition;
-    // color: $darkWhite;
+    background: transparentize($brand2, 0.1);
+    box-shadow: $higherShadow;
   }
   [data-icon] {
     color: black;

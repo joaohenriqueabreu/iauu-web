@@ -40,7 +40,9 @@ import {
   faPhotoVideo,
   faHeart,
   faMusic,
-  faSearchDollar
+  faSearchDollar,
+  faClock,
+  faDollarSign
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope,
@@ -114,7 +116,9 @@ library.add(
   faHeart,
   faFrown,
   faMusic,
-  faSearchDollar
+  faSearchDollar,
+  faClock,
+  faDollarSign
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

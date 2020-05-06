@@ -1,6 +1,6 @@
 import { Model } from 'vue-mc'
 import User from './user'
-import Media from './edia'
+import Media from './media'
 
 export default class Contractor extends Model {
   defaults() {

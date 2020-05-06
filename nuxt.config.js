@@ -43,6 +43,8 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    { src: '@/plugins/config' },
+    { src: '@/plugins/utils' },
     { src: '@/plugins/http' },
     { src: '@/plugins/ui', mode: 'client' },
     { src: '@/plugins/icons', mode: 'client' },
