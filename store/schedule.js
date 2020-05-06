@@ -27,6 +27,9 @@ export const actions = {
 
     // commits timeslot in the correct format
     commit('append_timeslot', response.data)
+  },
+  appendTimeslot({ commit }, timeslotData) {
+    commit('append_timeslot', timeslotData)
   }
 }
 

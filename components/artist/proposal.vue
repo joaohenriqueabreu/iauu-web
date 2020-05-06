@@ -19,7 +19,7 @@
         <div class="boxed">
           <div class="horizontal middle">
             <h4>
-              <font-awesome icon="calendar"></font-awesome>
+              <font-awesome icon="calendar-alt"></font-awesome>
               {{ presentationDate }}
             </h4>
             <h5>{{ presentationTime }}</h5>
@@ -64,23 +64,26 @@
     </main>
     <footer>
       <div class="mr-5">
-        <submit-button>Aceitar</submit-button>
+        <submit-button :submit-callback="accept">Aceitar</submit-button>
       </div>
       <div>
-        <h5>Rejeitar</h5>
+        <h5 @click="reject">Rejeitar</h5>
       </div>
     </footer>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import moment from 'moment'
 import Attachment from '@/components/form/attachment'
 
 export default {
   components: {
     attachment: Attachment
+  },
+  props: {
+    callback: { type: Function, default: () => {} }
   },
   computed: {
     ...mapState({ proposal: (state) => state.event.proposal }),
@@ -98,6 +101,25 @@ export default {
       return encodeURI(
         `http://maps.google.com/maps?q=${this.proposal.location.display}`
       )
+    }
+  },
+  methods: {
+    ...mapActions('event', ['acceptProposal', 'rejectProposal']),
+    async accept() {
+      try {
+        await this.acceptProposal(this.proposal.id)
+      } catch (error) {
+      } finally {
+        this.proposalCallback()
+      }
+    },
+    async reject() {
+      try {
+        await this.rejectProposal(this.proposal.id)
+      } catch (error) {
+      } finally {
+        this.proposalCallback()
+      }
     }
   }
 }

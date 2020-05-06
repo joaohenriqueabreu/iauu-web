@@ -19,7 +19,7 @@
         ></unavailable>
       </modal>
       <modal ref="proposalModal">
-        <proposal></proposal>
+        <proposal :callback="closeProposalModal"></proposal>
       </modal>
       <modal ref="presentationModal">
         <presentation></presentation>
@@ -67,6 +67,9 @@ export default {
     },
     closeUnavailableModal() {
       this.$refs.unavailableModal.close()
+    },
+    closeProposalModal() {
+      this.$refs.proposalModal.close()
     }
   }
 }

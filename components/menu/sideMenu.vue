@@ -8,7 +8,7 @@
     </header>
     <main>
       <nuxt-link :to="scheduleLink">
-        <font-awesome icon="calendar"></font-awesome>
+        <font-awesome icon="calendar-alt"></font-awesome>
         <h6>Agenda</h6>
       </nuxt-link>
       <nuxt-link :to="scheduleLink">

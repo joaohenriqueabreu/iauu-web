@@ -3,7 +3,7 @@ import Vue from 'vue'
 // Font awesome imports
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faCalendar,
+  faCalendarAlt,
   faUserSecret,
   faSearch,
   faBars,
@@ -68,7 +68,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // import { faCoffee as fadCoffee } from '@fortawesome/pro-duotone-svg-icons'
 
 library.add(
-  faCalendar,
+  faCalendarAlt,
   faUserSecret,
   faSearch,
   faBars,

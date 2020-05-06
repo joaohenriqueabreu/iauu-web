@@ -20,10 +20,13 @@ export const actions = {
     const response = await this.$http.get(`proposals/${id}`)
     commit('set_proposal', response.data)
   },
-  async saveProposal({ commit }) {
-    // see schedule store (saveTimeout)
-    const response = await setTimeout(() => {}, 500)
-    alert(response)
+  async acceptProposal({ commit }, id) {
+    const response = await this.$http.post(`proposals/${id}`)
+    this.dispatch('schedule', response.data)
+  },
+  async rejectProposal({ commit }, id) {
+    const response = await this.$http.delete(`proposals/${id}`)
+    this.dispatch('schedule', response.data)
   }
 }
 
