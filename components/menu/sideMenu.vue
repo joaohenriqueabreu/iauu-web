@@ -36,7 +36,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import logo from '@/components/Logo'
+import logo from '@/components/logo'
 export default {
   components: {
     logo

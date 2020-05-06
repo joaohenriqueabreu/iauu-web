@@ -12,7 +12,7 @@ import { ToggleButton } from 'vue-js-toggle-button'
 import moment from 'moment'
 
 // Form components
-import Modal from '@/components/modal'
+import Modal from '@/components/layout/modal'
 import FormInput from '@/components/form/input'
 import FormSelect from '@/components/form/select'
 import FormToggle from '@/components/form/toggle'
