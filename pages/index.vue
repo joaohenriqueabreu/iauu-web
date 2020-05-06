@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Logo from '~/components/logo.vue'
+import Logo from '~/components/layout/logo.vue'
 
 export default {
   components: {

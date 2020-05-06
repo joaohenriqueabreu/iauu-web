@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import logo from '@/components/logo'
+import logo from '@/components/layout/logo'
 import MenuManager from '@/components/menu/menuManager'
 export default {
   components: {
