@@ -1,11 +1,7 @@
 import axios from 'axios'
 
-// const http = axios.create({
-//   baseURL: process.env.VUE_APP_API_URL
-// })
-
 const http = axios.create({
-  baseURL: 'http://localhost:3003/api/'
+  baseURL: process.env.NUXT_ENV_API_URL
 })
 
 // TODO include token on requests call - nuxt has server/client and sometimes this gets called by serverside

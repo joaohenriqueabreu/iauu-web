@@ -1,5 +1,8 @@
 export default {
   mode: 'universal',
+  env: {
+    baseURL: process.env.BASE_URL
+  },
   /*
    ** Headers of the page
    */
