@@ -36,10 +36,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import logo from '@/components/layout/logo'
+import Logo from '@/components/layout/logo'
 export default {
   components: {
-    logo
+    logo: Logo
   },
   computed: {
     ...mapGetters('auth', ['isArtist']),

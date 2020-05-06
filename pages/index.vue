@@ -29,7 +29,7 @@ import Logo from '~/components/layout/logo.vue'
 
 export default {
   components: {
-    Logo
+    logo: Logo
   }
 }
 </script>
