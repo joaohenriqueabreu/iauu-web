@@ -1,18 +1,23 @@
 <template>
   <div>
-    <div v-if="file.id" class="attachment horizontal middle">
+    <a
+      v-if="file.id"
+      :href="file.url"
+      target="_blank"
+      class="attachment horizontal middle"
+    >
       <font-awesome icon="paperclip"></font-awesome>
       <span class="ext">{{ fileExtension }}</span>
       <span>{{ file.subtitle }}</span>
-    </div>
+    </a>
   </div>
 </template>
 
 <script>
-import Media from '@/models/media'
+// import Media from '@/models/media'
 export default {
   props: {
-    file: { type: Media, default: () => {} }
+    file: { type: Object, default: () => {} }
   },
   computed: {
     fileExtension() {

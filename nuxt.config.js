@@ -51,6 +51,7 @@ export default {
     { src: '@/plugins/http' },
     { src: '@/plugins/ui', mode: 'client' },
     { src: '@/plugins/icons', mode: 'client' },
+    { src: '@/plugins/data', mode: 'client' },
     { src: '@/plugins/full-calendar', ssr: false }
   ],
   /*

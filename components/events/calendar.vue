@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -43,7 +44,7 @@ export default {
     FullCalendar // make the <FullCalendar> tag available
   },
   props: {
-    timeslots: { type: Array, default: () => [] },
+    // timeslots: { type: Array, default: () => [] },
     dateClickCallback: { type: Function, default: () => {} },
     eventClickCallback: { type: Function, default: () => {} }
   },
@@ -59,6 +60,14 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      timeslots: (state) => state.schedule.schedule.timeslots,
+      removedId: (state) => state.schedule.lastRemovedTimeslotId,
+      newTimeslot: (state) => state.schedule.newlyAddedTimeslot
+    }),
+    numOfTimeslots() {
+      return this.timeslots.length
+    },
     headerButtons: () => {
       return {
         left: 'title',
@@ -101,13 +110,17 @@ export default {
         day: 'numeric',
         omitCommas: 'false'
       }
+    },
+    fullcalendarApi() {
+      return this.$refs.fullcalendar.getApi()
     }
   },
   watch: {
-    timeslots(data) {
-      this.calendarEvents.push(
-        this.formatFullcalendarTimeslot(data[data.length - 1])
-      )
+    removedId(id) {
+      this.fullcalendarApi.getEventById(id).remove()
+    },
+    newTimeslot(timeslot) {
+      this.fullcalendarApi.addEvent(this.formatFullcalendarTimeslot(timeslot))
     }
   },
   mounted() {
@@ -119,6 +132,7 @@ export default {
   methods: {
     formatFullcalendarTimeslot: (timeslot) => {
       const fullcalendarEvent = {
+        id: timeslot.id,
         title: 'some random event',
         start: moment(timeslot.start_dt).toISOString(),
         extendedProps: { id: timeslot.id, type: timeslot.type },

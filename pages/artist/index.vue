@@ -7,7 +7,6 @@
     </p>
     <div v-if="timeslots">
       <full-calendar
-        :timeslots="timeslots"
         :date-click-callback="openUnavailable"
         :event-click-callback="openEvent"
         class="content"
@@ -22,7 +21,7 @@
         <proposal :callback="closeProposalModal"></proposal>
       </modal>
       <modal ref="presentationModal">
-        <presentation></presentation>
+        <presentation :callback="closePresentationModal"></presentation>
       </modal>
     </div>
   </div>
@@ -64,12 +63,20 @@ export default {
         await this.loadProposal(id)
         this.$refs.proposalModal.open()
       }
+
+      if (type === 'presentation') {
+        await this.loadPresentation(id)
+        this.$refs.presentationModal.open()
+      }
     },
     closeUnavailableModal() {
       this.$refs.unavailableModal.close()
     },
     closeProposalModal() {
       this.$refs.proposalModal.close()
+    },
+    closePresentationModal() {
+      this.$refs.presentationModal.close()
     }
   }
 }

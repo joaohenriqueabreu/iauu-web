@@ -19,6 +19,10 @@
         <font-awesome icon="search-dollar"></font-awesome>
         <h6>Propostas</h6>
       </nuxt-link>
+      <nuxt-link :to="scheduleLink">
+        <font-awesome icon="piggy-bank"></font-awesome>
+        <h6>Conta</h6>
+      </nuxt-link>
     </main>
     <footer>
       <hr />
@@ -68,6 +72,15 @@ div {
 main {
   background: none !important; // override main.scss
   box-shadow: none !important; // override main.scss
+
+  a,
+  h6 {
+    transition: $transition;
+    &:hover {
+      transition: $transition;
+      color: $bg4;
+    }
+  }
 }
 
 @include desktop {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <fade-transition group :duration="1000">
+    <fade-transition :duration="300" mode="out-in">
       <div
         v-if="!submitted"
         key="submitting"

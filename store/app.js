@@ -1,48 +1,45 @@
 export const state = () => ({
-  apiLoaded: true,
   showMenu: false,
-  message: undefined
+  alert: {
+    type: null,
+    message: null
+  }
 })
 
 export const mutations = {
-  start_api(state) {
-    state.apiLoaded = false
-  },
-  api_loaded(state) {
-    state.apiLoaded = true
-  },
   toggle_menu(state) {
     state.showMenu = !state.showMenu
   },
   close_menu(state) {
     state.showMenu = false
   },
-  set_message(state, message) {
-    state.message = message
+  show_message(state, { type, message }) {
+    state.alert.type = type
+    state.alert.message = message
   },
-  show_message(state) {
-    setTimeout(() => (state.message = undefined), 5000)
+  clear_message(state) {
+    state.alert.message = null
+    state.alert.type = null
   }
 }
 
 export const actions = {
-  startApi({ commit }) {
-    commit('start_api')
-  },
-  apiLoaded({ commit }) {
-    commit('api_loaded')
-  },
   toggleMenu({ commit }) {
     commit('toggle_menu')
   },
   closeMenu({ commit }) {
     commit('close_menu')
+  },
+  showMessage({ commit }, { message, type = 'success' }) {
+    commit('show_message', { type, message })
+    setTimeout(() => {
+      commit('clear_message')
+    }, this.$config.alertTimer)
   }
 }
 
 export const getters = {
-  isApiLoaded: (state) => state.apiLoaded,
   isMenuOpened: (state) => state.showMenu,
-  hasMessage: (state) => state.message !== undefined,
-  getMessage: (state) => state.message
+  hasMessage: (state) =>
+    state.alert.message !== null || state.alert.message !== undefined
 }

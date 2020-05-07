@@ -6,10 +6,10 @@
       </aside>
       <div class="vertical">
         <main>
+          <alert></alert>
           <header class="d-flex justify-content-end">
             <menu-manager></menu-manager>
           </header>
-
           <nuxt />
         </main>
       </div>

@@ -67,7 +67,7 @@
         <submit-button :submit-callback="accept">Aceitar</submit-button>
       </div>
       <div>
-        <h5 @click="reject">Rejeitar</h5>
+        <h5 @click="reject">Recusar</h5>
       </div>
     </footer>
   </div>
@@ -110,7 +110,7 @@ export default {
         await this.acceptProposal(this.proposal.id)
       } catch (error) {
       } finally {
-        this.proposalCallback()
+        this.callback()
       }
     },
     async reject() {
@@ -118,7 +118,7 @@ export default {
         await this.rejectProposal(this.proposal.id)
       } catch (error) {
       } finally {
-        this.proposalCallback()
+        this.callback()
       }
     }
   }

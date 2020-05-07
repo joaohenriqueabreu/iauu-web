@@ -22,11 +22,31 @@ export const actions = {
   },
   async acceptProposal({ commit }, id) {
     const response = await this.$http.post(`proposals/${id}`)
-    this.dispatch('schedule', response.data)
+    this.dispatch('schedule/appendTimeslot', response.data)
+    this.dispatch('schedule/removeTimeslot', id)
   },
   async rejectProposal({ commit }, id) {
-    const response = await this.$http.delete(`proposals/${id}`)
-    this.dispatch('schedule', response.data)
+    await this.$http.delete(`proposals/${id}`)
+    this.dispatch('schedule/removeTimeslot', id)
+    this.dispatch('app/showMessage', {
+      message: 'Proposta recusada com sucesso'
+    })
+  },
+  async loadPresentation({ commit }, id) {
+    const response = await this.$http.get(`presentations/${id}`)
+    commit('set_presentation', response.data)
+  },
+  async confirmPresentation({ commit }, id) {
+    await this.$http.post(`presentations/${id}`)
+    this.dispatch('schedule/removeTimeslot', id)
+    this.dispatch('app/showMessage', {
+      message:
+        'Obrigado por confirmar a realização da apresentação! Vamos agora finalizar os pagamentos pendentes'
+    })
+  },
+  async cancelPresentation({ commit }, id) {
+    await this.$http.delete(`proposals/${id}`)
+    this.dispatch('schedule/removeTimeslot', id)
   }
 }
 

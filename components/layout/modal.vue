@@ -1,14 +1,14 @@
 <template>
   <div>
     <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">
-      <div class="body">
-        <header>
-          <font-awesome icon="times" @click="$modal.hide(name)"></font-awesome>
-        </header>
-        <main :class="height">
+      <header>
+        <font-awesome icon="times" @click="close"></font-awesome>
+      </header>
+      <main :class="height">
+        <perfect-scrollbar>
           <slot></slot>
-        </main>
-      </div>
+        </perfect-scrollbar>
+      </main>
     </v-modal>
   </div>
 </template>
@@ -40,18 +40,30 @@ export default {
 }
 
 .vm--modal {
-  border-radius: 10px;
+  border-radius: $edges;
+  overflow: inherit;
 }
 </style>
 
 <style lang="scss" scoped>
 header {
+  @extend .vertical, .middle, .center;
+  text-align: center;
   position: absolute;
-  top: 10px;
-  right: 0;
+  top: -10px;
+  right: -10px;
+  padding: 5px;
+  border-radius: $rounded;
+  background: $bg4;
+  box-shadow: $shadow;
+  width: 30px;
+  height: 20x;
+  padding-left: 18px;
+  z-index: $moveToTop;
 }
 
 main {
+  overflow: hidden;
   .small {
     min-height: 50vh;
   }
@@ -65,6 +77,7 @@ main {
   color: $brand;
   font-size: $huge;
   cursor: pointer;
+  z-index: $moveToTop;
   &:hover {
     transition: $transition;
     color: $darkComponent;
