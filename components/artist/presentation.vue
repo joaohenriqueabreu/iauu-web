@@ -73,6 +73,7 @@ export default {
     isPresentationPast() {
       // const endDate = this.moment(this.presentation.end_dt)
       // const now = this.moment()
+      // TODO usar moment#isAfter
       return true
     }
   },

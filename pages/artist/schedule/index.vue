@@ -53,9 +53,18 @@ export default {
   },
   methods: {
     ...mapActions('event', ['loadProposal', 'loadPresentation']),
+    ...mapActions('app', ['showMessage']),
     openUnavailable({ dateStr }) {
-      this.selectedTimeslot = dateStr
-      this.$refs.unavailableModal.open()
+      // if ()
+      this.showMessage({
+        message:
+          'Existem apresentações ou propostas neste dia, cancele-as antes de marcar como indisponível',
+        type: 'error'
+      })
+
+      // }
+      // this.selectedTimeslot = dateStr
+      // this.$refs.unavailableModal.open()
     },
     async openEvent({ event }) {
       const { id, type } = event.extendedProps

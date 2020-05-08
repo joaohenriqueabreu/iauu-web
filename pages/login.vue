@@ -26,7 +26,7 @@ export default {
     ...mapActions('auth', ['login']),
     async submit() {
       await this.login(this.credentials)
-      this.$router.push('/artist')
+      this.$router.push('/artist/schedule')
     }
   }
 }
@@ -56,7 +56,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/imgs/concert.png');
+    background-image: url('~assets/imgs/concert.png?webp');
     height: 100%;
     width: 100%;
     opacity: 0.2;

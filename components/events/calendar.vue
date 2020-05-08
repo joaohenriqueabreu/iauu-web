@@ -25,6 +25,7 @@
     :column-header-format="columnHeaderFormat"
     :slot-label-format="slotLabelFormat"
     :event-time-format="eventTimeFormat"
+    :day-render="dayRender"
     @dateClick="dateClickCallback"
     @eventClick="eventClickCallback"
   />
@@ -44,7 +45,6 @@ export default {
     FullCalendar // make the <FullCalendar> tag available
   },
   props: {
-    // timeslots: { type: Array, default: () => [] },
     dateClickCallback: { type: Function, default: () => {} },
     eventClickCallback: { type: Function, default: () => {} }
   },
@@ -65,8 +65,11 @@ export default {
       removedId: (state) => state.schedule.lastRemovedTimeslotId,
       newTimeslot: (state) => state.schedule.newlyAddedTimeslot
     }),
-    numOfTimeslots() {
-      return this.timeslots.length
+    unavailableTimeslots() {
+      return this.$collection.filter(
+        this.timeslots,
+        (timeslot) => timeslot.type === 'unavailable'
+      )
     },
     headerButtons: () => {
       return {
@@ -130,11 +133,31 @@ export default {
     })
   },
   methods: {
+    // dayRender({ date, el }) {
+    //   // Blur date if unavailable events
+
+    //   // TODO investigate why we can't use this here
+    //   // TODO try to make less iterations here
+    //   const self = this
+    //   if (
+    //     this.$array.findIndex(this.unavailableTimeslots, function(unavailable) {
+    //       return self.moment(unavailable.start_dt).isSame(date, 'day')
+    //     }) !== -1
+    //   ) {
+    //     el.classList.add('unavailable')
+    //   }
+    // },
     formatFullcalendarTimeslot(timeslot) {
       const fullcalendarEvent = {
         id: `${timeslot.type}_${timeslot.id}`,
-        title: 'some random event',
-        start: moment(timeslot.start_dt).toISOString(),
+        title:
+          timeslot.type === 'unavailable' ? 'Indisponível' : timeslot.title,
+        start:
+          timeslot.type === 'unavailable'
+            ? moment(timeslot.start_dt)
+                .startOf('day')
+                .toISOString()
+            : moment(timeslot.start_dt).toISOString(),
         extendedProps: { id: timeslot.id, type: timeslot.type },
         // Layout settings
         classNames: ['event', timeslot.type]
@@ -174,12 +197,16 @@ export default {
   }
 
   &.unavailable {
-    background: $darkElevated;
-    box-shadow: none;
-    margin-right: 0;
-    margin-bottom: 0;
+    background: transparent;
+    // box-shadow: none;
+    // margin-right: 0;
+    // margin-bottom: 0;
     span {
-      color: $darkElevated;
+      color: $layer5;
+    }
+
+    .fc-time {
+      display: none;
     }
   }
 }
@@ -189,10 +216,22 @@ td {
   cursor: pointer;
 }
 
-.fc-event-container:has(.unavailable) {
-  background: red;
-  cursor: default;
-}
+// .fc-event-container:has(.unavailable) {
+//   background: red;
+//   cursor: default;
+// }
+
+// .fc-day.unavailable {
+//   border-top: 2px solid red !important;
+//   border-bottom: 2px solid red !important;
+//   border-left: 2px solid red !important;
+//   border-right: 2px solid red !important;
+//   z-index: $moveToTop;
+//   opacity: 0.2;
+//   span.fc-day-number {
+//     color: $layer2;
+//   }
+// }
 
 .fc-view-container {
   background: $darkComponent;
@@ -254,8 +293,8 @@ td:not(.fc-minor) {
   }
 }
 
-.fc-unthemed .fc-disabled-day {
-  background: transparent;
+.fc-day.fc-disabled-day {
+  background: $layer2;
   cursor: default;
 }
 </style>
