@@ -25,14 +25,13 @@
     :column-header-format="columnHeaderFormat"
     :slot-label-format="slotLabelFormat"
     :event-time-format="eventTimeFormat"
-    :day-render="dayRender"
-    @dateClick="dateClickCallback"
-    @eventClick="eventClickCallback"
+    @dateClick="dateClick"
+    @eventClick="eventClick"
   />
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -133,25 +132,24 @@ export default {
     })
   },
   methods: {
-    // dayRender({ date, el }) {
-    //   // Blur date if unavailable events
-
-    //   // TODO investigate why we can't use this here
-    //   // TODO try to make less iterations here
-    //   const self = this
-    //   if (
-    //     this.$array.findIndex(this.unavailableTimeslots, function(unavailable) {
-    //       return self.moment(unavailable.start_dt).isSame(date, 'day')
-    //     }) !== -1
-    //   ) {
-    //     el.classList.add('unavailable')
-    //   }
-    // },
+    ...mapActions('schedule', ['removeTimeslot']),
+    eventClick({ event }) {
+      if (event.extendedProps.type === 'unavailable') {
+        this.removeTimeslot(event.extendedProps)
+        return
+      }
+      return this.eventClickCallback(event.extendedProps)
+    },
+    dateClick(date) {
+      return this.dateClickCallback(date)
+    },
     formatFullcalendarTimeslot(timeslot) {
       const fullcalendarEvent = {
         id: `${timeslot.type}_${timeslot.id}`,
         title:
-          timeslot.type === 'unavailable' ? 'Indisponível' : timeslot.title,
+          timeslot.type === 'unavailable'
+            ? 'Indisponibilidade'
+            : timeslot.title,
         start:
           timeslot.type === 'unavailable'
             ? moment(timeslot.start_dt)
@@ -181,7 +179,10 @@ export default {
   border-radius: 5px;
   padding: 5px;
   background-clip: none;
-  font-size: $small;
+
+  span {
+    font-size: $small;
+  }
 
   // Make events fill 100% of container
   margin-right: 5px;
@@ -197,10 +198,8 @@ export default {
   }
 
   &.unavailable {
+    transition: $transition;
     background: transparent;
-    // box-shadow: none;
-    // margin-right: 0;
-    // margin-bottom: 0;
     span {
       color: $layer5;
     }
@@ -208,7 +207,47 @@ export default {
     .fc-time {
       display: none;
     }
+
+    &::before {
+      display: none;
+      content: '';
+    }
+
+    &:hover {
+      transition: $transition;
+      background: red;
+      span {
+        color: $brand;
+      }
+
+      &::before {
+        display: block;
+        font-size: $small;
+        content: 'Remover';
+      }
+    }
   }
+}
+
+.fc-day-grid-event {
+  position: relative;
+}
+
+span.remove-event {
+  @extend .vertical, .center, .middle;
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  padding: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: $rounded;
+  color: $brand !important;
+  font-size: $large;
+  font-weight: $bold;
+  box-shadow: $shadow;
+  background: $layer5;
+  z-index: $moveToTop;
 }
 
 // Full calendar overrides

@@ -55,19 +55,20 @@ export default {
     ...mapActions('event', ['loadProposal', 'loadPresentation']),
     ...mapActions('app', ['showMessage']),
     openUnavailable({ dateStr }) {
-      // if ()
-      this.showMessage({
-        message:
-          'Existem apresentações ou propostas neste dia, cancele-as antes de marcar como indisponível',
-        type: 'error'
-      })
+      if (this.haveEventsOnDate(dateStr)) {
+        this.showMessage({
+          message:
+            'Existem apresentações ou propostas neste dia, cancele-as antes de marcar como indisponível',
+          type: 'error'
+        })
 
-      // }
-      // this.selectedTimeslot = dateStr
-      // this.$refs.unavailableModal.open()
+        return
+      }
+
+      this.selectedTimeslot = dateStr
+      this.$refs.unavailableModal.open()
     },
-    async openEvent({ event }) {
-      const { id, type } = event.extendedProps
+    async openEvent({ id, type }) {
       if (type === 'proposal') {
         await this.loadProposal(id)
         this.$refs.proposalModal.open()
@@ -86,6 +87,16 @@ export default {
     },
     closePresentationModal() {
       this.$refs.presentationModal.close()
+    },
+    haveEventsOnDate(date) {
+      const indexOfEvent = this.$array.findIndex(this.timeslots, (timeslot) => {
+        return (
+          ['proposal', 'presentation'].includes(timeslot.type) &&
+          this.moment(date).isSame(this.moment(timeslot.start_dt), 'day')
+        )
+      })
+
+      return indexOfEvent !== -1
     }
   }
 }
