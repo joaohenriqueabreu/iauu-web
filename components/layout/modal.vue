@@ -54,7 +54,7 @@ header {
   right: -10px;
   padding: 5px;
   border-radius: $rounded;
-  background: $bg4;
+  background: $layer4;
   box-shadow: $shadow;
   width: 30px;
   height: 20x;

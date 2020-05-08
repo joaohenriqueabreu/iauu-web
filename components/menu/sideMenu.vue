@@ -1,38 +1,53 @@
 <template>
   <div>
     <header>
-      <nuxt-link :to="scheduleLink">
+      <nuxt-link to="/">
         <logo :height="50" :width="50"></logo>
         <h6>iauu</h6>
       </nuxt-link>
     </header>
     <main>
-      <nuxt-link :to="scheduleLink">
+      <nuxt-link
+        :to="`/${userType}/schedule`"
+        :class="{ routed: routed('schedule') }"
+      >
         <font-awesome icon="calendar-alt"></font-awesome>
-        <h6>Agenda</h6>
+        <span>Agenda</span>
       </nuxt-link>
-      <nuxt-link :to="scheduleLink">
+      <nuxt-link
+        :to="`/${userType}/presentations`"
+        :class="{ routed: routed('presentations') }"
+      >
         <font-awesome icon="music"></font-awesome>
-        <h6>Apresentações</h6>
+        <span>Apresentações</span>
       </nuxt-link>
-      <nuxt-link :to="scheduleLink">
+      <nuxt-link
+        :to="`/${userType}/proposals`"
+        :class="{ routed: routed('proposals') }"
+      >
         <font-awesome icon="search-dollar"></font-awesome>
-        <h6>Propostas</h6>
+        <span>Propostas</span>
       </nuxt-link>
-      <nuxt-link :to="scheduleLink">
+      <nuxt-link
+        :to="`/${userType}/account`"
+        :class="{ routed: routed('account') }"
+      >
         <font-awesome icon="piggy-bank"></font-awesome>
-        <h6>Conta</h6>
+        <span>Conta</span>
+      </nuxt-link>
+      <nuxt-link
+        :to="`/${userType}/profile`"
+        :class="{ routed: routed('profile') }"
+      >
+        <font-awesome icon="user"></font-awesome>
+        <span>Perfil</span>
       </nuxt-link>
     </main>
     <footer>
       <hr />
-      <nuxt-link :to="scheduleLink">
-        <font-awesome icon="user"></font-awesome>
-        <h6>Perfil</h6>
-      </nuxt-link>
       <nuxt-link to="/logout">
         <font-awesome icon="times"></font-awesome>
-        <h6>Sair</h6>
+        <span>Sair</span>
       </nuxt-link>
     </footer>
   </div>
@@ -49,38 +64,32 @@ export default {
     ...mapGetters('auth', ['isArtist']),
     scheduleLink() {
       return this.isArtist ? '/artist' : '/contractor'
+    },
+    userType() {
+      return this.isArtist ? 'artist' : 'contractor'
+    }
+  },
+  methods: {
+    routed(option) {
+      return this.$route.path.split('/').includes(option)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-div {
-  padding: 0 10px;
-}
-
 .logo {
   margin-left: 0;
   margin-right: 2 * $space;
 }
 
 [data-icon] {
-  color: $brand;
   font-size: $huge;
 }
 
 main {
   background: none !important; // override main.scss
   box-shadow: none !important; // override main.scss
-
-  a,
-  h6 {
-    transition: $transition;
-    &:hover {
-      transition: $transition;
-      color: $bg4;
-    }
-  }
 }
 
 @include desktop {
@@ -105,22 +114,45 @@ main {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 7 * $space;
+    margin-bottom: 2 * $space;
+    transition: $transition;
+    color: $brand;
+    padding: 5 * $space 2 * $space 5 * $space 3 * $space;
+    width: 100%;
+    border-top-left-radius: $rounded;
+    border-bottom-left-radius: $rounded;
+    &.routed {
+      background: $layer2;
+    }
+
+    &:hover {
+      transition: $transition;
+      color: $layer4;
+    }
   }
 }
 
 @include mobile {
+  aside {
+    width: 100vw;
+    div {
+      width: 100%;
+    }
+  }
   div {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
   }
 
   a {
     margin-right: 4 * $space;
   }
 
-  h6,
+  header,
+  footer,
+  span,
   hr {
     display: none;
   }

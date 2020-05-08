@@ -43,5 +43,6 @@ main {
 
 footer {
   height: 20vh;
+  background: $layer1;
 }
 </style>

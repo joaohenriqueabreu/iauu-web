@@ -5,9 +5,15 @@
         v-if="!submitted"
         key="submitting"
         class="button"
+        :class="{ disabled }"
         @click="$refs.submit.click()"
       >
-        <input ref="submit" type="submit" @click.prevent="submit" />
+        <input
+          ref="submit"
+          type="submit"
+          :disabled="disabled"
+          @click.prevent="submit"
+        />
         <slot></slot>
       </div>
       <div v-else key="submitted" class="button">
@@ -20,7 +26,8 @@
 <script>
 export default {
   props: {
-    submitCallback: { type: Function, default: () => {} }
+    submitCallback: { type: Function, default: () => {} },
+    disabled: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -63,12 +70,18 @@ input {
   outline: none;
   min-width: 150px;
 
+  &.disabled {
+    background: $layer3;
+    cursor: default;
+    box-shadow: none;
+  }
+
   &:focus,
   &:active {
     outline: none;
   }
 
-  &:hover {
+  &:hover:not(.disabled) {
     transition: $transition;
     background: transparentize($brand2, 0.1);
     box-shadow: $higherShadow;

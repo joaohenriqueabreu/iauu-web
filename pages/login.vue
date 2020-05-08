@@ -5,6 +5,7 @@
       <h5>Entre</h5>
       <form-input v-model="credentials.email"></form-input>
       <form-input v-model="credentials.password" type="password"></form-input>
+      <div class="mb-5"></div>
       <submit-button :submit-callback="submit">Login</submit-button>
     </form>
   </div>

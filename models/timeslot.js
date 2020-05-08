@@ -4,6 +4,7 @@ export default class Timeslot extends Model {
   defaults() {
     return {
       id: null,
+      calendarId: null,
       start_dt: null,
       end_dt: null,
       type: null,

@@ -49,7 +49,6 @@ textarea {
   box-shadow: $lightShadow;
 
   padding: 5px;
-  margin-bottom: $space;
   &:focus {
     outline-color: transparent;
   }

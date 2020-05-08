@@ -8,66 +8,43 @@
         ></avatar>
         <h5>{{ presentation.contractor.name }}</h5>
       </div>
-      <span class="identifier">Proposta</span>
+      <span class="identifier">Apresentação</span>
     </header>
-    <div></div>
+    <div class="my-4 countdown horizontal middle center">
+      <countdown v-if="!isPresentationPast" :time="timeUntilPresentation">
+        <template slot-scope="props">
+          <h5>
+            Faltam {{ props.days }} dias : {{ props.hours }} horas :
+            {{ props.minutes }} minutos
+          </h5>
+        </template>
+      </countdown>
+      <div v-else>
+        <p>
+          Conta pra gente como foi a apresentação!
+          <a href="#" @click.prevent="confirm">Confirme a Realização</a> para
+          podermos finalizar o processo de pagamento.
+        </p>
+        <p>
+          Caso a apresentação não seja confirmada por ambas as partes em até
+          <b>{{ $config.closePresentationDeadline }} dias</b> ela será
+          automaticamente encerrada.
+        </p>
+      </div>
+    </div>
     <main>
       <perfect-scrollbar>
-        <div>
-          <h4>{{ presentation.title }}</h4>
-        </div>
-        <div class="boxed">
-          <div class="horizontal middle">
-            <h4>
-              <font-awesome icon="calendar-alt"></font-awesome>
-              {{ presentationDate }}
-            </h4>
-            <h5>{{ presentationTime }}</h5>
-          </div>
-          <div class="horizontal middle">
-            <font-awesome icon="map-marker-alt"></font-awesome>
-            <a :href="encodedMapsLocation" target="_blank">
-              <h6>{{ presentation.location.display }}</h6>
-            </a>
-          </div>
-        </div>
-        <div>
-          <span>{{ presentation.description }}</span>
-        </div>
-        <div class="boxed vertical">
-          <div>
-            <h5>{{ presentation.product.name }}</h5>
-          </div>
-          <div>
-            <h6>
-              <font-awesome icon="dollar-sign"></font-awesome>
-              {{ presentation.product.price }}
-            </h6>
-          </div>
-          <div>
-            <h6>
-              <font-awesome icon="clock"></font-awesome>
-              {{ presentation.product.duration }}
-              {{ $utils.pluralize('hora', presentation.product.duration) }}
-            </h6>
-          </div>
-        </div>
-        <div class="attachments">
-          <attachment
-            v-for="(file, index) in presentation.files"
-            :key="index"
-            :file="file"
-          >
-          </attachment>
-        </div>
+        <event-info :event="presentation"></event-info>
       </perfect-scrollbar>
     </main>
     <footer>
       <div class="mr-5">
-        <submit-button :submit-callback="accept">Aceitar</submit-button>
+        <submit-button :submit-callback="confirm">
+          Confirmar Realização
+        </submit-button>
       </div>
       <div>
-        <h5 @click="reject">Recusar</h5>
+        <h5 v-if="!isPresentationPast" @click="cancel">Cancelar</h5>
       </div>
     </footer>
   </div>
@@ -75,47 +52,43 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import moment from 'moment'
-import Attachment from '@/components/form/attachment'
+import VueCountdown from '@chenfengyuan/vue-countdown'
+import EventInfo from '@/components/artist/eventInfo'
 
 export default {
   components: {
-    attachment: Attachment
+    countdown: VueCountdown,
+    eventInfo: EventInfo
   },
   props: {
     callback: { type: Function, default: () => {} }
   },
   computed: {
     ...mapState({ presentation: (state) => state.event.presentation }),
-    presentationTime() {
-      return (
-        moment(this.presentation.start_dt).format(this.$config.timeFormat) +
-        ' - ' +
-        moment(this.presentation.end_dt).format(this.$config.timeFormat)
-      )
+    timeUntilPresentation() {
+      return this.moment
+        .duration(this.moment().diff(this.moment(this.presentation.start_dt)))
+        .as('milliseconds')
     },
-    presentationDate() {
-      return moment(this.presentation.start_dt).format(this.$config.dateFormat)
-    },
-    encodedMapsLocation() {
-      return encodeURI(
-        `http://maps.google.com/maps?q=${this.presentation.location.display}`
-      )
+    isPresentationPast() {
+      // const endDate = this.moment(this.presentation.end_dt)
+      // const now = this.moment()
+      return true
     }
   },
   methods: {
-    ...mapActions('event', ['acceptpresentation', 'rejectpresentation']),
-    async accept() {
+    ...mapActions('event', ['confirmPresentation', 'cancelPresentation']),
+    async confirm() {
       try {
-        await this.acceptpresentation(this.presentation.id)
+        await this.confirmPresentation(this.presentation.id)
       } catch (error) {
       } finally {
         this.callback()
       }
     },
-    async reject() {
+    async cancel() {
       try {
-        await this.rejectpresentation(this.presentation.id)
+        await this.cancelPresentation(this.presentation.id)
       } catch (error) {
       } finally {
         this.callback()
@@ -135,11 +108,19 @@ export default {
   .identifier {
     text-transform: uppercase;
     letter-spacing: $space / 2;
-    color: $bg3;
+    color: $layer3;
     padding-right: 10 * $space;
     font-weight: $bold;
-    border-bottom: 5px solid $bg3;
+    border-bottom: 5px solid $layer3;
     border-radius: rounded;
+  }
+
+  .countdown {
+    width: 100%;
+    background: $layer3;
+    box-shadow: $shadow;
+    padding: 2 * $space;
+    border-radius: $edges;
   }
 
   header {
@@ -158,37 +139,10 @@ export default {
     margin-bottom: 2 * $space;
     padding: 2 * $space;
     box-shadow: $shadow;
-    background: $bg3;
+    background: $layer3;
     border-radius: $edges;
     width: 100%;
     max-height: 60vh;
-
-    [data-icon] {
-      font-size: $large;
-      font-weight: $bold;
-      color: $brand;
-    }
-
-    div {
-      margin-bottom: 3 * $space;
-    }
-
-    .boxed {
-      background: $bg4;
-      border-radius: $edges;
-      padding: 2 * $space;
-      margin-left: 3 * $space;
-      margin-right: 3 * $space;
-
-      h6 {
-        margin-right: 5 * $space;
-      }
-    }
-
-    .attachments {
-      @extend .horizontal, .middle;
-      flex-wrap: wrap;
-    }
   }
 
   footer {

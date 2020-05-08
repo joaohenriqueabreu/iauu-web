@@ -19,18 +19,13 @@ export const mutations = {
 
     state.newlyAddedTimeslot = this.$array.last(state.schedule.timeslots)
   },
-  remove_timeslot(state, id) {
+  remove_timeslot(state, { type, id }) {
     this.$array.remove(
       state.schedule.timeslots,
       (timeslot) => timeslot.id === parseInt(id)
     )
 
-    state.lastRemovedTimeslotId = id
-
-    // TODO this is a shitty workaround to make vue react to the array change
-    //  seems that removing an element from an array does not trigger reactivity
-    // but adding one does
-    // state.schedule.timeslots.push({})
+    state.lastRemovedTimeslotId = `${type}_${id}`
   }
 }
 
@@ -48,8 +43,8 @@ export const actions = {
   appendTimeslot({ commit }, timeslotData) {
     commit('append_timeslot', timeslotData)
   },
-  removeTimeslot({ commit }, id) {
-    commit('remove_timeslot', id)
+  removeTimeslot({ commit }, timeslot) {
+    commit('remove_timeslot', timeslot)
   }
 }
 

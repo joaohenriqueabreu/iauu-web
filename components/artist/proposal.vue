@@ -13,53 +13,7 @@
     <div></div>
     <main>
       <perfect-scrollbar>
-        <div>
-          <h4>{{ proposal.title }}</h4>
-        </div>
-        <div class="boxed">
-          <div class="horizontal middle">
-            <h4>
-              <font-awesome icon="calendar-alt"></font-awesome>
-              {{ presentationDate }}
-            </h4>
-            <h5>{{ presentationTime }}</h5>
-          </div>
-          <div class="horizontal middle">
-            <font-awesome icon="map-marker-alt"></font-awesome>
-            <a :href="encodedMapsLocation" target="_blank">
-              <h6>{{ proposal.location.display }}</h6>
-            </a>
-          </div>
-        </div>
-        <div>
-          <span>{{ proposal.description }}</span>
-        </div>
-        <div class="boxed vertical">
-          <div>
-            <h5>{{ proposal.product.name }}</h5>
-          </div>
-          <div>
-            <h6>
-              <font-awesome icon="dollar-sign"></font-awesome>
-              {{ proposal.product.price }}
-            </h6>
-          </div>
-          <div>
-            <h6>
-              <font-awesome icon="clock"></font-awesome>
-              {{ proposal.product.duration }}
-              {{ $utils.pluralize('hora', proposal.product.duration) }}
-            </h6>
-          </div>
-        </div>
-        <div class="attachments">
-          <attachment
-            v-for="(file, index) in proposal.files"
-            :key="index"
-            :file="file"
-          >
-          </attachment>
-        </div>
+        <event-info :event="proposal"></event-info>
       </perfect-scrollbar>
     </main>
     <footer>
@@ -75,33 +29,17 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import moment from 'moment'
-import Attachment from '@/components/form/attachment'
+import EventInfo from '@/components/artist/eventInfo'
 
 export default {
   components: {
-    attachment: Attachment
+    eventInfo: EventInfo
   },
   props: {
     callback: { type: Function, default: () => {} }
   },
   computed: {
-    ...mapState({ proposal: (state) => state.event.proposal }),
-    presentationTime() {
-      return (
-        moment(this.proposal.start_dt).format(this.$config.timeFormat) +
-        ' - ' +
-        moment(this.proposal.end_dt).format(this.$config.timeFormat)
-      )
-    },
-    presentationDate() {
-      return moment(this.proposal.start_dt).format(this.$config.dateFormat)
-    },
-    encodedMapsLocation() {
-      return encodeURI(
-        `http://maps.google.com/maps?q=${this.proposal.location.display}`
-      )
-    }
+    ...mapState({ proposal: (state) => state.event.proposal })
   },
   methods: {
     ...mapActions('event', ['acceptProposal', 'rejectProposal']),
@@ -135,10 +73,10 @@ export default {
   .identifier {
     text-transform: uppercase;
     letter-spacing: $space / 2;
-    color: $bg3;
+    color: $layer3;
     padding-right: 10 * $space;
     font-weight: $bold;
-    border-bottom: 5px solid $bg3;
+    border-bottom: 5px solid $layer3;
     border-radius: rounded;
   }
 
@@ -158,37 +96,10 @@ export default {
     margin-bottom: 2 * $space;
     padding: 2 * $space;
     box-shadow: $shadow;
-    background: $bg3;
+    background: $layer3;
     border-radius: $edges;
     width: 100%;
     max-height: 60vh;
-
-    [data-icon] {
-      font-size: $large;
-      font-weight: $bold;
-      color: $brand;
-    }
-
-    div {
-      margin-bottom: 3 * $space;
-    }
-
-    .boxed {
-      background: $bg4;
-      border-radius: $edges;
-      padding: 2 * $space;
-      margin-left: 3 * $space;
-      margin-right: 3 * $space;
-
-      h6 {
-        margin-right: 5 * $space;
-      }
-    }
-
-    .attachments {
-      @extend .horizontal, .middle;
-      flex-wrap: wrap;
-    }
   }
 
   footer {

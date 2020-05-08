@@ -116,8 +116,8 @@ export default {
     }
   },
   watch: {
-    removedId(id) {
-      this.fullcalendarApi.getEventById(id).remove()
+    removedId(eventId) {
+      this.fullcalendarApi.getEventById(eventId).remove()
     },
     newTimeslot(timeslot) {
       this.fullcalendarApi.addEvent(this.formatFullcalendarTimeslot(timeslot))
@@ -130,9 +130,9 @@ export default {
     })
   },
   methods: {
-    formatFullcalendarTimeslot: (timeslot) => {
+    formatFullcalendarTimeslot(timeslot) {
       const fullcalendarEvent = {
-        id: timeslot.id,
+        id: `${timeslot.type}_${timeslot.id}`,
         title: 'some random event',
         start: moment(timeslot.start_dt).toISOString(),
         extendedProps: { id: timeslot.id, type: timeslot.type },

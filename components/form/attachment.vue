@@ -47,7 +47,7 @@ export default {
   span,
   h6,
   [data-icon] {
-    color: $bg1;
+    color: $layer1;
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
