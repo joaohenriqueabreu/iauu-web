@@ -104,6 +104,9 @@ main {
 
   main {
     height: 70vh;
+    a {
+      padding: 5 * $space 2 * $space 4 * $space 3 * $space;
+    }
   }
 
   footer {
@@ -117,7 +120,7 @@ main {
     margin-bottom: 2 * $space;
     transition: $transition;
     color: $brand;
-    padding: 5 * $space 2 * $space 5 * $space 3 * $space;
+    padding: 0 4 * $space;
     width: 100%;
     border-top-left-radius: $rounded;
     border-bottom-left-radius: $rounded;

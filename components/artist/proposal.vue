@@ -18,7 +18,7 @@
     </main>
     <footer>
       <div class="mr-5">
-        <submit-button :submit-callback="accept">Aceitar</submit-button>
+        <submit-button @submit="accept">Aceitar</submit-button>
       </div>
       <div>
         <h5 @click="reject">Recusar</h5>
@@ -35,9 +35,6 @@ export default {
   components: {
     eventInfo: EventInfo
   },
-  props: {
-    callback: { type: Function, default: () => {} }
-  },
   computed: {
     ...mapState({ proposal: (state) => state.event.proposal })
   },
@@ -48,7 +45,7 @@ export default {
         await this.acceptProposal(this.proposal.id)
       } catch (error) {
       } finally {
-        this.callback()
+        this.$emit('update')
       }
     },
     async reject() {
@@ -56,7 +53,7 @@ export default {
         await this.rejectProposal(this.proposal.id)
       } catch (error) {
       } finally {
-        this.callback()
+        this.$emit('update')
       }
     }
   }

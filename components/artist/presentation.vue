@@ -39,7 +39,7 @@
     </main>
     <footer>
       <div class="mr-5">
-        <submit-button :submit-callback="confirm">
+        <submit-button @submit="confirm">
           Confirmar Realização
         </submit-button>
       </div>
@@ -59,9 +59,6 @@ export default {
   components: {
     countdown: VueCountdown,
     eventInfo: EventInfo
-  },
-  props: {
-    callback: { type: Function, default: () => {} }
   },
   computed: {
     ...mapState({ presentation: (state) => state.event.presentation }),
@@ -84,7 +81,7 @@ export default {
         await this.confirmPresentation(this.presentation.id)
       } catch (error) {
       } finally {
-        this.callback()
+        this.$emit('update')
       }
     },
     async cancel() {
@@ -92,7 +89,7 @@ export default {
         await this.cancelPresentation(this.presentation.id)
       } catch (error) {
       } finally {
-        this.callback()
+        this.$emit('update')
       }
     }
   }

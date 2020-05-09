@@ -26,7 +26,6 @@
 <script>
 export default {
   props: {
-    submitCallback: { type: Function, default: () => {} },
     disabled: { type: Boolean, default: false }
   },
   data() {
@@ -40,7 +39,7 @@ export default {
       await this.delay()
       this.submitted = true
       await this.delay()
-      this.submitCallback()
+      this.$emit('submit')
     },
     delay() {
       return setTimeout(() => {}, 1000)

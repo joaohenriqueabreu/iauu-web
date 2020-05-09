@@ -8,22 +8,22 @@
     <div v-if="timeslots">
       <full-calendar
         ref="fullcalendar"
-        :date-click-callback="openUnavailable"
-        :event-click-callback="openEvent"
-        :reload-calendar-callback="reloadEvents"
         class="content"
+        @reload-events="reloadEvents"
+        @event-click="openEvent"
+        @date-click="openUnavailable"
       ></full-calendar>
       <modal ref="unavailableModal" height="small">
         <unavailable
           :default="selectedTimeslot"
-          :submit-callback="closeUnavailableModal"
+          @save="closeUnavailableModal"
         ></unavailable>
       </modal>
       <modal ref="proposalModal">
-        <proposal :callback="closeProposalModal"></proposal>
+        <proposal @update="closeProposalModal"></proposal>
       </modal>
       <modal ref="presentationModal">
-        <presentation :callback="closePresentationModal"></presentation>
+        <presentation @update="closePresentationModal"></presentation>
       </modal>
     </div>
   </div>

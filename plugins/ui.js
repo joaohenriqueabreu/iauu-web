@@ -15,9 +15,12 @@ import moment from 'moment'
 // Form components
 import Modal from '@/components/layout/modal'
 import AlertMessage from '@/components/layout/alert'
+import Overlay from '@/components/layout/overlay'
+
 import FormInput from '@/components/form/input'
 import FormSelect from '@/components/form/select'
 import FormToggle from '@/components/form/toggle'
+import ImageUploader from '@/components/form/imageUploader'
 import SubmitButton from '@/components/form/submitButton'
 
 moment.locale('pt-br')
@@ -33,9 +36,11 @@ Vue.use(VueModal, { componentName: 'v-modal' })
 
 Vue.component('avatar', Avatar)
 Vue.component('toggle-button', ToggleButton)
+Vue.component('overlay', Overlay)
 Vue.component('form-input', FormInput)
 Vue.component('form-select', FormSelect)
 Vue.component('form-toggle', FormToggle)
+Vue.component('image-uploader', ImageUploader)
 Vue.component('submit-button', SubmitButton)
 Vue.component('fade-transition', FadeTransition)
 Vue.component('modal', Modal)

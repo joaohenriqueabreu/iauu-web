@@ -33,7 +33,7 @@
         </div>
       </main>
       <footer>
-        <submit-button :submit-callback="submit">Salvar</submit-button>
+        <submit-button @submit="submit">Salvar</submit-button>
       </footer>
     </form>
   </div>
@@ -44,8 +44,7 @@ import { mapActions } from 'vuex'
 import Timeslot from '@/models/timeslot'
 export default {
   props: {
-    default: { type: String, default: '' },
-    submitCallback: { type: Function, default: () => {} }
+    default: { type: String, default: '' }
   },
   data() {
     return {
@@ -76,7 +75,7 @@ export default {
         await this.saveTimeslot(this.timeslot)
       } catch (error) {
       } finally {
-        this.submitCallback()
+        this.$emit('save')
       }
     }
   }

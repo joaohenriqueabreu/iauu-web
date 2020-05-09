@@ -1,7 +1,10 @@
+require('dotenv').config()
+
 export default {
   mode: 'universal',
   env: {
-    baseURL: process.env.BASE_URL
+    baseURL: process.env.BASE_URL,
+    fileStackApiKey: process.env.NUXT_ENV_FILESTACK_API_KEY
   },
   /*
    ** Headers of the page

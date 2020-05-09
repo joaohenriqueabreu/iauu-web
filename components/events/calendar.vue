@@ -45,11 +45,6 @@ export default {
   components: {
     FullCalendar // make the <FullCalendar> tag available
   },
-  props: {
-    dateClickCallback: { type: Function, default: () => {} },
-    eventClickCallback: { type: Function, default: () => {} },
-    reloadCalendarCallback: { type: Function, default: () => {} }
-  },
   data() {
     return {
       calendarPlugins: [
@@ -142,7 +137,8 @@ export default {
         this.removeTimeslot(event.extendedProps)
         return
       }
-      return this.eventClickCallback(event.extendedProps)
+
+      this.$emit('event-click', event.extendedProps)
     },
     validRange(something) {},
     datesDestroy() {
@@ -151,12 +147,12 @@ export default {
       if (
         this.moment(this.fullcalendarApi.getDate()).year() !== this.currentYear
       ) {
-        this.reloadCalendarCallback(this.currentYear)
+        this.$emit('reload-events', this.currentYear)
         this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
       }
     },
     dateClick(date) {
-      return this.dateClickCallback(date)
+      this.$emit('date-click', date)
     },
     formatFullcalendarTimeslot(timeslot) {
       const fullcalendarEvent = {
@@ -264,9 +260,14 @@ export default {
 fc-button-primary {
   background: $brandLayer;
   border: none;
+  transition: $transition;
 
   &:disabled {
     background: transparentize($brandLayer, 0.5);
+  }
+
+  &:hover {
+    transition: $transition;
   }
 }
 
