@@ -80,7 +80,7 @@ main {
   z-index: $moveToTop;
   &:hover {
     transition: $transition;
-    color: $darkComponent;
+    color: $layer3;
   }
 }
 </style>

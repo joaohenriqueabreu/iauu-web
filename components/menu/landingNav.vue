@@ -30,7 +30,7 @@ export default {
 <style lang="scss" scoped>
 nav {
   transition: $transition;
-  background: $darkBG;
+  background: $layer1;
 
   .transparent {
     transition: $transition;

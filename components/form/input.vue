@@ -43,7 +43,7 @@ textarea {
   outline-color: transparent;
   font-size: $regular;
   resize: none;
-  background-color: $darkBG;
+  background-color: $layer1;
   color: $white;
   font-weight: $bold;
   box-shadow: $lightShadow;
@@ -53,7 +53,7 @@ textarea {
     outline-color: transparent;
   }
   &:hover {
-    background-color: $darkBG;
+    background-color: $layer1;
   }
 }
 

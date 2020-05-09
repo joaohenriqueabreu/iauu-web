@@ -121,7 +121,7 @@ export default {
   h4 {
     margin-right: 4 * $space;
     padding-right: 4 * $space;
-    border-right: 5px solid $darkComponent;
+    border-right: 5px solid $layer3;
   }
 }
 </style>

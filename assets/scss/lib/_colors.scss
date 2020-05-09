@@ -3,18 +3,14 @@ $brand2: rgb(200, 200, 100);
 
 $white: white;
 
-$darkBG: rgb(20, 20, 20);
-$darkElevated: rgb(35, 35, 35);
-$darkComponent: rgb(55, 55, 55);
-
-// TODO have a different file according to overall styling (dark || light)
-
 // The index indicates the raising level
 $layer1: rgb(20, 20, 20);
 $layer2: rgb(35, 35, 35);
 $layer3: rgb(55, 55, 55);
 $layer4: rgb(75, 75, 75);
 $layer5: rgb(95, 95, 95);
+
+$brandLayer: rgb(255, 153, 10);
 
 $lightBG: rgb(250, 240, 240);
 $lightAlt: rgba(255, 165, 0, 0.5);

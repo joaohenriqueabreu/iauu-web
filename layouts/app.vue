@@ -43,8 +43,7 @@ header {
 main {
   position: relative;
   padding: 0 20px;
-  min-height: 100vh;
-  overflow: auto;
+  padding-bottom: 8 * $space;
 
   @include desktop {
     margin-left: 15vw;
@@ -52,7 +51,7 @@ main {
 }
 
 aside {
-  background: $darkBG;
+  background: $layer1;
   position: fixed;
   left: 0;
   z-index: $moveToTop;

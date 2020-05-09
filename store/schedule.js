@@ -30,8 +30,8 @@ export const mutations = {
 }
 
 export const actions = {
-  async load({ commit }, id) {
-    const response = await this.$http.get(`schedules/${id}`)
+  async loadSchedule({ commit }, { id, year }) {
+    const response = await this.$http.get(`schedules/${id}/${year}`)
     commit('set_schedule', response.data)
   },
   async saveTimeslot({ commit }, { attributes: timeslotData }) {

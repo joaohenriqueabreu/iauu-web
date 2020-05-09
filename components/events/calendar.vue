@@ -25,6 +25,8 @@
     :column-header-format="columnHeaderFormat"
     :slot-label-format="slotLabelFormat"
     :event-time-format="eventTimeFormat"
+    :dates-destroy="datesDestroy"
+    :valid-range="validRange"
     @dateClick="dateClick"
     @eventClick="eventClick"
   />
@@ -45,7 +47,8 @@ export default {
   },
   props: {
     dateClickCallback: { type: Function, default: () => {} },
-    eventClickCallback: { type: Function, default: () => {} }
+    eventClickCallback: { type: Function, default: () => {} },
+    reloadCalendarCallback: { type: Function, default: () => {} }
   },
   data() {
     return {
@@ -55,7 +58,8 @@ export default {
         timeGridPlugin,
         bootstrapPlugin
       ],
-      calendarEvents: []
+      calendarEvents: [],
+      currentYear: 0 // store to fetch new events when user switches year
     }
   },
   computed: {
@@ -118,6 +122,7 @@ export default {
     }
   },
   watch: {
+    // TODO refactor op - We can move this to
     removedId(eventId) {
       this.fullcalendarApi.getEventById(eventId).remove()
     },
@@ -126,19 +131,29 @@ export default {
     }
   },
   mounted() {
-    // Convert provided timeslots into full-calender format
-    this.timeslots.forEach((timeslot) => {
-      this.calendarEvents.push(this.formatFullcalendarTimeslot(timeslot))
-    })
+    this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
+    this.loadCalendarEvents()
   },
   methods: {
     ...mapActions('schedule', ['removeTimeslot']),
+    ...mapActions('app', ['showMessage']),
     eventClick({ event }) {
       if (event.extendedProps.type === 'unavailable') {
         this.removeTimeslot(event.extendedProps)
         return
       }
       return this.eventClickCallback(event.extendedProps)
+    },
+    validRange(something) {},
+    datesDestroy() {
+      // This method is called right after every view switch on calendar,
+      // when we switch years, append new events data
+      if (
+        this.moment(this.fullcalendarApi.getDate()).year() !== this.currentYear
+      ) {
+        this.reloadCalendarCallback(this.currentYear)
+        this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
+      }
     },
     dateClick(date) {
       return this.dateClickCallback(date)
@@ -167,6 +182,13 @@ export default {
       }
 
       return fullcalendarEvent
+    },
+    // Can be called by parent
+    loadCalendarEvents() {
+      // Convert provided timeslots into full-calender format
+      this.timeslots.forEach((timeslot) => {
+        this.calendarEvents.push(this.formatFullcalendarTimeslot(timeslot))
+      })
     }
   }
 }
@@ -190,11 +212,19 @@ export default {
   left: 0% !important;
   right: 0% !important;
   &.proposal {
-    background: rgb(100, 100, 200);
+    background: rgb(249, 195, 34);
+    span {
+      color: $layer2;
+    }
   }
 
   &.presentation {
     background: rgb(100, 200, 100);
+  }
+
+  &.blank {
+    background: $layer3;
+    color: $layer3;
   }
 
   &.unavailable {
@@ -226,6 +256,17 @@ export default {
         content: 'Remover';
       }
     }
+  }
+}
+
+// Overwrite buttons
+.fc-button,
+fc-button-primary {
+  background: $brandLayer;
+  border: none;
+
+  &:disabled {
+    background: transparentize($brandLayer, 0.5);
   }
 }
 
@@ -273,7 +314,7 @@ td {
 // }
 
 .fc-view-container {
-  background: $darkComponent;
+  background: $layer3;
   box-shadow: $higherShadow;
   border-radius: 5px;
   padding: 10px;

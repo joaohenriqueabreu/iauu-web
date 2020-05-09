@@ -34,7 +34,7 @@ select {
   outline-color: transparent;
   font-size: $regular;
   resize: none;
-  background-color: $darkBG;
+  background-color: $layer1;
   cursor: pointer;
   color: $white;
   font-weight: $bold;
@@ -43,10 +43,10 @@ select {
   padding: 5px;
   margin-bottom: $space;
   &:focus {
-    outline-color: $darkBG;
+    outline-color: $layer1;
   }
   &:hover {
-    background-color: $darkBG;
+    background-color: $layer1;
   }
 }
 

@@ -7,8 +7,10 @@
     </p>
     <div v-if="timeslots">
       <full-calendar
+        ref="fullcalendar"
         :date-click-callback="openUnavailable"
         :event-click-callback="openEvent"
+        :reload-calendar-callback="reloadEvents"
         class="content"
       ></full-calendar>
       <modal ref="unavailableModal" height="small">
@@ -38,8 +40,11 @@ export default {
     proposal: Proposal,
     presentation: Presentation
   },
-  async asyncData({ store }) {
-    await store.dispatch('schedule/load', store.state.auth.user.id)
+  async asyncData({ app, store }) {
+    await store.dispatch('schedule/loadSchedule', {
+      id: store.state.auth.user.id,
+      year: new Date().getFullYear()
+    })
   },
   data() {
     return {
@@ -49,11 +54,17 @@ export default {
     }
   },
   computed: {
-    ...mapState({ timeslots: (state) => state.schedule.schedule.timeslots })
+    ...mapState({ timeslots: (state) => state.schedule.schedule.timeslots }),
+    ...mapState({ userId: (state) => state.auth.user.id })
   },
   methods: {
     ...mapActions('event', ['loadProposal', 'loadPresentation']),
+    ...mapActions('schedule', ['loadSchedule']),
     ...mapActions('app', ['showMessage']),
+    async reloadEvents(year) {
+      await this.loadSchedule({ id: this.userId, year })
+      this.$refs.fullcalendar.loadCalendarEvents()
+    },
     openUnavailable({ dateStr }) {
       if (this.haveEventsOnDate(dateStr)) {
         this.showMessage({

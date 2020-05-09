@@ -44,7 +44,7 @@ export default {
     z-index: $above;
     min-height: 50vh;
     min-width: 25vw;
-    background: $darkElevated;
+    background: $layer2;
     box-shadow: $shadow;
 
     input {
