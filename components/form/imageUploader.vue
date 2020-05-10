@@ -1,8 +1,16 @@
 <template>
   <div>
-    <overlay></overlay>
     <div @click.prevent="upload">
-      <slot></slot>
+      <overlay :rounded="rounded">
+        <template v-slot:default>
+          <slot></slot>
+        </template>
+        <template v-slot:hover>
+          <div class="vertical middle center">
+            <h3>Enviar imagem</h3>
+          </div>
+        </template>
+      </overlay>
     </div>
   </div>
 </template>
@@ -11,6 +19,9 @@
 import * as filestack from 'filestack-js'
 
 export default {
+  props: {
+    rounded: { type: Boolean, default: false }
+  },
   data() {
     return {
       uploadClient: { type: Object, default: () => {} }
@@ -36,15 +47,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-div {
-  cursor: pointer;
-  position: relative;
-  &:hover {
-    opacity: 0.5;
-    &:before {
-      content: 'upload';
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

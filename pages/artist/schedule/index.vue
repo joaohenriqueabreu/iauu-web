@@ -14,16 +14,22 @@
         @date-click="openUnavailable"
       ></full-calendar>
       <modal ref="unavailableModal" height="small">
-        <unavailable
-          :default="selectedTimeslot"
-          @save="closeUnavailableModal"
-        ></unavailable>
+        <template v-slot:main>
+          <unavailable
+            :default="selectedTimeslot"
+            @save="closeUnavailableModal"
+          ></unavailable>
+        </template>
       </modal>
       <modal ref="proposalModal">
-        <proposal @update="closeProposalModal"></proposal>
+        <template v-slot:main>
+          <proposal @update="closeProposalModal"></proposal>
+        </template>
       </modal>
       <modal ref="presentationModal">
-        <presentation @update="closePresentationModal"></presentation>
+        <template v-slot:main>
+          <presentation @update="closePresentationModal"></presentation>
+        </template>
       </modal>
     </div>
   </div>

@@ -44,7 +44,8 @@ import {
   faClock,
   faDollarSign,
   faPiggyBank,
-  faInfo
+  faInfo,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope,
@@ -59,7 +60,9 @@ import {
   faInstagram,
   faPinterest,
   faWhatsapp,
-  faLinkedin
+  faLinkedin,
+  faSpotify,
+  faYoutube
 } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -112,6 +115,8 @@ library.add(
   faFacebook,
   faPinterest,
   faWhatsapp,
+  faSpotify,
+  faYoutube,
   faPhotoVideo,
   faComment,
   faQuestionCircle,
@@ -122,7 +127,8 @@ library.add(
   faClock,
   faDollarSign,
   faPiggyBank,
-  faInfo
+  faInfo,
+  faExclamation
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

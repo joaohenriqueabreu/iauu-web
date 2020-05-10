@@ -35,6 +35,7 @@ Vue.use(VueSweetalert2)
 Vue.use(VueModal, { componentName: 'v-modal' })
 
 Vue.component('avatar', Avatar)
+
 Vue.component('toggle-button', ToggleButton)
 Vue.component('overlay', Overlay)
 Vue.component('form-input', FormInput)

@@ -1,21 +1,64 @@
 <template>
   <div>
     <label :for="name"></label>
-    <select :name="name">
-      <option v-for="(option, index) in options" :key="index">{{
-        option
-      }}</option>
-    </select>
+    <v-selectize
+      v-model="something"
+      :name="name"
+      :settings="settings"
+      @input="optionSelected"
+    >
+      <option
+        v-for="(option, index) in selectizeOptions"
+        :key="index"
+        :value="option.display"
+        >{{ option.display }}
+      </option>
+    </v-selectize>
     <font-awesome v-if="icon" icon="icon"></font-awesome>
   </div>
 </template>
 
 <script>
+import VueSelectize from 'vue2-selectize'
 export default {
+  components: {
+    'v-selectize': VueSelectize
+  },
   props: {
     options: { type: Array, default: () => [] },
     name: { type: String, default: '' },
-    icon: { type: String, default: 'arrow-down' }
+    icon: { type: String, default: 'arrow-down' },
+    placeholder: { type: String, default: 'Digite para procurar' }
+  },
+  data() {
+    return {
+      selectizeOptions: [],
+      something: ''
+    }
+  },
+  computed: {
+    settings() {
+      const self = this
+      return {
+        maxOptions: 3,
+        placeholder: self.placeholder,
+        onChange(value) {
+          self.$emit('select', value)
+        }
+      }
+    }
+  },
+  mounted() {
+    // convert into selectize format
+    const self = this
+    this.$collection.forEach(this.options, function(option) {
+      self.selectizeOptions.push({ display: option })
+    })
+  },
+  methods: {
+    optionSelected(value) {
+      this.$emit('select', value)
+    }
   }
 }
 </script>
@@ -60,5 +103,14 @@ select {
 div.error {
   position: absolute;
   bottom: -30px;
+}
+
+// Selectize overwrites
+.selectize-input.items.not-full {
+  input {
+    &::after {
+      display: none;
+    }
+  }
 }
 </style>

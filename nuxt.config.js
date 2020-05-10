@@ -32,7 +32,8 @@ export default {
   css: [
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css',
-    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
+    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
+    'selectize/dist/css/selectize.bootstrap3.css'
   ],
   styleResources: {
     scss: [

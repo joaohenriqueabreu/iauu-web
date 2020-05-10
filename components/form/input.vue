@@ -2,6 +2,7 @@
   <div>
     <label :for="name">{{ label }}</label>
     <input
+      v-if="!rows"
       :value="value"
       :type="type"
       :name="name"
@@ -9,6 +10,15 @@
       :disabled="disabled"
       @input="$emit('input', $event.target.value)"
     />
+    <textarea
+      v-else
+      :value="value"
+      :rows="rows"
+      :name="name"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      @input="$emit('input', $event.target.value)"
+    ></textarea>
     <font-awesome v-if="icon" icon="icon"></font-awesome>
   </div>
 </template>
@@ -16,6 +26,7 @@
 <script>
 export default {
   props: {
+    rows: { type: Number, default: 0 },
     value: { type: [String, Number, Boolean], default: null },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
@@ -30,8 +41,10 @@ export default {
 <style lang="scss" scoped>
 label {
   font-weight: $bold;
-  margin-bottom: 5px;
+  margin-bottom: 2 * $space;
+  margin-right: 2 * $space;
   color: $brand;
+  text-transform: capitalize;
 }
 
 input,
@@ -47,6 +60,7 @@ textarea {
   color: $white;
   font-weight: $bold;
   box-shadow: $lightShadow;
+  margin-bottom: 2 * $space;
 
   padding: 5px;
   &:focus {
