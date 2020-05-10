@@ -40,7 +40,8 @@ export default {
     settings() {
       const self = this
       return {
-        maxOptions: 3,
+        openOnFocus: false,
+        hideSelected: true,
         placeholder: self.placeholder,
         onChange(value) {
           self.$emit('select', value)
@@ -55,13 +56,41 @@ export default {
       self.selectizeOptions.push({ display: option })
     })
   },
-  methods: {
-    optionSelected(value) {
-      this.$emit('select', value)
+  methods: {}
+}
+</script>
+
+<style lang="scss">
+// Selectize overwrites
+.selectize-control {
+  .selectize-input {
+    background: $layer1;
+    border: none;
+    border-radius: $edges;
+    box-shadow: $shadow;
+    transition: $transition;
+    &.items.not-full.has-options::after {
+      display: none;
+    }
+
+    &:hover {
+      background: $layer3;
+    }
+
+    &.focus.input-active {
+      transition: $transition;
+      background: $layer3;
+      input {
+        color: $brand;
+        font-weight: $bold;
+      }
+    }
+    input {
+      width: 100%;
     }
   }
 }
-</script>
+</style>
 
 <style lang="scss" scoped>
 label {
@@ -103,14 +132,5 @@ select {
 div.error {
   position: absolute;
   bottom: -30px;
-}
-
-// Selectize overwrites
-.selectize-input.items.not-full {
-  input {
-    &::after {
-      display: none;
-    }
-  }
 }
 </style>

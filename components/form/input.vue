@@ -49,8 +49,8 @@ label {
 
 input,
 textarea {
+  transition: $transition;
   width: 100%;
-  // border: 2px solid $white;
   border: none;
   border-radius: 10px;
   outline-color: transparent;
@@ -61,13 +61,20 @@ textarea {
   font-weight: $bold;
   box-shadow: $lightShadow;
   margin-bottom: 2 * $space;
+  padding: 2 * $space 1.5 * $space;
+  cursor: pointer;
 
-  padding: 5px;
   &:focus {
     outline-color: transparent;
   }
+
+  &:focus {
+    transition: $transition;
+    background: $layer5;
+    color: $brand;
+  }
   &:hover {
-    background-color: $layer1;
+    background-color: $layer5;
   }
 }
 
