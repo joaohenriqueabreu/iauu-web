@@ -3,10 +3,10 @@
     <form>
       <image-uploader ref="bgUploader" @uploaded="setBackground">
         <header
-          :style="{ 'background-image': `url(${backgroundUrl})` }"
+          :style="{ 'background-image': `url(${form.backgroundUrl})` }"
           @click="uploadBG"
         >
-          <input type="hidden" name="backgroundUrl" :value="backgroundUrl" />
+          <input v-model="form.backgroundUrl" type="hidden" />
         </header>
       </image-uploader>
       <main>
@@ -16,85 +16,77 @@
             :rounded="true"
             @uploaded="setAvatar"
           >
-            <avatar :src="avatarUrl" :size="150" @click="uploadAvatar"></avatar>
+            <avatar
+              :src="form.avatarUrl"
+              :size="150"
+              @click="uploadAvatar"
+            ></avatar>
+            <input v-model="form.avatarUrl" type="hidden" />
           </image-uploader>
         </div>
         <div class="pt-5"></div>
-        <div class="pt-5"></div>
         <div class="boxed">
-          <h6 class="mb-4">Conecte suas redes sociais</h6>
-          <div class="raised horizontal center middle">
-            <div class="icon-box">
-              <font-awesome
-                :class="{ active: hasSpotify }"
-                :icon="['fab', 'spotify']"
-                @click="linkNetwork('spotify')"
-              ></font-awesome>
-            </div>
-            <div class="icon-box">
-              <font-awesome
-                :class="{ active: hasFacebook }"
-                :icon="['fab', 'facebook']"
-                @click="linkNetwork('facebook')"
-              ></font-awesome>
-            </div>
-            <div class="icon-box">
-              <font-awesome
-                :class="{ active: hasInstagram }"
-                :icon="['fab', 'instagram']"
-                @click="linkNetwork('instagram')"
-              ></font-awesome>
-            </div>
-            <div class="icon-box">
-              <font-awesome
-                :class="{ active: hasYoutube }"
-                :icon="['fab', 'youtube']"
-                @click="linkNetwork('youtube')"
-              ></font-awesome>
-            </div>
-          </div>
-          <div class="my-5 box raised vertical center middle">
-            <h6 class="mb-4">Qual tipo de apresentação sua empresa realiza?</h6>
-            <small class="mb-4">
-              <font-awesome icon="exclamation"></font-awesome>
-              Não deixe de selecionar as opções para facilitar a busca dos
-              clientes
-            </small>
-            <div class="half-width">
-              <form-select
-                :options="categories"
-                @select="categorySelect"
-              ></form-select>
-            </div>
-          </div>
-          <div class="half-width my-5">
-            <form-input
-              class="mb-3"
-              label="Nome fantasia"
-              placeholder="Seu nome incrível vem aqui"
-            ></form-input>
-            <form-input
-              class="mb-3"
-              label="História"
-              :rows="5"
-              placeholder="Conta um pouquinho da sua história para seus clientes"
-            ></form-input>
-            <hr />
-            <form-input
-              v-model="form.cnpj"
-              label="CNPJ"
-              class="mb-3  horizontal center middle"
-            ></form-input>
-            <form-input
-              v-model="form.location"
-              label="Endereço"
-              class="mb-3 horizontal center middle"
-            ></form-input>
-            <form-input
-              v-model="form.phone"
-              label="Telefone"
-              class="mb-3  horizontal center middle"
-            ></form-input>
+          <ul class="nav nav-tabs mt-4">
+            <li class="nav-link first">
+              <a
+                class="nav-link"
+                :class="{ active: statsTab }"
+                @click="activeTab = 'stats'"
+                >Stats</a
+              >
+            </li>
+            <li class="nav-link">
+              <a
+                class="nav-link"
+                :class="{ active: infoTab }"
+                @click="activeTab = 'info'"
+                >Informações</a
+              >
+            </li>
+            <li class="nav-link">
+              <a
+                class="nav-link"
+                :class="{ active: socialTab }"
+                @click="activeTab = 'social'"
+                >Redes Sociais</a
+              >
+            </li>
+            <li class="nav-link">
+              <a
+                class="nav-link"
+                :class="{ active: categoriesTab }"
+                @click="activeTab = 'categories'"
+                >Categorias</a
+              >
+            </li>
+          </ul>
+          <div
+            class="mb-5 raised vertical middle center"
+            :class="{ first: statsTab }"
+          >
+            <fade-transition mode="out-in">
+              <profile-stats v-show="statsTab" key="stats"></profile-stats>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <social-networks
+                v-show="socialTab"
+                ref="social"
+                key="social"
+              ></social-networks>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <artist-categories
+                v-show="categoriesTab"
+                key="categories"
+              ></artist-categories>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <artist-info
+                v-show="infoTab"
+                ref="info"
+                key="artist"
+              ></artist-info>
+            </fade-transition>
           </div>
         </div>
       </main>
@@ -104,76 +96,57 @@
         </div>
       </footer>
     </form>
-    <modal ref="social" height="tiny">
-      <template v-slot:main>
-        <div class="full-fill vertical middle center p5">
-          <h6>
-            <font-awesome icon="exclamation"></font-awesome>
-            Lembre-se de deixar suas redes públicas!
-          </h6>
-          <div class="mb-4"></div>
-          <form-input
-            v-model="networkUrl"
-            class="half-width"
-            :label="selectedNetwork"
-            placeholder="Cole aqui o endereço de sua conta"
-          ></form-input>
-        </div>
-      </template>
-      <template v-slot:footer>
-        <div class="half-width">
-          <submit-button @submit="saveNetworkUrl">Conectar</submit-button>
-        </div>
-      </template>
-    </modal>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import SocialNetworks from '@/components/artist/socialNetworks'
+import ArtistInfo from '@/components/artist/info'
+import ArtistCategories from '@/components/artist/categories'
+import ProfileStats from '@/components/artist/profileStats'
 export default {
+  components: {
+    'social-networks': SocialNetworks,
+    'artist-info': ArtistInfo,
+    'artist-categories': ArtistCategories,
+    'profile-stats': ProfileStats
+  },
   data() {
     return {
-      backgroundUrl: { type: String, default: '' },
-      avatarUrl: { type: String, default: '' },
-      selectedNetwork: String,
-      networkUrl: String,
+      activeTab: { type: String, default: 'info' },
       form: {
-        socialNetworks: {
-          spotify: { type: String, default: '' },
-          youtube: { type: String, default: '' },
-          facebook: { type: String, default: '' },
-          instagram: { type: String, default: '' }
-        }
+        backgroundUrl: { type: String, default: '' },
+        avatarUrl: { type: String, default: '' },
+        social: { type: Object, default: () => {} },
+        category: { type: Object, default: () => {} },
+        info: { type: Object, default: () => {} }
       }
     }
   },
   computed: {
-    hasSpotify() {
-      return this.form.socialNetworks.spotify.length > 0
+    statsTab() {
+      return this.activeTab === 'stats'
     },
-    hasFacebook() {
-      return this.form.socialNetworks.facebook.length > 0
+    infoTab() {
+      return this.activeTab === 'info'
     },
-    hasInstagram() {
-      return this.form.socialNetworks.instagram.length > 0
+    socialTab() {
+      return this.activeTab === 'social'
     },
-    hasYoutube() {
-      return this.form.socialNetworks.youtube.length > 0
-    },
-    categories() {
-      return ['rock', 'pop', 'jazz', 'funk', 'pagode']
+    categoriesTab() {
+      return this.activeTab === 'categories'
     }
   },
   created() {
-    this.backgroundUrl = this.$config.defaultBGImgUrl
-    this.avatarUrl = this.$config.defaultAvatarImgUrl
+    // TODO grab from user store
+    this.form.backgroundUrl = this.$config.defaultBGImgUrl
+    this.form.avatarUrl = this.$config.defaultAvatarImgUrl
+    this.activeTab = 'info'
   },
   methods: {
     ...mapActions('app', ['showMessage']),
-    hasConnectedNetwork(network) {
-      return this.$collection.includes(this.form.socialNetworks, network)
-    },
+
     uploadBG() {
       this.$refs.bgUploader.upload()
     },
@@ -181,19 +154,10 @@ export default {
       this.$refs.avatarUploader.upload()
     },
     setBackground({ url }) {
-      this.backgroundUrl = url
+      this.form.backgroundUrl = url
     },
     setAvatar({ url }) {
-      this.avatarUrl = url
-    },
-    linkNetwork(network) {
-      this.selectedNetwork = network
-      this.networkUrl = ''
-      this.$refs.social.open()
-    },
-    saveNetworkUrl() {
-      this.form.socialNetworks[this.selectedNetwork] = this.networkUrl
-      this.$refs.social.close()
+      this.form.avatarUrl = url
     },
     categorySelect(category) {
       alert(category)
@@ -228,41 +192,23 @@ form {
     }
 
     .boxed {
-      @extend .vertical, .center;
+      @extend .vertical, .middle;
       background: $layer3;
       box-shadow: $shadow;
       border-radius: $edges;
       padding: 5 * $space;
 
       .raised {
+        transition: $transition;
         background: $layer4;
         padding: 4 * $space;
-        border-radius: $edges;
         box-shadow: $shadow;
         width: 100%;
+        border-radius: $edges;
+        min-height: 50vh;
 
-        .icon-box {
-          @extend .horizontal, .middle, .center;
-          margin: 0 5 * $space;
-
-          [data-icon] {
-            color: $layer5;
-            font-size: 55px;
-            font-weight: $bold;
-            // box-shadow: $shadow;
-            filter: drop-shadow($shadow);
-            // border-radius: $rounded;
-            transition: $transition;
-            cursor: pointer;
-            &:hover {
-              transition: $transition;
-              color: $brand;
-            }
-            &.active {
-              transition: $transition;
-              color: $brand;
-            }
-          }
+        &.first {
+          border-radius: 0 $edges $edges $edges;
         }
       }
     }
@@ -275,6 +221,40 @@ form {
   footer {
     height: 10vh;
     position: relative;
+  }
+
+  // Overwrite bootstrap styling
+  .nav-tabs {
+    border-bottom: none;
+    z-index: $moveToTop;
+    .nav-link {
+      padding-bottom: 0;
+      border: none;
+      border-top-left-radius: $edges;
+      border-top-right-radius: $edges;
+      cursor: pointer;
+      transition: $transition;
+
+      &.first {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      &.active {
+        background: $layer4;
+        border: none;
+        color: $brand;
+        box-shadow: 0 -19px 19px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      &:hover {
+        transition: $transition;
+        color: $layer5;
+      }
+      a {
+        padding-bottom: 2 * $space;
+      }
+    }
   }
 }
 </style>

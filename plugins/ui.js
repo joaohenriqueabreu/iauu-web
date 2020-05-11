@@ -11,6 +11,7 @@ import VueModal from 'vue-js-modal'
 import VueSweetalert2 from 'vue-sweetalert2'
 import { ToggleButton } from 'vue-js-toggle-button'
 import moment from 'moment'
+import { VueSvgGauge } from 'vue-svg-gauge'
 
 // Form components
 import Modal from '@/components/layout/modal'
@@ -46,6 +47,7 @@ Vue.component('submit-button', SubmitButton)
 Vue.component('fade-transition', FadeTransition)
 Vue.component('modal', Modal)
 Vue.component('alert', AlertMessage)
+Vue.component('gauge', VueSvgGauge)
 
 Vue.prototype.moment = moment
 Vue.prototype.delay = setTimeout(() => {}, 500)

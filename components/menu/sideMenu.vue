@@ -122,8 +122,17 @@ main {
     color: $brand;
     padding: 0 4 * $space;
     width: 100%;
-    border-top-left-radius: $rounded;
-    border-bottom-left-radius: $rounded;
+    // border-top-right-radius: $rounded;
+    // border-bottom-right-radius: $rounded;
+
+    &.previous {
+      border-bottom-right-radius: $rounded;
+    }
+
+    &.later {
+      border-top-right-radius: $rounded;
+    }
+
     &.routed {
       background: $layer2;
     }
