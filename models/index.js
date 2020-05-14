@@ -1,5 +1,6 @@
 import User from './user'
 import Artist from './artist'
+import Product from './product'
 import Contractor from './contractor'
 import Media from './media'
 import Proposal from './proposal'
@@ -10,6 +11,7 @@ import Timeslot from './timeslot'
 export default {
   User,
   Artist,
+  Product,
   Contractor,
   Media,
   Proposal,

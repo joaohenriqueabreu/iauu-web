@@ -62,7 +62,8 @@ import {
   faWhatsapp,
   faLinkedin,
   faSpotify,
-  faYoutube
+  faYoutube,
+  faProductHunt
 } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -117,6 +118,7 @@ library.add(
   faWhatsapp,
   faSpotify,
   faYoutube,
+  faProductHunt,
   faPhotoVideo,
   faComment,
   faQuestionCircle,

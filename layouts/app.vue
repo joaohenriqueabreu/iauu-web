@@ -35,7 +35,7 @@ export default {
 <style lang="scss" scoped>
 header {
   position: relative;
-  height: 10vh;
+  min-height: 10vh;
   padding: 10px 0;
   z-index: $moveToTop;
 }

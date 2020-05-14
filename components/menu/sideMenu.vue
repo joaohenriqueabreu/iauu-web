@@ -35,21 +35,7 @@
         <font-awesome icon="piggy-bank"></font-awesome>
         <span>Conta</span>
       </nuxt-link>
-      <nuxt-link
-        :to="`/${userType}/profile`"
-        :class="{ routed: routed('profile') }"
-      >
-        <font-awesome icon="user"></font-awesome>
-        <span>Perfil</span>
-      </nuxt-link>
     </main>
-    <footer>
-      <hr />
-      <nuxt-link to="/logout">
-        <font-awesome icon="times"></font-awesome>
-        <span>Sair</span>
-      </nuxt-link>
-    </footer>
   </div>
 </template>
 
