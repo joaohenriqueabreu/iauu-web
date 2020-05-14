@@ -3,7 +3,7 @@
     <div class="sub-wrapper">
       <slot name="default"></slot>
     </div>
-    <div class="overlay" :class="{ rounded }">
+    <div class="overlay" :class="{ rounded, selected }">
       <slot name="hover"></slot>
     </div>
   </div>
@@ -12,7 +12,8 @@
 <script>
 export default {
   props: {
-    rounded: Boolean
+    rounded: Boolean,
+    selected: { type: Boolean, default: false } // fixed styling
   }
 }
 </script>
@@ -28,6 +29,11 @@ div {
   }
 
   .overlay {
+    &.selected {
+      background: $brandLayer;
+      opacity: 0.6;
+    }
+
     &:hover {
       opacity: 0.9;
     }

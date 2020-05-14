@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <form-input
       v-model="info.name"
       class="mb-3"
@@ -14,21 +14,26 @@
       placeholder="Conta um pouquinho da sua história para seus clientes"
     ></form-input>
     <hr />
-    <form-input
-      v-model="info.cnpj"
-      label="CNPJ"
-      class="mb-3  horizontal center middle"
-    ></form-input>
-    <form-input
-      v-model="info.location"
-      label="Endereço"
-      class="mb-3 horizontal center middle"
-    ></form-input>
-    <form-input
-      v-model="info.phone"
-      label="Telefone"
-      class="mb-3  horizontal center middle"
-    ></form-input>
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+        <form-input
+          v-model="info.cnpj"
+          label="CNPJ"
+          class="mb-3  horizontal center middle"
+        ></form-input>
+        <form-input
+          v-model="info.location"
+          label="Endereço"
+          class="mb-3 horizontal center middle"
+        ></form-input>
+        <form-input
+          v-model="info.phone"
+          label="Telefone"
+          class="mb-3  horizontal center middle"
+        ></form-input>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,4 +47,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped></style>

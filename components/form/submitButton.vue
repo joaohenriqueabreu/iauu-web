@@ -82,7 +82,7 @@ input {
 
   &:hover:not(.disabled) {
     transition: $transition;
-    background: transparentize($brand2, 0.1);
+    background: transparentize($brandLayer, 0.1);
     box-shadow: $higherShadow;
   }
   [data-icon] {

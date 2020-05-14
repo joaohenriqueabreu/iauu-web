@@ -60,12 +60,16 @@
               >
             </li>
           </ul>
-          <div
-            class="mb-5 raised vertical middle center"
-            :class="{ first: statsTab }"
-          >
+          <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
             <fade-transition mode="out-in">
               <profile-stats v-show="statsTab" key="stats"></profile-stats>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <artist-info
+                v-show="infoTab"
+                ref="info"
+                key="artist"
+              ></artist-info>
             </fade-transition>
             <fade-transition mode="out-in">
               <social-networks
@@ -78,14 +82,8 @@
               <artist-categories
                 v-show="categoriesTab"
                 key="categories"
+                :categories="categories"
               ></artist-categories>
-            </fade-transition>
-            <fade-transition mode="out-in">
-              <artist-info
-                v-show="infoTab"
-                ref="info"
-                key="artist"
-              ></artist-info>
             </fade-transition>
           </div>
         </div>
@@ -112,9 +110,13 @@ export default {
     'artist-categories': ArtistCategories,
     'profile-stats': ProfileStats
   },
+  async asyncData({ app }) {
+    const { data } = await app.$http.get('categories')
+    return { categories: data }
+  },
   data() {
     return {
-      activeTab: { type: String, default: 'info' },
+      activeTab: { type: String, default: 'stats' },
       form: {
         backgroundUrl: { type: String, default: '' },
         avatarUrl: { type: String, default: '' },
@@ -142,7 +144,7 @@ export default {
     // TODO grab from user store
     this.form.backgroundUrl = this.$config.defaultBGImgUrl
     this.form.avatarUrl = this.$config.defaultAvatarImgUrl
-    this.activeTab = 'info'
+    this.activeTab = 'stats'
   },
   methods: {
     ...mapActions('app', ['showMessage']),

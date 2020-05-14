@@ -1,20 +1,15 @@
 <template>
   <div>
-    <label :for="name"></label>
-    <v-selectize
-      v-model="something"
-      :name="name"
-      :settings="settings"
-      @input="optionSelected"
-    >
+    <label v-if="label" :for="name">{{ label }}</label>
+    <v-selectize :name="name" :settings="settings">
       <option
         v-for="(option, index) in selectizeOptions"
         :key="index"
-        :value="option.display"
+        :value="option.value"
         >{{ option.display }}
       </option>
     </v-selectize>
-    <font-awesome v-if="icon" icon="icon"></font-awesome>
+    <!-- <font-awesome v-if="icon" icon="icon"></font-awesome> -->
   </div>
 </template>
 
@@ -27,34 +22,30 @@ export default {
   props: {
     options: { type: Array, default: () => [] },
     name: { type: String, default: '' },
-    icon: { type: String, default: 'arrow-down' },
-    placeholder: { type: String, default: 'Digite para procurar' }
-  },
-  data() {
-    return {
-      selectizeOptions: [],
-      something: ''
-    }
+    label: { type: String, default: '' },
+    placeholder: { type: String, default: 'Digite para procurar' },
+    autoOpen: { type: Boolean, default: false },
+    hideSelected: { type: Boolean, default: false }
   },
   computed: {
     settings() {
       const self = this
       return {
-        openOnFocus: false,
-        hideSelected: true,
+        openOnFocus: self.autoOpen,
+        hideSelected: self.hideSelected,
         placeholder: self.placeholder,
         onChange(value) {
-          self.$emit('select', value)
+          if (value !== undefined && value !== null && value.length > 0) {
+            self.$emit('selected', value)
+          }
         }
       }
+    },
+    selectizeOptions() {
+      return this.$collection.map(this.options, (option) => {
+        return { value: option, display: option }
+      })
     }
-  },
-  mounted() {
-    // convert into selectize format
-    const self = this
-    this.$collection.forEach(this.options, function(option) {
-      self.selectizeOptions.push({ display: option })
-    })
   },
   methods: {}
 }
@@ -87,6 +78,16 @@ export default {
     }
     input {
       width: 100%;
+    }
+  }
+  .selectize-dropdown {
+    transition: $transition;
+    background: $layer1;
+    color: $brand;
+
+    .option.active {
+      color: $brand;
+      background: $layer2;
     }
   }
 }
