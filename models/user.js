@@ -13,7 +13,8 @@ export default class User extends Model {
       photo: new Media(),
       phone: '',
       password: '',
-      email: ''
+      email: '',
+      requires_initial_setup: true
     }
   }
 }

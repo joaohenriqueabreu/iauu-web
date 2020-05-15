@@ -70,16 +70,16 @@ export default {
   },
   computed: {
     hasSpotify() {
-      return this.spotify.length > 0
+      return !this.$utils.isEmpty(this.spotify)
     },
     hasFacebook() {
-      return this.facebook.length > 0
+      return !this.$utils.isEmpty(this.facebook.length)
     },
     hasInstagram() {
-      return this.instagram.length > 0
+      return !this.$utils.isEmpty(this.instagram.length)
     },
     hasYoutube() {
-      return this.youtube.length > 0
+      return !this.$utils.isEmpty(this.youtube.length)
     }
   },
   methods: {

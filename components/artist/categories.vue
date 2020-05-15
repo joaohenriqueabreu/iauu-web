@@ -32,10 +32,7 @@
         </div>
       </div>
     </fade-transition>
-    <div
-      v-show="selectedCategory !== null && selectedCategory.length > 0"
-      class="subcategory-select"
-    >
+    <div v-show="!$utils.isEmpty(selectedCategory)" class="subcategory-select">
       <h6></h6>
       <form-select
         :options="subCategoryOptions"
@@ -72,9 +69,6 @@ export default {
     }
   },
   computed: {
-    hasSelectedCategory() {
-      return this.selectedCategory.length > 0
-    },
     subCategoryOptions() {
       return this.$collection.map(
         this.subCategories,

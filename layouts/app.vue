@@ -21,6 +21,7 @@
 import { mapState } from 'vuex'
 import MenuManager from '@/components/menu/menuManager'
 import SideMenu from '@/components/menu/sideMenu'
+
 export default {
   components: {
     'side-menu': SideMenu,

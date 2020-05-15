@@ -10,6 +10,7 @@ import { FadeTransition, SlideYDownTransition } from 'vue2-transitions'
 import VueModal from 'vue-js-modal'
 import VueSweetalert2 from 'vue-sweetalert2'
 import { ToggleButton } from 'vue-js-toggle-button'
+import LinkPrevue from 'link-prevue'
 import moment from 'moment'
 
 // Form components
@@ -47,6 +48,7 @@ Vue.component('image-uploader', ImageUploader)
 Vue.component('submit-button', SubmitButton)
 Vue.component('fade-transition', FadeTransition)
 Vue.component('slide-down-transition', SlideYDownTransition)
+Vue.component('link-preview', LinkPrevue)
 Vue.component('modal', Modal)
 Vue.component('alert', AlertMessage)
 Vue.component('stats-donut', StatsDonut)

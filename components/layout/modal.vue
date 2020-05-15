@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">
+    <v-modal
+      :name="name"
+      :adaptive="true"
+      :click-to-close="true"
+      height="auto"
+      @before-open="disableBodyScroll"
+      @before-close="enableBodyScroll"
+    >
       <div :class="height">
         <header>
           <div class="close" @click="close">
@@ -17,7 +24,6 @@
           <slot name="footer"></slot>
         </footer>
       </div>
-      <!-- </div> -->
     </v-modal>
   </div>
 </template>
@@ -37,6 +43,14 @@ export default {
     },
     close() {
       this.$modal.hide(this.name)
+    },
+    disableBodyScroll() {
+      document.getElementsByTagName('body')[0].classList.add('disable-scroll')
+    },
+    enableBodyScroll() {
+      document
+        .getElementsByTagName('body')[0]
+        .classList.remove('disable-scroll')
     }
   }
 }

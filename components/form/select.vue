@@ -35,7 +35,7 @@ export default {
         hideSelected: self.hideSelected,
         placeholder: self.placeholder,
         onChange(value) {
-          if (value !== undefined && value !== null && value.length > 0) {
+          if (!self.$utils.isEmpty(value)) {
             self.$emit('selected', value)
           }
         }

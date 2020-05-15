@@ -3,20 +3,20 @@
     <div class="horizontal middle d-flex justify-content-between mb-5">
       <h5 class="mr-2">Produtos</h5>
       <div class="add">
-        <button>
+        <button @click="openNewProductModal">
           <font-awesome icon="music"></font-awesome>
           Adicionar Produto
         </button>
       </div>
     </div>
-    <div v-if="products.length > 0" class="row">
+    <div v-if="!$utils.isEmpty(products)" class="row">
       <div
         v-for="(product, prodIndex) in products"
         :key="prodIndex"
         class="col-sm-6 mb-4"
       >
         <div class="product">
-          <header @click="remove(product.id)">
+          <header @click="openConfirm(product.id)">
             <font-awesome icon="times"></font-awesome>
           </header>
           <main>
@@ -37,7 +37,7 @@
                 {{ product.description }}
               </div>
             </perfect-scrollbar>
-            <div v-if="product.documents.length > 0">
+            <div v-if="!$utils.isEmpty(product.documents)">
               <h6>Documentos</h6>
               <hr />
               <perfect-scrollbar>
@@ -51,11 +51,11 @@
               </perfect-scrollbar>
             </div>
             <div class="mb-4"></div>
-            <div v-if="product.medias.length > 0">
-              <h6>Medias</h6>
+            <div v-if="!$utils.isEmpty(product.medias)">
+              <h6>Mídias</h6>
               <hr />
               <perfect-scrollbar>
-                <div class="documents">
+                <div class="vertical">
                   <media-thumbnail
                     v-for="(media, mediaIndex) in product.medias"
                     :key="mediaIndex"
@@ -82,7 +82,9 @@
             renegociar com seu cliente os novos termos do produto
           </p>
           <div class="horizontal center middle">
-            <submit-button class="mr-4">Ok, remover produto</submit-button>
+            <submit-button class="mr-4" @submit="remove(selectedProductId)"
+              >Ok, remover produto</submit-button
+            >
             <span class="clickable" @click="$refs.confirm.close()"
               >Não remover</span
             >
@@ -90,11 +92,47 @@
         </div>
       </template>
     </modal>
+    <modal ref="addProduct">
+      <template v-slot:header>
+        <h4>Cadastre um novo produto</h4>
+      </template>
+      <template v-slot:main>
+        <perfect-scrollbar>
+          <div class="new-product-form vertical middle p-4">
+            <form>
+              <form-input v-model="newProduct.name" label="Título"></form-input>
+              <form-input
+                v-model="newProduct.description"
+                label="Descrição"
+                :rows="3"
+              ></form-input>
+              <div class="horizontal middle center">
+                <form-input
+                  v-model="newProduct.value"
+                  class="mr-2"
+                  label="Valor (R$)"
+                ></form-input>
+                <form-input
+                  v-model="newProduct.duration"
+                  label="Duração da apresentação"
+                ></form-input>
+              </div>
+            </form>
+          </div>
+        </perfect-scrollbar>
+      </template>
+      <template v-slot:footer>
+        <div class="half-width mb-4">
+          <submit-button @submit="add">Cadastrar</submit-button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import Product from '@/models/product'
 import Attachment from '@/components/form/attachment'
 export default {
   components: {
@@ -103,12 +141,30 @@ export default {
   async asyncData({ store }) {
     await store.dispatch('artist/loadProducts')
   },
+  data() {
+    return {
+      selectedProductId: 0,
+      newProduct: new Product()
+    }
+  },
   computed: {
     ...mapState({ products: (state) => state.artist.products })
   },
   methods: {
-    remove(productId) {
+    ...mapActions('artist', ['removeProduct']),
+    openNewProductModal() {
+      this.$refs.addProduct.open()
+    },
+    openConfirm(productId) {
       this.$refs.confirm.open()
+      this.selectedProductId = productId
+    },
+    async add() {},
+    async remove(productId) {
+      await this.removeProduct(productId)
+      this.$nextTick(function() {
+        this.$refs.confirm.close()
+      })
     }
   }
 }
@@ -173,5 +229,9 @@ button {
   @extend .horizontal, .middle;
   max-width: 100%;
   position: relative;
+}
+
+.new-product-form {
+  max-height: 50vh;
 }
 </style>

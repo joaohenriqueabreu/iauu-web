@@ -33,12 +33,20 @@
         </div>
       </div>
     </slide-down-transition>
+    <initial-setup-manager
+      v-if="isLoggedIn && user.requires_initial_setup"
+      class="full-width my-3"
+    ></initial-setup-manager>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import InitialSetupManager from '@/components/menu/initialSetupManager'
 export default {
+  components: {
+    'initial-setup-manager': InitialSetupManager
+  },
   data() {
     return {
       displaySubmenu: false

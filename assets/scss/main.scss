@@ -124,3 +124,7 @@ p, span, a {
 .clickable {
 	cursor: pointer;
 }
+
+.disable-scroll {
+	overflow: hidden !important;
+}
