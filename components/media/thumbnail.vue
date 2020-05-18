@@ -1,12 +1,28 @@
 <template>
   <div>
-    <link-preview :url="media.url">
+    <div v-if="simple" class="simple-container d-flex justify-content-between">
+      <div class="horizontal middle">
+        <avatar :size="50" :src="networkIcon" class="mr-4"></avatar>
+        <a :href="media.url" target="_blank">
+          <link-preview :url="media.url">
+            <template slot-scope="props">{{ props.title }} </template>
+          </link-preview>
+        </a>
+      </div>
+      <font-awesome
+        v-if="removable"
+        icon="times"
+        class="clickable ml-5"
+        @click="$emit('remove')"
+      ></font-awesome>
+    </div>
+    <link-preview v-else :url="media.url">
       <template slot-scope="props">
         <a :href="props.url" class="btn btn-primary" target="_blank">
           <div class="preview">
             <div class="preview-img">
               <div class="network-icon">
-                <img :src="networkIcon" class="social" alt="" />
+                <avatar :src="networkIcon" :size="30" class="social"> </avatar>
               </div>
               <img :src="props.img" />
             </div>
@@ -21,7 +37,9 @@
 <script>
 export default {
   props: {
-    media: { type: Object, default: () => {} }
+    media: { type: Object, default: () => {} },
+    simple: { type: Boolean, default: false },
+    removable: { type: Boolean, default: false }
   },
   computed: {
     networkIcon() {
@@ -52,6 +70,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.simple-container {
+  @extend .horizontal, .middle, .full-width;
+  border-radius: $rounded;
+  padding: $space;
+  transition: $transition;
+
+  &:hover {
+    transition: $transition;
+    box-shadow: $shadow;
+  }
+}
 a {
   background: transparent;
   outline: none;
@@ -84,7 +113,7 @@ a {
     max-height: 100px;
     .network-icon {
       position: absolute;
-      top: 5px;
+      bottom: 5px;
       right: 5px;
       height: 30px;
       width: 30px;

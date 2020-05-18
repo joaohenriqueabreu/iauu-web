@@ -45,7 +45,9 @@ import {
   faDollarSign,
   faPiggyBank,
   faInfo,
-  faExclamation
+  faExclamation,
+  faPlus,
+  faPencilAlt
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope,
@@ -130,7 +132,9 @@ library.add(
   faDollarSign,
   faPiggyBank,
   faInfo,
-  faExclamation
+  faExclamation,
+  faPlus,
+  faPencilAlt
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

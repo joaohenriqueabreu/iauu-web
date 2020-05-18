@@ -25,6 +25,7 @@ import FormSelect from '@/components/form/select'
 import FormToggle from '@/components/form/toggle'
 import ImageUploader from '@/components/form/imageUploader'
 import SubmitButton from '@/components/form/submitButton'
+import Attachment from '@/components/form/attachment'
 
 moment.locale('pt-br')
 
@@ -53,6 +54,7 @@ Vue.component('modal', Modal)
 Vue.component('alert', AlertMessage)
 Vue.component('stats-donut', StatsDonut)
 Vue.component('media-thumbnail', MediaThumbnail)
+Vue.component('attachment', Attachment)
 
 Vue.prototype.moment = moment
 Vue.prototype.delay = setTimeout(() => {}, 500)

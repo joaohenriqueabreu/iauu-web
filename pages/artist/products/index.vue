@@ -3,7 +3,7 @@
     <div class="horizontal middle d-flex justify-content-between mb-5">
       <h5 class="mr-2">Produtos</h5>
       <div class="add">
-        <button @click="openNewProductModal">
+        <button @click="openProductForm">
           <font-awesome icon="music"></font-awesome>
           Adicionar Produto
         </button>
@@ -16,11 +16,15 @@
         class="col-sm-6 mb-4"
       >
         <div class="product">
-          <header @click="openConfirm(product.id)">
+          <header @click="openConfirmRemove(product.id)">
             <font-awesome icon="times"></font-awesome>
           </header>
           <main>
-            <h6>{{ product.name }}</h6>
+            <div class="title" @click="openProductForm(product)">
+              <h6 class="mb-0">{{ product.name }}</h6>
+              <font-awesome icon="edit" class="ml-4"></font-awesome>
+            </div>
+
             <div class="horizontal middle">
               <span class="mr-4">
                 <font-awesome icon="dollar-sign" class="mr-1"></font-awesome>
@@ -71,95 +75,39 @@
     <div v-else class="horizontal middle">
       <h6>Nenhum produto cadastrado ainda</h6>
     </div>
-    <modal ref="confirm" height="tiny">
-      <template v-slot:main>
-        <div class="vertical middle center p-4">
-          <h6>Por favor leia essa informação antes de remover um produto</h6>
-          <p class="mb-4">
-            Ao remover ou alterar um produto apresentações confirmadas não
-            sofrerão alterações (utilizando assim o mesmo produto). Caso seja de
-            interesse de ambas as partes, favor cancelar a apresentação e
-            renegociar com seu cliente os novos termos do produto
-          </p>
-          <div class="horizontal center middle">
-            <submit-button class="mr-4" @submit="remove(selectedProductId)"
-              >Ok, remover produto</submit-button
-            >
-            <span class="clickable" @click="$refs.confirm.close()"
-              >Não remover</span
-            >
-          </div>
-        </div>
-      </template>
-    </modal>
-    <modal ref="addProduct">
-      <template v-slot:header>
-        <h4>Cadastre um novo produto</h4>
-      </template>
-      <template v-slot:main>
-        <perfect-scrollbar>
-          <div class="new-product-form vertical middle p-4">
-            <form>
-              <form-input v-model="newProduct.name" label="Título"></form-input>
-              <form-input
-                v-model="newProduct.description"
-                label="Descrição"
-                :rows="3"
-              ></form-input>
-              <div class="horizontal middle center">
-                <form-input
-                  v-model="newProduct.value"
-                  class="mr-2"
-                  label="Valor (R$)"
-                ></form-input>
-                <form-input
-                  v-model="newProduct.duration"
-                  label="Duração da apresentação"
-                ></form-input>
-              </div>
-            </form>
-          </div>
-        </perfect-scrollbar>
-      </template>
-      <template v-slot:footer>
-        <div class="half-width mb-4">
-          <submit-button @submit="add">Cadastrar</submit-button>
-        </div>
-      </template>
-    </modal>
+    <remove-product ref="removeProductDialog"></remove-product>
+    <product-form ref="productForm" @save="saveProduct"></product-form>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Product from '@/models/product'
 import Attachment from '@/components/form/attachment'
+import ProductForm from '@/components/artist/product/form'
+import RemoveProduct from '@/components/artist/product/remove'
 export default {
   components: {
-    attachment: Attachment
+    attachment: Attachment,
+    'product-form': ProductForm,
+    'remove-product': RemoveProduct
   },
-  async asyncData({ store }) {
-    await store.dispatch('artist/loadProducts')
-  },
-  data() {
-    return {
-      selectedProductId: 0,
-      newProduct: new Product()
-    }
-  },
+  // async asyncData({ store }) {
+  //   await store.dispatch('artist/loadProducts')
+  // },
   computed: {
     ...mapState({ products: (state) => state.artist.products })
   },
+  async mounted() {
+    await this.loadProducts()
+  },
   methods: {
-    ...mapActions('artist', ['removeProduct']),
-    openNewProductModal() {
-      this.$refs.addProduct.open()
+    ...mapActions('artist', ['loadProducts', 'saveProduct']),
+    openProductForm(product) {
+      this.$refs.productForm.openModal(product)
     },
-    openConfirm(productId) {
-      this.$refs.confirm.open()
-      this.selectedProductId = productId
+    openConfirmRemove(productId) {
+      this.$refs.removeProductDialog.openModal(productId)
     },
-    async add() {},
     async remove(productId) {
       await this.removeProduct(productId)
       this.$nextTick(function() {
@@ -207,6 +155,22 @@ button {
 
   main {
     background: none;
+
+    .title {
+      @extend .horizontal, .middle, .full-width, .clickable;
+      margin-bottom: 2 * $space;
+      transition: $transition;
+      color: $brand;
+
+      [data-icon] {
+        font-size: $small;
+      }
+
+      &:hover {
+        transition: $transition;
+        color: $layer5;
+      }
+    }
   }
 
   header {
@@ -226,9 +190,9 @@ button {
 }
 
 .documents {
-  @extend .horizontal, .middle;
-  max-width: 100%;
+  @extend .vertical, .middle, .full-width;
   position: relative;
+  padding: 2 * $space;
 }
 
 .new-product-form {

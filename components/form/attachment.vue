@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <a
-      v-if="file.id"
-      :href="file.url"
-      target="_blank"
-      class="attachment horizontal middle"
-    >
-      <font-awesome icon="paperclip"></font-awesome>
-      <span class="ext">{{ fileExtension }}</span>
-      <span>{{ file.subtitle }}</span>
-    </a>
+  <div class="attachment d-flex justify-content-between">
+    <div class="horizontal middle">
+      <avatar :size="50" :src="attachmentIcon" class="mr-4"></avatar>
+      <a :href="file.url" target="_blank">
+        <h6>{{ fileDisplay }}</h6>
+      </a>
+    </div>
+    <font-awesome
+      v-if="removable"
+      icon="times"
+      class="clickable ml-5"
+      @click="$emit('remove')"
+    ></font-awesome>
   </div>
 </template>
 
@@ -17,11 +19,23 @@
 // import Media from '@/models/media'
 export default {
   props: {
-    file: { type: Object, default: () => {} }
+    file: { type: Object, default: () => {} },
+    removable: { type: Boolean, default: false }
   },
   computed: {
-    fileExtension() {
-      return this.file.type.substring(0, 3)
+    attachmentIcon() {
+      if (this.file.type.includes(this.$config.pdfSubstringMatch)) {
+        return require('@/assets/imgs/social/pdf.png')
+      }
+
+      return require('@/assets/imgs/music.png')
+    },
+    fileDisplay() {
+      if (!this.$utils.isEmpty(this.file)) {
+        return this.file.subtitle || this.file.name
+      }
+
+      return ''
     }
   }
 }
@@ -29,26 +43,19 @@ export default {
 
 <style lang="scss" scoped>
 .attachment {
-  width: 200px;
+  @extend .horizontal, .middle, .full-width;
   cursor: pointer;
-  background: $brand;
-  box-shadow: $shadow;
+  // background: transparent;
   border-radius: $rounded;
-  margin-right: 2 * $space;
-  padding: 2 * $space;
-
-  .ext {
-    margin-right: $space;
-    text-transform: uppercase;
-    letter-spacing: $space / 4;
-    font-weight: $bold;
+  margin-bottom: 4 * $space;
+  padding: $space;
+  transition: $transition;
+  &:hover {
+    transition: $transition;
+    box-shadow: $shadow;
   }
 
-  span,
-  h6,
-  [data-icon] {
-    color: $layer1;
-    max-width: 100px;
+  h6 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

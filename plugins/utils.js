@@ -1,4 +1,5 @@
 import pluralize from 'pluralize'
+import { Model } from 'vue-mc'
 
 const utils = {
   pluralize: (value, count) => pluralize(value, count),
@@ -7,6 +8,10 @@ const utils = {
   isEmpty: (variable) => {
     if (variable === undefined || variable === null) {
       return true
+    }
+
+    if (variable instanceof Model) {
+      return variable.id === 0
     }
 
     if (typeof variable === 'number') {

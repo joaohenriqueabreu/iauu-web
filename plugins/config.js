@@ -12,7 +12,8 @@ const config = {
   vimeoSubstringMatch: 'vimeo',
   instagramSubstringMatch: 'instagram',
   tiktokSubstringMatch: 'vm.tiktok',
-  spotifySubstringMatch: 'open.spotify'
+  spotifySubstringMatch: 'open.spotify',
+  pdfSubstringMatch: 'pdf'
 }
 
 export default ({ app }, inject) => {

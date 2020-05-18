@@ -7,7 +7,9 @@ export default class Product extends Model {
       name: '',
       description: '',
       price: 0,
-      duration: 0
+      duration: 0,
+      documents: [],
+      medias: []
     }
   }
 }

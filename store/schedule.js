@@ -31,14 +31,14 @@ export const mutations = {
 
 export const actions = {
   async loadSchedule({ commit }, { id, year }) {
-    const response = await this.$http.get(`schedules/${id}/${year}`)
-    commit('set_schedule', response.data)
+    const { data } = await this.$http.get(`schedules/${id}/${year}`)
+    commit('set_schedule', data)
   },
   async saveTimeslot({ commit }, { attributes: timeslotData }) {
-    const response = await this.$http.post('schedules', timeslotData)
+    const { data } = await this.$http.post('schedules', timeslotData)
 
     // commits timeslot in the correct format
-    commit('append_timeslot', response.data)
+    commit('append_timeslot', data)
   },
   appendTimeslot({ commit }, timeslotData) {
     commit('append_timeslot', timeslotData)
