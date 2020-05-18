@@ -6,6 +6,9 @@
         <a :href="media.url" target="_blank">
           <link-preview :url="media.url">
             <template slot-scope="props">{{ props.title }} </template>
+            <template slot="loading">
+              <div class="loading"></div>
+            </template>
           </link-preview>
         </a>
       </div>
@@ -17,6 +20,9 @@
       ></font-awesome>
     </div>
     <link-preview v-else :url="media.url">
+      <template slot="loading">
+        <div class="loading"></div>
+      </template>
       <template slot-scope="props">
         <a :href="props.url" class="btn btn-primary" target="_blank">
           <div class="preview">
@@ -75,6 +81,10 @@ export default {
   border-radius: $rounded;
   padding: $space;
   transition: $transition;
+
+  a {
+    max-width: 85%;
+  }
 
   &:hover {
     transition: $transition;

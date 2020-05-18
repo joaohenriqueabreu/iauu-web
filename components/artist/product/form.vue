@@ -104,7 +104,7 @@ export default {
     openModal(product) {
       if (!this.$utils.isEmpty(product)) {
         // Need to copy object as js assignments are passed by reference
-        this.product = new Product(product._attributes)
+        this.$set(this, 'product', this.$object.clone(product.attributes))
       }
 
       this.$refs.form.open()

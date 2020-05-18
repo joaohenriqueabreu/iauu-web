@@ -2,21 +2,24 @@ import Vue from 'vue'
 import Product from '@/models/product'
 
 export const state = () => ({
-  products: {}
+  products: []
 })
 
 export const mutations = {
   set_products(state, productsData) {
-    state.products = {}
+    state.products = []
     productsData.forEach((productData) => {
-      Vue.set(state.products, productData.id, new Product(productData))
+      state.products.push(new Product(productData))
     })
   },
   set_product(state, productData) {
-    Vue.set(state.products, productData.id, new Product(productData))
+    state.products.unshift(new Product(productData))
   },
   remove_product(state, id) {
-    Vue.delete(state.products, id)
+    Vue.delete(
+      state.products,
+      this.$array.findIndex(state.products, (product) => product.id === id)
+    )
   }
 }
 
@@ -27,6 +30,13 @@ export const actions = {
   },
   async saveProduct({ commit }, product) {
     const { data } = await this.$http.post('products', product)
+
+    // Reactivity only watches for push operations and does not recognize assignment
+    if (!this.$utils.isEmpty(product.id)) {
+      commit('remove_product', data.id)
+    }
+
+    // This will also allows for new products / edits to move to the top of the array
     commit('set_product', data)
   },
   async removeProduct({ commit }, id) {

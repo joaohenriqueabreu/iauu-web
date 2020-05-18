@@ -3,7 +3,7 @@
     <div class="horizontal middle d-flex justify-content-between mb-5">
       <h5 class="mr-2">Produtos</h5>
       <div class="add">
-        <button @click="openProductForm">
+        <button @click="openProductForm()">
           <font-awesome icon="music"></font-awesome>
           Adicionar Produto
         </button>
