@@ -34,7 +34,7 @@
     </div>
     <main>
       <perfect-scrollbar>
-        <event-info :event="presentation"></event-info>
+        <event-details :event="presentation"></event-details>
       </perfect-scrollbar>
     </main>
     <footer>
@@ -53,12 +53,12 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import VueCountdown from '@chenfengyuan/vue-countdown'
-import EventInfo from '@/components/artist/eventInfo'
+import EventDetails from '@/components/artist/eventDetails'
 
 export default {
   components: {
     countdown: VueCountdown,
-    eventInfo: EventInfo
+    eventDetails: EventDetails
   },
   computed: {
     ...mapState({ presentation: (state) => state.event.presentation }),
@@ -157,12 +157,6 @@ export default {
         color: $brand;
       }
     }
-  }
-
-  h4 {
-    margin-right: 4 * $space;
-    padding-right: 4 * $space;
-    border-right: 5px solid $layer3;
   }
 }
 </style>

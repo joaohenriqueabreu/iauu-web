@@ -13,7 +13,7 @@
     <div></div>
     <main>
       <perfect-scrollbar>
-        <event-info :event="proposal"></event-info>
+        <event-details :event="proposal"></event-details>
       </perfect-scrollbar>
     </main>
     <footer>
@@ -29,11 +29,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import EventInfo from '@/components/artist/eventInfo'
+import EventDetails from '@/components/artist/eventDetails'
 
 export default {
   components: {
-    eventInfo: EventInfo
+    'event-details': EventDetails
   },
   computed: {
     ...mapState({ proposal: (state) => state.event.proposal })

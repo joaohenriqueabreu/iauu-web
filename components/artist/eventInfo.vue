@@ -1,138 +1,79 @@
 <template>
-  <div>
-    <div>
-      <h4>{{ event.title }}</h4>
-    </div>
-    <div class="boxed">
-      <div class="horizontal middle">
-        <h4>
-          <font-awesome icon="calendar-alt"></font-awesome>
-          {{ eventDate }}
-        </h4>
-        <h5>{{ eventTime }}</h5>
+  <div class="event">
+    <h4>{{ eventDate(event) }}</h4>
+    <div class="info">
+      <div class="mb-3">
+        <h5 class="mb-0">{{ event.title }}</h5>
+        <small>{{ getOtherParty(event) }}</small>
       </div>
-      <div class="horizontal middle">
-        <font-awesome icon="map-marker-alt"></font-awesome>
-        <a :href="encodedMapsLocation" target="_blank">
-          <h6>{{ event.location.display }}</h6>
-        </a>
-      </div>
-    </div>
-    <div>
-      <span>{{ event.description }}</span>
-    </div>
-    <div class="boxed vertical position-relative">
-      <!-- TODO b-tooltip failing -->
-      <!-- <div
-            v-b-tooltip.hover
-            class="position-absolute"
-            title="Este foi selecionado no momento da proposta. Caso tenha mudado ou não existe mais cancele a mesma."
-          > -->
-      <!-- <font-awesome icon="info"></font-awesome>
-          </div> -->
-      <div>
-        <h5>{{ event.product.name }}</h5>
-      </div>
-      <div>
-        <h6>
-          <font-awesome icon="dollar-sign"></font-awesome>
-          {{ event.product.price }}
+      <div class="horizontal">
+        <h6 class="mr-5">
+          <font-awesome icon="clock" class="mr-2"></font-awesome>
+          {{ eventTime(event) }}
         </h6>
+        <span class="">
+          <font-awesome icon="map-marker-alt" class="mr-2"></font-awesome>
+          {{ event.location.address }}, {{ event.location.city }},
+          {{ event.location.state }}
+        </span>
       </div>
-      <div>
-        <h6>
-          <font-awesome icon="clock"></font-awesome>
-          {{ event.product.duration }}
-          {{ $utils.pluralize('hora', event.product.duration) }}
-        </h6>
-      </div>
-    </div>
-    <div class="attachments">
-      <attachment
-        v-for="(file, index) in event.files"
-        :key="index"
-        :file="file"
-      >
-      </attachment>
     </div>
   </div>
 </template>
 
 <script>
-import Attachment from '@/components/form/attachment'
+import { mapGetters } from 'vuex'
 export default {
-  components: {
-    attachment: Attachment
-  },
   props: {
     event: { type: Object, default: () => {} }
   },
   computed: {
-    encodedMapsLocation() {
-      return encodeURI(
-        `http://maps.google.com/maps?q=${this.event.location.display}`
-      )
+    ...mapGetters('auth', ['isArtist'])
+  },
+  methods: {
+    eventDate(event) {
+      return this.moment(event.start_dt).format(this.$config.dateFormat)
     },
-    eventTime() {
+    eventTime(event) {
       return (
-        this.moment(this.event.start_dt).format(this.$config.timeFormat) +
+        this.moment(event.start_dt).format(this.$config.timeFormat) +
         ' - ' +
-        this.moment(this.event.end_dt).format(this.$config.timeFormat)
+        this.moment(event.end_dt).format(this.$config.timeFormat)
       )
     },
-    eventDate() {
-      return this.moment(this.event.start_dt).format(this.$config.dateFormat)
+    getOtherParty(event) {
+      if (this.isArtist) {
+        return event.contractor.name
+      }
+
+      return event.artist.name
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-[data-icon] {
-  font-size: $large;
-  font-weight: $bold;
-  color: $brand;
-}
-
-div {
+.event {
+  @extend .full-width, .horizontal, .middle, .clickable;
   margin-bottom: 3 * $space;
-}
-
-.boxed {
-  background: $layer4;
-  border-radius: $edges;
   padding: 2 * $space;
-  margin-left: 3 * $space;
-  margin-right: 3 * $space;
+  background: $layer3;
+  box-shadow: $shadow;
+  border-radius: $edges;
+  transition: $transition;
 
-  h6 {
-    margin-right: 5 * $space;
+  h4 {
+    margin-right: 4 * $space;
   }
 
-  .position-absolute {
-    @extend .vertical, .middle, .center;
+  .info {
+    border-left: 5px solid $layer2;
+    padding-left: 4 * $space;
+  }
+
+  &:hover {
     transition: $transition;
-    top: 5px;
-    right: 5px;
-    padding: 5px;
-    width: 30px;
-    height: 30px;
-    border-radius: $rounded;
-    box-shadow: $shadow;
-    background: $layer5;
-    color: $brand;
-    padding-left: 18px;
-    cursor: pointer;
-    &:hover {
-      transition: $transition;
-      background: $brand;
-      color: $layer5;
-    }
+    background: $layer4;
   }
-}
-
-.attachments {
-  @extend .horizontal, .middle;
-  flex-wrap: wrap;
 }
 </style>

@@ -51,5 +51,15 @@ export const actions = {
 export const getters = {
   lastTimeslot(state) {
     return this.$array.last(state.schedule.timeslots)
+  },
+  presentations(state) {
+    return state.schedule.timeslots.filter(
+      (timeslot) => timeslot.type === 'presentation'
+    )
+  },
+  proposals(state) {
+    return state.schedule.timeslots.filter(
+      (timeslot) => timeslot.type === 'proposal'
+    )
   }
 }
