@@ -12,6 +12,7 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import { ToggleButton } from 'vue-js-toggle-button'
 import LinkPrevue from 'link-prevue'
 import moment from 'moment'
+import VueFilters from 'vue2-filters'
 
 // Form components
 import Modal from '@/components/layout/modal'
@@ -36,6 +37,7 @@ Vue.use(VueMask)
 Vue.use(VueSmoothScroll)
 Vue.use(PerfectScrollbar)
 Vue.use(VueSweetalert2)
+Vue.use(VueFilters, { thousandsSeparator: '.', decimalSeparator: ',' })
 Vue.use(VueModal, { componentName: 'v-modal' })
 
 Vue.component('avatar', Avatar)

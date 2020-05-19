@@ -1,97 +1,52 @@
 <template>
   <div class="vertical center middle">
-    <h6 class="mb-4">Conecte suas redes sociais</h6>
-    <div class="raised horizontal center middle">
-      <div class="icon-box">
+    <div class="horizontal d-flex justify-content-between mb-2">
+      <h6 class="mb-4">Conecte suas redes sociais</h6>
+    </div>
+    <div class="vertical half-width mb-4">
+      <fade-transition group>
+        <div v-for="(media, index) in medias" :key="index">
+          <media-thumbnail
+            class="mb-2"
+            simple
+            removable
+            :media="media"
+            @remove="unlink(index)"
+          ></media-thumbnail>
+        </div>
+      </fade-transition>
+      <div class="horizontal middle full-width">
+        <form-input
+          v-model="newMedia.url"
+          class="full-width"
+          placeholder="Cole o link de suas midias sociais aqui"
+        ></form-input>
         <font-awesome
-          :class="{ active: hasSpotify }"
-          :icon="['fab', 'spotify']"
-          @click="link('spotify')"
-        ></font-awesome>
-      </div>
-      <div class="icon-box">
-        <font-awesome
-          :class="{ active: hasFacebook }"
-          :icon="['fab', 'facebook']"
-          @click="link('facebook')"
-        ></font-awesome>
-      </div>
-      <div class="icon-box">
-        <font-awesome
-          :class="{ active: hasInstagram }"
-          :icon="['fab', 'instagram']"
-          @click="link('instagram')"
-        ></font-awesome>
-      </div>
-      <div class="icon-box">
-        <font-awesome
-          :class="{ active: hasYoutube }"
-          :icon="['fab', 'youtube']"
-          @click="link('youtube')"
+          icon="plus"
+          class="clickable ml-5"
+          @click="link"
         ></font-awesome>
       </div>
     </div>
-    <modal ref="social" height="tiny">
-      <template v-slot:main>
-        <div class="full-fill vertical middle center p5">
-          <h6>
-            <font-awesome icon="exclamation"></font-awesome>
-            Lembre-se de deixar suas redes públicas!
-          </h6>
-          <div class="mb-4"></div>
-          <form-input
-            v-model="url"
-            class="half-width"
-            :label="network"
-            placeholder="Cole aqui o endereço de sua conta"
-          ></form-input>
-        </div>
-      </template>
-      <template v-slot:footer>
-        <div class="half-width">
-          <submit-button @submit="save">Conectar</submit-button>
-        </div>
-      </template>
-    </modal>
   </div>
 </template>
 
 <script>
+import Media from '@/models/media'
 export default {
   data() {
     return {
-      spotify: { type: String, default: '' },
-      instagram: { type: String, default: '' },
-      youtube: { type: String, default: '' },
-      facebook: { type: String, default: '' },
-      network: { type: String, default: '' },
-      url: { type: String, default: '' }
-    }
-  },
-  computed: {
-    hasSpotify() {
-      return !this.$utils.isEmpty(this.spotify)
-    },
-    hasFacebook() {
-      return !this.$utils.isEmpty(this.facebook.length)
-    },
-    hasInstagram() {
-      return !this.$utils.isEmpty(this.instagram.length)
-    },
-    hasYoutube() {
-      return !this.$utils.isEmpty(this.youtube.length)
+      medias: [],
+      newMedia: new Media()
     }
   },
   methods: {
-    link(network) {
-      this.network = network
-      this.url = ''
-      this.$refs.social.open()
+    link() {
+      this.medias.push(this.newMedia)
+      this.newMedia = new Media()
     },
-    save() {
-      this[this.network] = this.url
-      this.$emit('upload', this.network, this.url)
-      this.$refs.social.close()
+    unlink(index) {
+      this.$delete(this.medias, index)
     }
   }
 }

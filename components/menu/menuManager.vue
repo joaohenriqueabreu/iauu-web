@@ -9,7 +9,7 @@
         <avatar :src="user.photo.url" :username="user.name"></avatar>
       </overlay>
     </div>
-    <div v-else>
+    <div v-else class="pr-4">
       <nuxt-link to="/login">
         <h5>Login</h5>
       </nuxt-link>
@@ -55,6 +55,11 @@ export default {
   computed: {
     ...mapState({ user: (state) => state.auth.user }),
     ...mapGetters('auth', ['isLoggedIn', 'isArtist'])
+  },
+  watch: {
+    $route(to, from) {
+      this.displaySubmenu = false
+    }
   }
 }
 </script>
@@ -62,7 +67,6 @@ export default {
 <style lang="scss" scoped>
 .menu {
   @extend .vertical, .middle;
-  margin-right: 2 * $space;
   width: 100%;
   align-items: flex-end;
 }

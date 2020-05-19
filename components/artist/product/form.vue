@@ -15,11 +15,13 @@
           <div class="horizontal middle center mb-4">
             <form-input
               v-model="product.price"
+              type="money"
               class="mr-2"
               label="Valor (R$)"
             ></form-input>
             <form-input
               v-model="product.duration"
+              type="numeric"
               label="Duração da apresentação"
             ></form-input>
           </div>
@@ -92,7 +94,7 @@ import Media from '@/models/media'
 export default {
   data() {
     return {
-      product: { type: Product, default: new Product() },
+      product: new Product(),
       newMedia: new Media()
     }
   },

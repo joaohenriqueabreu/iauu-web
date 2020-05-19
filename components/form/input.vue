@@ -2,16 +2,26 @@
   <div>
     <label :for="name">{{ label }}</label>
     <input
-      v-if="!rows"
+      v-if="!rows && !isMasked"
       :value="value"
-      :type="type"
+      type="text"
+      :name="name"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      @input="$emit('input', $event.target.value)"
+    />
+    <input
+      v-if="isMasked"
+      v-mask="getMask"
+      :value="value"
+      type="text"
       :name="name"
       :placeholder="placeholder"
       :disabled="disabled"
       @input="$emit('input', $event.target.value)"
     />
     <textarea
-      v-else
+      v-if="rows && !isMasked"
       :value="value"
       :rows="rows"
       :name="name"
@@ -24,7 +34,21 @@
 </template>
 
 <script>
+import VueFilters from 'vue2-filters'
 export default {
+  filters: {
+    getFilter(value, type) {
+      // const convertToNumber = (value, precision) => {
+      //   return value.toString().replace(/\D/g, '')
+      // }
+
+      if (type === 'numeric') {
+        return VueFilters.Number(value)
+      }
+
+      return value
+    }
+  },
   props: {
     rows: { type: Number, default: 0 },
     value: { type: [String, Number, Boolean], default: null },
@@ -34,6 +58,14 @@ export default {
     type: { type: String, default: 'text' },
     icon: { type: String, default: null },
     disabled: { type: Boolean, default: false }
+  },
+  computed: {
+    isMasked() {
+      return ['phone', 'document'].includes(this.type)
+    },
+    getMask() {
+      return ''
+    }
   }
 }
 </script>
