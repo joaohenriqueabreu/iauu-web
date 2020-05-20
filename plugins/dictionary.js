@@ -1,13 +1,7 @@
 const dictionary = {
   payment: {
     label: {
-      closed: 'Saque',
-      active: 'Realizado',
-      pending: 'Pendente',
-      total: 'Total'
-    },
-    icons: {
-      closed: 'Saque',
+      closed: 'Retirado',
       active: 'Realizado',
       pending: 'Pendente',
       total: 'Total'
