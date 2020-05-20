@@ -6,9 +6,8 @@
 
 <script>
 export default {
-  layout: 'app'
-  // TODO enable when we implement auth layer
-  // middleware: ['auth']
+  layout: 'app',
+  middleware: ['auth']
 }
 </script>
 

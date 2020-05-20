@@ -40,19 +40,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import Logo from '@/components/layout/logo'
 export default {
   components: {
     logo: Logo
   },
   computed: {
-    ...mapGetters('auth', ['isArtist']),
     scheduleLink() {
-      return this.isArtist ? '/artist' : '/contractor'
+      return this.$auth.hasScope('artist') ? '/artist' : '/contractor'
     },
     userType() {
-      return this.isArtist ? 'artist' : 'contractor'
+      return this.$auth.hasScope('artist') ? 'artist' : 'contractor'
     }
   },
   methods: {

@@ -1,35 +1,37 @@
 <template>
-  <FullCalendar
-    ref="fullcalendar"
-    :events="calendarEvents"
-    theme="bootstrap"
-    default-view="dayGridMonth"
-    locale="pt-br"
-    :plugins="calendarPlugins"
-    content-height="auto"
-    height="parent"
-    width="parent"
-    :aspect-ratio="0.5"
-    :select-long-press-delay="250"
-    slot-duration="01:00:00"
-    slot-label-interval="04:00:00"
-    :selectable="true"
-    :editable="true"
-    :event-overlap="true"
-    :now-indicator="false"
-    :all-day-slot="false"
-    :all-day-maintain-duration="true"
-    :show-non-current-dates="false"
-    :header="headerButtons"
-    :button-text="buttonText"
-    :column-header-format="columnHeaderFormat"
-    :slot-label-format="slotLabelFormat"
-    :event-time-format="eventTimeFormat"
-    :dates-destroy="datesDestroy"
-    :valid-range="validRange"
-    @dateClick="dateClick"
-    @eventClick="eventClick"
-  />
+  <div>
+    <FullCalendar
+      ref="fullcalendar"
+      :events="calendarEvents"
+      theme="bootstrap"
+      default-view="dayGridMonth"
+      locale="pt-br"
+      :plugins="calendarPlugins"
+      content-height="auto"
+      height="parent"
+      width="parent"
+      :aspect-ratio="0.5"
+      :select-long-press-delay="250"
+      slot-duration="01:00:00"
+      slot-label-interval="04:00:00"
+      :selectable="true"
+      :editable="true"
+      :event-overlap="true"
+      :now-indicator="false"
+      :all-day-slot="false"
+      :all-day-maintain-duration="true"
+      :show-non-current-dates="false"
+      :header="headerButtons"
+      :button-text="buttonText"
+      :column-header-format="columnHeaderFormat"
+      :slot-label-format="slotLabelFormat"
+      :event-time-format="eventTimeFormat"
+      :dates-destroy="datesDestroy"
+      :valid-range="validRange"
+      @dateClick="dateClick"
+      @eventClick="eventClick"
+    />
+  </div>
 </template>
 
 <script>
@@ -208,14 +210,14 @@ export default {
   left: 0% !important;
   right: 0% !important;
   &.proposal {
-    background: rgb(249, 195, 34);
+    background: $proposalTimeslot;
     span {
       color: $layer2;
     }
   }
 
   &.presentation {
-    background: rgb(100, 200, 100);
+    background: $presentationTimeslot;
   }
 
   &.blank {

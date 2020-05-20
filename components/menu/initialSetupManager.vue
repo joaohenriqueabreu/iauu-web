@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="isArtist && !isAtSetupRoute"
+      v-if="$auth.hasScope('artist') && !isAtSetupRoute"
       class="warning d-flex justify-content-between"
     >
       <h6>Adicione produtos para que os clientes lhe enviem propostas</h6>
@@ -11,10 +11,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   computed: {
-    ...mapGetters('auth', ['isArtist']),
     isAtSetupRoute() {
       return this.$route.path === '/artist/products'
     }

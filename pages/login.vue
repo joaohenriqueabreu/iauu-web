@@ -6,7 +6,7 @@
       <form-input v-model="credentials.email"></form-input>
       <form-input v-model="credentials.password" type="password"></form-input>
       <div class="mb-5"></div>
-      <submit-button @submit="submit">Login</submit-button>
+      <submit-button @submit="login">Login</submit-button>
     </form>
   </div>
 </template>
@@ -24,8 +24,11 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['login']),
-    async submit() {
-      await this.login(this.credentials)
+    async login() {
+      await this.$auth.loginWith('local', {
+        data: this.credentials
+      })
+      // await this.login(this.credentials)
       this.$router.push('/artist/schedule')
     }
   }

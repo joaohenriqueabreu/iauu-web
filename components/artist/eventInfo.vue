@@ -22,14 +22,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   props: {
     event: { type: Object, default: () => {} }
   },
-  computed: {
-    ...mapGetters('auth', ['isArtist'])
-  },
+  computed: {},
   methods: {
     eventDate(event) {
       return this.moment(event.start_dt).format(this.$config.dateFormat)
@@ -42,7 +39,7 @@ export default {
       )
     },
     getOtherParty(event) {
-      if (this.isArtist) {
+      if (this.$auth.hasScope('artist')) {
         return event.contractor.name
       }
 

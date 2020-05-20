@@ -1,10 +1,25 @@
 <template>
   <div>
-    <h4>Bem vindo a Sua Agenda</h4>
-    <p>
-      Veja e interaja com seus próximos eventos e responda a propostas de
-      clientes
-    </p>
+    <div class="d-flex justify-content-between">
+      <div class="vertical">
+        <h4>Bem vindo a Sua Agenda</h4>
+        <p>
+          Veja e interaja com seus próximos eventos e responda a propostas de
+          clientes
+        </p>
+      </div>
+      <div class="vertical text-right">
+        <div class="horizontal middle mb-2">
+          <span class="event-subtitle proposal"></span>
+          <span>Proposta</span>
+        </div>
+        <div class="horizontal middle mb-2">
+          <span class="event-subtitle presentation"></span>
+          <span>Apresentação</span>
+        </div>
+      </div>
+    </div>
+
     <div v-if="timeslots">
       <full-calendar
         ref="fullcalendar"
@@ -48,7 +63,7 @@ export default {
   },
   async asyncData({ app, store }) {
     await store.dispatch('schedule/loadSchedule', {
-      id: store.state.auth.user.id,
+      id: app.$auth.user.id,
       year: new Date().getFullYear()
     })
   },
@@ -60,15 +75,14 @@ export default {
     }
   },
   computed: {
-    ...mapState({ timeslots: (state) => state.schedule.schedule.timeslots }),
-    ...mapState({ userId: (state) => state.auth.user.id })
+    ...mapState({ timeslots: (state) => state.schedule.schedule.timeslots })
   },
   methods: {
     ...mapActions('event', ['loadProposal', 'loadPresentation']),
     ...mapActions('schedule', ['loadSchedule']),
     ...mapActions('app', ['showMessage']),
     async reloadEvents(year) {
-      await this.loadSchedule({ id: this.userId, year })
+      await this.loadSchedule({ id: this.$auth.user.id, year })
       this.$refs.fullcalendar.loadCalendarEvents()
     },
     openUnavailable({ dateStr }) {
@@ -119,4 +133,18 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.event-subtitle {
+  height: 30px;
+  width: 30px;
+  border-radius: $rounded;
+  margin-right: $space;
+  &.proposal {
+    background: $proposalTimeslot;
+  }
+
+  &.presentation {
+    background: $presentationTimeslot;
+  }
+}
+</style>

@@ -2,6 +2,7 @@ require('dotenv').config()
 
 export default {
   mode: 'universal',
+  // mode: 'spa',
   env: {
     baseURL: process.env.BASE_URL,
     fileStackApiKey: process.env.NUXT_ENV_FILESTACK_API_KEY
@@ -20,7 +21,7 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
     script: [
       {
         src:
@@ -82,7 +83,8 @@ export default {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    '@nuxtjs/auth'
   ],
   optimizedImages: {
     optimizeImages: true,
@@ -99,7 +101,26 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: process.env.BASE_URL
+  },
+
+  auth: {
+    scopeKey: 'type',
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'login', method: 'post', propertyName: 'token' },
+          logout: { url: 'login', method: 'delete' },
+          user: {
+            url: 'validate',
+            method: 'post',
+            propertyName: 'user'
+          }
+        }
+      }
+    }
+  },
   /*
    ** Build configuration
    */
@@ -108,5 +129,9 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+
+  server: {
+    port: 8000
   }
 }

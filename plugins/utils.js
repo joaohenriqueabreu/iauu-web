@@ -11,7 +11,7 @@ const utils = {
     }
 
     if (variable instanceof Model) {
-      return variable.id === 0
+      return variable.id === 0 || variable.id === null
     }
 
     if (typeof variable === 'number') {

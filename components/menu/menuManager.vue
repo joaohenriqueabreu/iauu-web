@@ -1,12 +1,15 @@
 <template>
   <div class="menu">
     <div
-      v-if="isLoggedIn"
+      v-if="$auth.loggedIn"
       class="horizontal"
       @click="displaySubmenu = !displaySubmenu"
     >
       <overlay :rounded="true" :selected="displaySubmenu">
-        <avatar :src="user.photo.url" :username="user.name"></avatar>
+        <avatar
+          :src="$auth.user.photo.url"
+          :username="$auth.user.name"
+        ></avatar>
       </overlay>
     </div>
     <div v-else class="pr-4">
@@ -14,34 +17,35 @@
         <h5>Login</h5>
       </nuxt-link>
     </div>
-    <slide-down-transition>
-      <div v-show="displaySubmenu" class="submenu">
+    <fade-transition mode="out-in">
+      <div v-if="$auth.loggedIn" v-show="displaySubmenu" class="submenu">
         <div class="vertical">
-          <h5>{{ user.name }}</h5>
+          <h5>{{ $auth.user.name }}</h5>
           <small>artista</small>
         </div>
         <div class="horizontal middle">
-          <nuxt-link v-if="isArtist" to="/artist/products">
+          <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/products">
             <h6>Produtos</h6>
           </nuxt-link>
-          <nuxt-link :to="`/${isArtist ? 'artist' : 'contractor'}/profile`">
+          <nuxt-link
+            :to="
+              `/${$auth.hasScope('artist') ? 'artist' : 'contractor'}/profile`
+            "
+          >
             <h6>Perfil</h6>
           </nuxt-link>
-          <nuxt-link to="/logout">
-            <h6>Sair</h6>
-          </nuxt-link>
+          <h6 class="clickable" @click="$auth.logout('local')">Sair</h6>
         </div>
       </div>
-    </slide-down-transition>
+    </fade-transition>
     <initial-setup-manager
-      v-if="isLoggedIn && user.requires_initial_setup"
+      v-if="$auth.loggedIn && $auth.user.requires_initial_setup"
       class="full-width my-3"
     ></initial-setup-manager>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import InitialSetupManager from '@/components/menu/initialSetupManager'
 export default {
   components: {
@@ -52,10 +56,7 @@ export default {
       displaySubmenu: false
     }
   },
-  computed: {
-    ...mapState({ user: (state) => state.auth.user }),
-    ...mapGetters('auth', ['isLoggedIn', 'isArtist'])
-  },
+  computed: {},
   watch: {
     $route(to, from) {
       this.displaySubmenu = false

@@ -27,9 +27,9 @@ export default {
     presentation: Presentation,
     'event-info': EventInfo
   },
-  async asyncData({ store }) {
+  async asyncData({ store, app }) {
     await store.dispatch('schedule/loadSchedule', {
-      id: store.state.auth.user.id,
+      id: app.$auth.user.id,
       year: new Date().getFullYear()
     })
   },
