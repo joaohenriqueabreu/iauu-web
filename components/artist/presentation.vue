@@ -37,7 +37,7 @@
         <event-details :event="presentation"></event-details>
       </perfect-scrollbar>
     </main>
-    <footer>
+    <footer v-if="!readOnly">
       <div class="mr-5">
         <submit-button @submit="confirm">
           Confirmar Realização
@@ -59,6 +59,9 @@ export default {
   components: {
     countdown: VueCountdown,
     eventDetails: EventDetails
+  },
+  props: {
+    readOnly: { type: Boolean, default: true }
   },
   computed: {
     ...mapState({ presentation: (state) => state.event.presentation }),

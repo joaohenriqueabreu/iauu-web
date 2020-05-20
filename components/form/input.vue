@@ -19,6 +19,14 @@
       @input="$emit('input', $event.target.value)"
     />
     <input
+      v-if="isNumeric"
+      :value="value"
+      type="number"
+      :name="name"
+      placeholder=""
+      @input="$emit('input', $event.target.value)"
+    />
+    <input
       v-if="isMasked"
       v-mask="getMask"
       :value="value"
@@ -72,14 +80,14 @@ export default {
     disabled: { type: Boolean, default: false }
   },
   computed: {
-    isLocation() {
-      return this.type === 'location'
-    },
     isSimpleText() {
       return this.type === 'text' && this.rows === 0
     },
     isPassword() {
       return this.type === 'password'
+    },
+    isNumeric() {
+      return this.type === 'numeric' || this.type === 'number'
     },
     isTextArea() {
       return this.type === 'text' && this.rows > 0

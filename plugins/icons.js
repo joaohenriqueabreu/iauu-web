@@ -47,7 +47,8 @@ import {
   faInfo,
   faExclamation,
   faPlus,
-  faPencilAlt
+  faPencilAlt,
+  faReceipt
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope,
@@ -134,7 +135,8 @@ library.add(
   faInfo,
   faExclamation,
   faPlus,
-  faPencilAlt
+  faPencilAlt,
+  faReceipt
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

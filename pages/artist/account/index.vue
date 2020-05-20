@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex justify-content-between mb-5">
-      <h6>Minha conta</h6>
+      <h4>Minha conta</h4>
       <submit-button @submit="openWithdrawModal">Solicitar saque</submit-button>
     </div>
     <h6 class="mb-3">Pagamentos</h6>
@@ -9,42 +9,58 @@
       <div v-for="(stat, statName) in stats" :key="statName" class="stat">
         <h5>{{ $dictionary.payment.label[statName] }}</h5>
         <hr />
-        <h2 class="text-right">{{ stat | currency }}</h2>
+        <h4 class="text-right">
+          {{ stat | currency }}
+        </h4>
       </div>
     </div>
-    <table class="payments-container">
-      <!-- <thead
-          class="horizontal full-width middle d-flex justify-content-between mb-3"
-        > -->
+    <table class="payments-container text-center">
       <tr>
+        <th></th>
         <th>Status</th>
         <th>Apresentação</th>
         <th>Valor (R$)</th>
         <th>Data</th>
       </tr>
-      <!-- </thead> -->
-      <!-- <tbody> -->
       <tr v-for="(payment, index) in payments" :key="index" class="payment">
+        <td>
+          <font-awesome
+            v-if="payment.status === 'closed'"
+            icon="receipt"
+            class="clickable"
+          ></font-awesome>
+        </td>
         <td class="status" :class="payment.status">
           {{ $dictionary.payment.label[payment.status] }}
         </td>
-        <td @click="openPresentation">{{ payment.presentation_id }}</td>
-        <td>{{ payment.amount | currency }}</td>
-        <td>{{ payment.created_at | date }}</td>
+        <td @click="openPresentationModal(payment.presentation_id)">
+          # {{ payment.presentation_id }}
+        </td>
+        <td class="text-right">{{ payment.amount | currency }}</td>
+        <td class="text-right">{{ payment.create_dt | date }}</td>
       </tr>
-      <!-- </tbody> -->
     </table>
 
-    <withdraw-request ref="withdrawRequest"></withdraw-request>
+    <withdraw-request
+      ref="withdrawRequest"
+      :available="stats.active"
+    ></withdraw-request>
+    <modal ref="presentationModal">
+      <template v-slot:main>
+        <presentation read-only></presentation>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import WidthdrawRequest from '@/components/payment/withdrawRequest'
+import Presentation from '@/components/artist/presentation'
 export default {
   components: {
-    'withdraw-request': WidthdrawRequest
+    'withdraw-request': WidthdrawRequest,
+    presentation: Presentation
   },
   async asyncData({ store }) {
     await store.dispatch('payment/loadPayments')
@@ -54,8 +70,13 @@ export default {
     ...mapState({ stats: (state) => state.payment.stats })
   },
   methods: {
+    ...mapActions('event', ['loadPresentation']),
     openWithdrawModal() {
       this.$refs.withdrawRequest.openModal()
+    },
+    async openPresentationModal(id) {
+      await this.loadPresentation(id)
+      this.$refs.presentationModal.open()
     }
   }
 }
@@ -80,25 +101,25 @@ hr {
 
 .payments-container {
   @extend .full-width;
-  height: 40vh;
   tr {
-    // @extend .horizontal, .middle;
-    padding: 2 * $space;
     transition: $transition;
     border-bottom: 2px solid $layer3;
+    td {
+      padding: 2 * $space;
+    }
 
     .status {
-      border-radius: $rounded;
-      padding: $space;
       font-weight: $bold;
       &.closed {
-        background: $layer1;
         color: $layer2;
       }
 
       &.pending {
-        background: $layer4;
         color: red;
+      }
+
+      &.closed {
+        color: $layer5;
       }
     }
 
