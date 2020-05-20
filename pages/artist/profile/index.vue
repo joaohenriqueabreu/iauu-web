@@ -99,10 +99,10 @@
 
 <script>
 import { mapActions } from 'vuex'
-import SocialNetworks from '@/components/artist/socialNetworks'
-import ArtistInfo from '@/components/artist/info'
-import ArtistCategories from '@/components/artist/categories'
-import ProfileStats from '@/components/artist/profileStats'
+import SocialNetworks from '@/components/artist/profile/socialNetworks'
+import ArtistInfo from '@/components/artist/profile/info'
+import ArtistCategories from '@/components/artist/profile/categories'
+import ProfileStats from '@/components/artist/profile/stats'
 export default {
   components: {
     'social-networks': SocialNetworks,

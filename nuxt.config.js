@@ -20,7 +20,13 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        src:
+          'https://maps.googleapis.com/maps/api/js?key=AIzaSyDydTcmc4LkB3Yw2Rn6YUYgYbNF5j6ti5k&libraries=places'
+      }
+    ]
   },
   /*
    ** Customize the progress-bar color
@@ -56,6 +62,7 @@ export default {
     { src: '@/plugins/ui', mode: 'client' },
     { src: '@/plugins/icons', mode: 'client' },
     { src: '@/plugins/data', mode: 'client' },
+    { src: '@/plugins/dictionary', mode: 'client' },
     { src: '@/plugins/full-calendar', ssr: false }
   ],
   /*

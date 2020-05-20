@@ -22,11 +22,11 @@
           label="CNPJ"
           class="mb-3  horizontal center middle"
         ></form-input>
-        <form-input
+        <form-location
           v-model="info.location"
           label="Endereço"
           class="mb-3 horizontal center middle"
-        ></form-input>
+        ></form-location>
         <form-input
           v-model="info.phone"
           label="Telefone"

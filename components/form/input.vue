@@ -2,12 +2,20 @@
   <div>
     <label :for="name">{{ label }}</label>
     <input
-      v-if="!rows && !isMasked"
+      v-if="isSimpleText"
       :value="value"
       type="text"
       :name="name"
       :placeholder="placeholder"
       :disabled="disabled"
+      @input="$emit('input', $event.target.value)"
+    />
+    <input
+      v-if="isPassword"
+      :value="value"
+      type="password"
+      :name="name"
+      placeholder="**********"
       @input="$emit('input', $event.target.value)"
     />
     <input
@@ -21,7 +29,7 @@
       @input="$emit('input', $event.target.value)"
     />
     <textarea
-      v-if="rows && !isMasked"
+      v-if="isTextArea"
       :value="value"
       :rows="rows"
       :name="name"
@@ -35,7 +43,11 @@
 
 <script>
 import VueFilters from 'vue2-filters'
+// import Location from '@/components/form/location'
 export default {
+  // components: {
+  //   location: Location
+  // },
   filters: {
     getFilter(value, type) {
       // const convertToNumber = (value, precision) => {
@@ -60,6 +72,18 @@ export default {
     disabled: { type: Boolean, default: false }
   },
   computed: {
+    isLocation() {
+      return this.type === 'location'
+    },
+    isSimpleText() {
+      return this.type === 'text' && this.rows === 0
+    },
+    isPassword() {
+      return this.type === 'password'
+    },
+    isTextArea() {
+      return this.type === 'text' && this.rows > 0
+    },
     isMasked() {
       return ['phone', 'document'].includes(this.type)
     },
