@@ -7,11 +7,7 @@
       {{ strengthMessage }}
     </small>
     <div class="chart">
-      <stats-donut
-        :options="statsOptions"
-        :data="statsData"
-        :height="200"
-      ></stats-donut>
+      <stats-donut :options="statsOptions" :data="statsData" :height="200"></stats-donut>
     </div>
 
     <div class="mb-5"></div>

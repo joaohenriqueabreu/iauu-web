@@ -2,10 +2,7 @@
   <div>
     <label v-if="label" :for="name">{{ label }}</label>
     <v-selectize :name="name" :settings="settings">
-      <option
-        v-for="(option, index) in selectizeOptions"
-        :key="index"
-        :value="option.value"
+      <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
         >{{ option.display }}
       </option>
     </v-selectize>

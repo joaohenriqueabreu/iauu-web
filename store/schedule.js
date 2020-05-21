@@ -10,9 +10,7 @@ export const state = () => ({
 export const mutations = {
   set_schedule(state, { id, type, timeslots }) {
     state.schedule = new Schedule({ id, type })
-    timeslots.forEach((timeslotData) =>
-      state.schedule.timeslots.push(new Timeslot(timeslotData))
-    )
+    timeslots.forEach((timeslotData) => state.schedule.timeslots.push(new Timeslot(timeslotData)))
   },
   append_timeslot(state, timeslotData) {
     state.schedule.timeslots.push(new Timeslot(timeslotData))
@@ -20,10 +18,7 @@ export const mutations = {
     state.newlyAddedTimeslot = this.$array.last(state.schedule.timeslots)
   },
   remove_timeslot(state, { type, id }) {
-    this.$array.remove(
-      state.schedule.timeslots,
-      (timeslot) => timeslot.id === parseInt(id)
-    )
+    this.$array.remove(state.schedule.timeslots, (timeslot) => timeslot.id === parseInt(id))
 
     state.lastRemovedTimeslotId = `${type}_${id}`
   }
@@ -53,13 +48,9 @@ export const getters = {
     return this.$array.last(state.schedule.timeslots)
   },
   presentations(state) {
-    return state.schedule.timeslots.filter(
-      (timeslot) => timeslot.type === 'presentation'
-    )
+    return state.schedule.timeslots.filter((timeslot) => timeslot.type === 'presentation')
   },
   proposals(state) {
-    return state.schedule.timeslots.filter(
-      (timeslot) => timeslot.type === 'proposal'
-    )
+    return state.schedule.timeslots.filter((timeslot) => timeslot.type === 'proposal')
   }
 }

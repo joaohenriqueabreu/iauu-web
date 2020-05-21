@@ -49,12 +49,7 @@ export default {
   },
   data() {
     return {
-      calendarPlugins: [
-        interactionPlugin,
-        dayGridPlugin,
-        timeGridPlugin,
-        bootstrapPlugin
-      ],
+      calendarPlugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, bootstrapPlugin],
       calendarEvents: [],
       currentYear: 0 // store to fetch new events when user switches year
     }
@@ -66,10 +61,7 @@ export default {
       newTimeslot: (state) => state.schedule.newlyAddedTimeslot
     }),
     unavailableTimeslots() {
-      return this.$collection.filter(
-        this.timeslots,
-        (timeslot) => timeslot.type === 'unavailable'
-      )
+      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'unavailable')
     },
     headerButtons: () => {
       return {
@@ -146,9 +138,7 @@ export default {
     datesDestroy() {
       // This method is called right after every view switch on calendar,
       // when we switch years, append new events data
-      if (
-        this.moment(this.fullcalendarApi.getDate()).year() !== this.currentYear
-      ) {
+      if (this.moment(this.fullcalendarApi.getDate()).year() !== this.currentYear) {
         this.$emit('reload-events', this.currentYear)
         this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
       }
@@ -159,10 +149,7 @@ export default {
     formatFullcalendarTimeslot(timeslot) {
       const fullcalendarEvent = {
         id: `${timeslot.type}_${timeslot.id}`,
-        title:
-          timeslot.type === 'unavailable'
-            ? 'Indisponibilidade'
-            : timeslot.title,
+        title: timeslot.type === 'unavailable' ? 'Indisponibilidade' : timeslot.title,
         start:
           timeslot.type === 'unavailable'
             ? moment(timeslot.start_dt)

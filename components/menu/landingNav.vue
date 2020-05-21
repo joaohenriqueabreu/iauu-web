@@ -6,7 +6,7 @@
       </nuxt-link>
     </div>
     <div>
-      <menu-manager></menu-manager>
+      <menu-manager class="pr-4"></menu-manager>
     </div>
   </nav>
 </template>

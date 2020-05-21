@@ -2,25 +2,14 @@
   <div>
     <form>
       <image-uploader ref="bgUploader" @uploaded="setBackground">
-        <header
-          :style="{ 'background-image': `url(${form.backgroundUrl})` }"
-          @click="uploadBG"
-        >
+        <header :style="{ 'background-image': `url(${form.backgroundUrl})` }" @click="uploadBG">
           <input v-model="form.backgroundUrl" type="hidden" />
         </header>
       </image-uploader>
       <main>
         <div class="logo">
-          <image-uploader
-            ref="avatarUploader"
-            :rounded="true"
-            @uploaded="setAvatar"
-          >
-            <avatar
-              :src="form.avatarUrl"
-              :size="150"
-              @click="uploadAvatar"
-            ></avatar>
+          <image-uploader ref="avatarUploader" :rounded="true" @uploaded="setAvatar">
+            <avatar :src="form.avatarUrl" :size="150" @click="uploadAvatar"></avatar>
             <input v-model="form.avatarUrl" type="hidden" />
           </image-uploader>
         </div>
@@ -28,26 +17,17 @@
         <div class="boxed">
           <ul class="nav nav-tabs mt-4">
             <li class="nav-link first">
-              <a
-                class="nav-link"
-                :class="{ active: statsTab }"
-                @click="activeTab = 'stats'"
+              <a class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'"
                 >Stats</a
               >
             </li>
             <li class="nav-link">
-              <a
-                class="nav-link"
-                :class="{ active: infoTab }"
-                @click="activeTab = 'info'"
+              <a class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'"
                 >Informações</a
               >
             </li>
             <li class="nav-link">
-              <a
-                class="nav-link"
-                :class="{ active: socialTab }"
-                @click="activeTab = 'social'"
+              <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'"
                 >Redes Sociais</a
               >
             </li>
@@ -65,18 +45,10 @@
               <profile-stats v-show="statsTab" key="stats"></profile-stats>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-info
-                v-show="infoTab"
-                ref="info"
-                key="artist"
-              ></artist-info>
+              <artist-info v-show="infoTab" ref="info" key="artist"></artist-info>
             </fade-transition>
             <fade-transition mode="out-in">
-              <social-networks
-                v-show="socialTab"
-                ref="social"
-                key="social"
-              ></social-networks>
+              <social-networks v-show="socialTab" ref="social" key="social"></social-networks>
             </fade-transition>
             <fade-transition mode="out-in">
               <artist-categories

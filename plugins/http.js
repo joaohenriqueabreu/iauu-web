@@ -8,8 +8,7 @@ const http = axios.create({
 //  need to check how to make it work
 if (process.client) {
   // const token = localStorage.getItem('token')
-  const token =
-    'o1h4o31yh135pj239p52jpi23j24j0j408u240j2j5025y295y40jy08uy024jy0824u82h4t020'
+  const token = 'o1h4o31yh135pj239p52jpi23j24j0j408u240j2j5025y295y40jy08uy024jy0824u82h4t020'
   if (token) {
     http.defaults.headers.authorization = `Bearer ${token}`
     // http.defaults.headers = {

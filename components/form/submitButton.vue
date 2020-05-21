@@ -8,12 +8,7 @@
         :class="{ disabled }"
         @click="$refs.submit.click()"
       >
-        <input
-          ref="submit"
-          type="submit"
-          :disabled="disabled"
-          @click.prevent="submit"
-        />
+        <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
       <div v-else key="submitted" class="button">

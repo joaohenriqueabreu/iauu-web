@@ -26,10 +26,7 @@
             <form-toggle v-model="timeslot.full_day">Dia inteiro?</form-toggle>
           </div>
           <span class="space"></span>
-          <form-select
-            v-model="timeslot.frequency"
-            :options="repeatOptions"
-          ></form-select>
+          <form-select v-model="timeslot.frequency" :options="repeatOptions"></form-select>
         </div>
       </main>
       <footer>

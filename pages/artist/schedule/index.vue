@@ -4,8 +4,7 @@
       <div class="vertical">
         <h4>Bem vindo a Sua Agenda</h4>
         <p>
-          Veja e interaja com seus próximos eventos e responda a propostas de
-          clientes
+          Veja e interaja com seus próximos eventos e responda a propostas de clientes
         </p>
       </div>
       <div class="vertical text-right">
@@ -30,10 +29,7 @@
       ></full-calendar>
       <modal ref="unavailableModal" height="small">
         <template v-slot:main>
-          <unavailable
-            :default="selectedTimeslot"
-            @save="closeUnavailableModal"
-          ></unavailable>
+          <unavailable :default="selectedTimeslot" @save="closeUnavailableModal"></unavailable>
         </template>
       </modal>
       <modal ref="proposalModal">

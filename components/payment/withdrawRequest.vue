@@ -5,16 +5,14 @@
     </template>
     <template v-slot:main>
       <div class="mb-2 p-2">
-        Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui vem as
-        regras de saque. Aqui vem as regras de saque. Aqui vem as regras de
-        saque. Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui
-        vem as regras de saque. Aqui vem as regras de saque.
+        Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui
+        vem as regras de saque. Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui vem
+        as regras de saque. Aqui vem as regras de saque. Aqui vem as regras de saque.
       </div>
       <div class="mb-5 p-2">
-        Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui vem as
-        regras de saque. Aqui vem as regras de saque. Aqui vem as regras de
-        saque. Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui
-        vem as regras de saque. Aqui vem as regras de saque.
+        Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui
+        vem as regras de saque. Aqui vem as regras de saque. Aqui vem as regras de saque. Aqui vem
+        as regras de saque. Aqui vem as regras de saque. Aqui vem as regras de saque.
       </div>
       <div class="horizontal middle px-5 py-2 mb-4">
         <h6 class="mr-4 noCap">Seu saldo é de:</h6>

@@ -70,10 +70,7 @@ export default {
   },
   computed: {
     subCategoryOptions() {
-      return this.$collection.map(
-        this.subCategories,
-        (subcategory) => subcategory.name
-      )
+      return this.$collection.map(this.subCategories, (subcategory) => subcategory.name)
     }
   },
   methods: {

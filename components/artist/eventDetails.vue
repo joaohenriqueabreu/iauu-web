@@ -48,12 +48,7 @@
       </div>
     </div>
     <div class="attachments">
-      <attachment
-        v-for="(file, index) in event.files"
-        :key="index"
-        :file="file"
-      >
-      </attachment>
+      <attachment v-for="(file, index) in event.files" :key="index" :file="file"> </attachment>
     </div>
   </div>
 </template>
@@ -69,9 +64,7 @@ export default {
   },
   computed: {
     encodedMapsLocation() {
-      return encodeURI(
-        `http://maps.google.com/maps?q=${this.event.location.display}`
-      )
+      return encodeURI(`http://maps.google.com/maps?q=${this.event.location.display}`)
     },
     eventTime() {
       return (

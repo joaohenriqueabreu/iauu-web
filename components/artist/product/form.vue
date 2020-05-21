@@ -7,11 +7,7 @@
       <div class="new-product-form vertical p-4">
         <form v-if="!$utils.isEmpty(product)">
           <form-input v-model="product.name" label="Título"></form-input>
-          <form-input
-            v-model="product.description"
-            label="Descrição"
-            :rows="3"
-          ></form-input>
+          <form-input v-model="product.description" label="Descrição" :rows="3"></form-input>
           <div class="horizontal middle center mb-4">
             <form-input
               v-model="product.price"
@@ -27,11 +23,7 @@
           </div>
           <div class="horizontal d-flex justify-content-between mb-2">
             <h6>Adicionar documentos</h6>
-            <font-awesome
-              icon="plus"
-              class="clickable"
-              @click="uploadDocument"
-            ></font-awesome>
+            <font-awesome icon="plus" class="clickable" @click="uploadDocument"></font-awesome>
           </div>
           <div class="vertical mb-5">
             <fade-transition group>
@@ -49,10 +41,7 @@
           </div>
           <div class="vertical mb-4">
             <fade-transition group>
-              <div
-                v-for="(media, mediaIndex) in product.medias"
-                :key="mediaIndex"
-              >
+              <div v-for="(media, mediaIndex) in product.medias" :key="mediaIndex">
                 <media-thumbnail
                   class="mb-2"
                   simple
@@ -68,11 +57,7 @@
                 class="full-width"
                 placeholder="Cole o link de suas midias sociais aqui"
               ></form-input>
-              <font-awesome
-                icon="plus"
-                class="clickable ml-5"
-                @click="uploadMedia"
-              ></font-awesome>
+              <font-awesome icon="plus" class="clickable ml-5" @click="uploadMedia"></font-awesome>
             </div>
           </div>
         </form>

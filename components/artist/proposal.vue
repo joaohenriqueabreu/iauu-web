@@ -2,10 +2,7 @@
   <div class="container">
     <header>
       <div class="horizontal middle">
-        <avatar
-          :src="proposal.contractor.photo"
-          :username="proposal.contractor.name"
-        ></avatar>
+        <avatar :src="proposal.contractor.photo" :username="proposal.contractor.name"></avatar>
         <h5>{{ proposal.contractor.name }}</h5>
       </div>
       <span class="identifier">Proposta</span>

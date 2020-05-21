@@ -14,21 +14,19 @@
       <countdown v-if="!isPresentationPast" :time="timeUntilPresentation">
         <template slot-scope="props">
           <h5>
-            Faltam {{ props.days }} dias : {{ props.hours }} horas :
-            {{ props.minutes }} minutos
+            Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos
           </h5>
         </template>
       </countdown>
       <div v-else>
         <p>
           Conta pra gente como foi a apresentação!
-          <a href="#" @click.prevent="confirm">Confirme a Realização</a> para
-          podermos finalizar o processo de pagamento.
+          <a href="#" @click.prevent="confirm">Confirme a Realização</a> para podermos finalizar o
+          processo de pagamento.
         </p>
         <p>
           Caso a apresentação não seja confirmada por ambas as partes em até
-          <b>{{ $config.closePresentationDeadline }} dias</b> ela será
-          automaticamente encerrada.
+          <b>{{ $config.closePresentationDeadline }} dias</b> ela será automaticamente encerrada.
         </p>
       </div>
     </div>

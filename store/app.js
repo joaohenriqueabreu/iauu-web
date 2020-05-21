@@ -40,6 +40,5 @@ export const actions = {
 
 export const getters = {
   isMenuOpened: (state) => state.showMenu,
-  hasMessage: (state) =>
-    state.alert.message !== null || state.alert.message !== undefined
+  hasMessage: (state) => state.alert.message !== null || state.alert.message !== undefined
 }

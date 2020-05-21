@@ -10,11 +10,7 @@
       </div>
     </div>
     <div v-if="!$utils.isEmpty(products)" class="row">
-      <div
-        v-for="(product, prodIndex) in products"
-        :key="prodIndex"
-        class="col-sm-6 mb-4"
-      >
+      <div v-for="(product, prodIndex) in products" :key="prodIndex" class="col-sm-6 mb-4">
         <div class="product">
           <header @click="openConfirmRemove(product.id)">
             <font-awesome icon="times"></font-awesome>

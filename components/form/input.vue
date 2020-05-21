@@ -9,6 +9,7 @@
       :placeholder="placeholder"
       :disabled="disabled"
       @input="$emit('input', $event.target.value)"
+      @keyup.enter="$emit('enter', value)"
     />
     <input
       v-if="isPassword"
@@ -17,6 +18,7 @@
       :name="name"
       placeholder="**********"
       @input="$emit('input', $event.target.value)"
+      @keyup.enter="$emit('enter', value)"
     />
     <input
       v-if="isNumeric"
@@ -25,6 +27,7 @@
       :name="name"
       placeholder=""
       @input="$emit('input', $event.target.value)"
+      @keyup.enter="$emit('enter', value)"
     />
     <input
       v-if="isMasked"
@@ -35,6 +38,7 @@
       :placeholder="placeholder"
       :disabled="disabled"
       @input="$emit('input', $event.target.value)"
+      @keyup.enter="$emit('enter', value)"
     />
     <textarea
       v-if="isTextArea"
@@ -44,6 +48,7 @@
       :placeholder="placeholder"
       :disabled="disabled"
       @input="$emit('input', $event.target.value)"
+      @keyup.enter="$emit('enter', value)"
     ></textarea>
     <font-awesome v-if="icon" icon="icon"></font-awesome>
   </div>

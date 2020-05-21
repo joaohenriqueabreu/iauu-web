@@ -21,11 +21,7 @@
           class="full-width"
           placeholder="Cole o link de suas midias sociais aqui"
         ></form-input>
-        <font-awesome
-          icon="plus"
-          class="clickable ml-5"
-          @click="link"
-        ></font-awesome>
+        <font-awesome icon="plus" class="clickable ml-5" @click="link"></font-awesome>
       </div>
     </div>
   </div>

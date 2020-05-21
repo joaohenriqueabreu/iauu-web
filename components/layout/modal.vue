@@ -48,9 +48,7 @@ export default {
       document.getElementsByTagName('body')[0].classList.add('disable-scroll')
     },
     enableBodyScroll() {
-      document
-        .getElementsByTagName('body')[0]
-        .classList.remove('disable-scroll')
+      document.getElementsByTagName('body')[0].classList.remove('disable-scroll')
     }
   }
 }

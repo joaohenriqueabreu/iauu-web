@@ -1,5 +1,6 @@
 <template>
-  <svg
+  <img src="@/assets/imgs/logo.png" :style="`height: ${height}px; width: ${width}px`" />
+  <!-- <svg
     class="logo"
     :width="width"
     :height="height"
@@ -21,7 +22,7 @@
         fill-rule="nonzero"
       />
     </g>
-  </svg>
+  </svg> -->
 </template>
 <script>
 export default {

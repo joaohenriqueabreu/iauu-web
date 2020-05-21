@@ -2,11 +2,7 @@
   <div>
     <div class="vertical">
       <h6 class="mb-4">Últimas propostas recebidas</h6>
-      <div
-        v-for="(proposal, index) in proposals"
-        :key="index"
-        @click="open(proposal.id)"
-      >
+      <div v-for="(proposal, index) in proposals" :key="index" @click="open(proposal.id)">
         <event-info :event="proposal"></event-info>
       </div>
     </div>

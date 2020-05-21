@@ -41,10 +41,7 @@
       </tr>
     </table>
 
-    <withdraw-request
-      ref="withdrawRequest"
-      :available="stats.active"
-    ></withdraw-request>
+    <withdraw-request ref="withdrawRequest" :available="stats.active"></withdraw-request>
     <modal ref="presentationModal">
       <template v-slot:main>
         <presentation read-only></presentation>

@@ -29,19 +29,18 @@ export default {
 header {
   position: fixed;
   width: 100vw;
-  z-index: $above;
-}
-
-header {
+  z-index: $moveToTop;
   height: 10vh;
 }
 
 main {
-  height: 100vh;
+  min-height: 100vh;
   padding-top: 10vh;
 }
 
 footer {
+  position: relative;
+  bottom: 0;
   height: 20vh;
   background: $layer1;
 }
