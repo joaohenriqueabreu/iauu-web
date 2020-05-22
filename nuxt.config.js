@@ -139,8 +139,8 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {},
-    babelrc: true
+    extend(config, ctx) {}
+    // babelrc: true
   }
 
   // server: {
