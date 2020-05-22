@@ -39,7 +39,7 @@ export default {
 .content {
   @extend .vertical, .middle, .center;
   position: relative;
-  height: 100vh;
+  height: 100%;
 
   form {
     @extend .vertical, .middle;
