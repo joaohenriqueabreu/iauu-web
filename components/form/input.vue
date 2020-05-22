@@ -80,7 +80,7 @@ export default {
     color: $white;
     font-weight: $bold;
     box-shadow: $lightShadow;
-    // margin-bottom: 2 * $space;
+    margin-bottom: 2 * $space;
     padding: 2 * $space 5 * $space 2 * $space 2 * $space;
     cursor: pointer;
 
