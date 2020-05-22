@@ -1,8 +1,6 @@
 <template>
   <div>
-    <client-only>
-      <nuxt-child />
-    </client-only>
+    <nuxt-child />
   </div>
 </template>
 

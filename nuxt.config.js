@@ -60,10 +60,17 @@ export default {
     { src: '@/plugins/config' },
     { src: '@/plugins/utils' },
     { src: '@/plugins/http' },
+
+    // { src: '@/plugins/ui' },
+    { src: '@/plugins/icons' },
+    { src: '@/plugins/data' },
+    { src: '@/plugins/dictionary' },
+    // { src: '@/plugins/full-calendar' },
+
     { src: '@/plugins/ui', mode: 'client' },
-    { src: '@/plugins/icons', mode: 'client' },
-    { src: '@/plugins/data', mode: 'client' },
-    { src: '@/plugins/dictionary', mode: 'client' },
+    // { src: '@/plugins/icons', mode: 'client' },
+    // { src: '@/plugins/data', mode: 'client' },
+    // { src: '@/plugins/dictionary', mode: 'client' },
     { src: '@/plugins/full-calendar', mode: 'client' }
     // { src: '@/plugins/full-calendar', ssr: false }
   ],
@@ -119,7 +126,9 @@ export default {
             propertyName: 'user'
           }
         }
-      }
+      },
+      tokenRequired: false,
+      resetOnError: true
     }
   },
   /*
