@@ -1,8 +1,8 @@
 require('dotenv').config()
 
 export default {
-  mode: 'universal',
-  // mode: 'spa',
+  // mode: 'universal',
+  mode: 'spa',
   env: {
     baseURL: process.env.BASE_URL,
     fileStackApiKey: process.env.NUXT_ENV_FILESTACK_API_KEY
