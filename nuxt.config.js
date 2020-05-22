@@ -119,7 +119,7 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'login', method: 'post', propertyName: 'token' },
+          login: { url: 'login', method: 'post', propertyName: 'asdtoken' },
           logout: { url: 'login', method: 'delete' },
           user: { url: 'validate', method: 'post', propertyName: 'user' }
         }
