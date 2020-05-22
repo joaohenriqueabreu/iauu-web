@@ -115,7 +115,6 @@ export default {
   },
 
   auth: {
-    cookie: false,
     scopeKey: 'type',
     strategies: {
       local: {

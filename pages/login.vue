@@ -32,7 +32,7 @@ export default {
         // await this.login(this.credentials)
         this.$router.push('/artist/schedule')
       } catch (error) {
-        this.$sentry.captureException(error)
+        // this.$sentry.captureException(error)
       }
     }
   }
