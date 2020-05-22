@@ -64,7 +64,8 @@ export default {
     { src: '@/plugins/icons', mode: 'client' },
     { src: '@/plugins/data', mode: 'client' },
     { src: '@/plugins/dictionary', mode: 'client' },
-    { src: '@/plugins/full-calendar', ssr: false }
+    { src: '@/plugins/full-calendar', mode: 'client' }
+    // { src: '@/plugins/full-calendar', ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules
