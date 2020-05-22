@@ -1,8 +1,8 @@
 require('dotenv').config()
 
 export default {
-  // mode: 'universal',
-  mode: 'spa',
+  mode: 'universal',
+  // mode: 'spa',
   env: {
     baseURL: process.env.BASE_URL,
     fileStackApiKey: process.env.NUXT_ENV_FILESTACK_API_KEY
@@ -120,15 +120,11 @@ export default {
         endpoints: {
           login: { url: 'login', method: 'post', propertyName: 'token' },
           logout: { url: 'login', method: 'delete' },
-          user: {
-            url: 'validate',
-            method: 'post',
-            propertyName: 'user'
-          }
+          user: { url: 'validate', method: 'post', propertyName: 'user' }
         }
-      },
-      tokenRequired: false,
-      resetOnError: true
+      }
+      // tokenRequired: false,
+      // resetOnError: true
     }
   },
   /*
