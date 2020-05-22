@@ -1,16 +1,22 @@
 <template>
   <div>
-    <div class="mx-0 row">
-      <form-input v-model="term" class="col-sm-4" placeholder="Aniversário, Casamento"></form-input>
-      <form-location v-model="location" class="col-sm-3" placeholder="Próximo de"></form-location>
-      <form-range v-model="price" filter-name="currency" class="col-sm-3"></form-range>
-      <form-select
-        :allow-input="false"
-        class="col-sm-2"
-        icon-helper="sort-alpha-down"
-        placeholder="Ordenar por"
-      ></form-select>
-    </div>
+    <client-only>
+      <div class="mx-0 row">
+        <form-input
+          v-model="term"
+          class="col-sm-4"
+          placeholder="Aniversário, Casamento"
+        ></form-input>
+        <form-location v-model="location" class="col-sm-3" placeholder="Próximo de"></form-location>
+        <form-range v-model="price" filter-name="currency" class="col-sm-3"></form-range>
+        <form-select
+          :allow-input="false"
+          class="col-sm-2"
+          icon-helper="sort-alpha-down"
+          placeholder="Ordenar por"
+        ></form-select>
+      </div>
+    </client-only>
     <div class="full-width px-4">
       <hr />
     </div>

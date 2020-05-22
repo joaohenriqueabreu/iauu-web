@@ -36,7 +36,9 @@
               </div>
               <div class="d-flex align-items-end full-height">
                 <div v-if="artist.display_rate" class="horizontal middle">
-                  <h4>R$ {{ rateMin | number('0,0') }} - R$ {{ rateMax | number('0,0') }}</h4>
+                  <client-only>
+                    <h4>R$ {{ rateMin | number('0,0') }} - R$ {{ rateMax | number('0,0') }}</h4>
+                  </client-only>
                 </div>
                 <div v-if="!artist.display_rate" class="horizontal middle">
                   <span>Entre em contato para orçar</span>
