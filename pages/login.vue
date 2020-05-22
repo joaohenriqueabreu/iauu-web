@@ -25,11 +25,15 @@ export default {
   methods: {
     ...mapActions('auth', ['login']),
     async login() {
-      await this.$auth.loginWith('local', {
-        data: this.credentials
-      })
-      // await this.login(this.credentials)
-      this.$router.push('/artist/schedule')
+      try {
+        await this.$auth.loginWith('local', {
+          data: this.credentials
+        })
+        // await this.login(this.credentials)
+        this.$router.push('/artist/schedule')
+      } catch (error) {
+        this.$sentry.captureException(error)
+      }
     }
   }
 }
