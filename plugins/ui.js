@@ -19,11 +19,21 @@ import AlertMessage from '@/components/layout/alert'
 import Overlay from '@/components/layout/overlay'
 import StatsDonut from '@/components/layout/statsDonut'
 import MediaThumbnail from '@/components/media/thumbnail'
+import Rating from '@/components/artist/profile/rating'
 
 import FormInput from '@/components/form/input'
+import FormNumeric from '@/components/form/numeric'
+import FormPassword from '@/components/form/password'
+import FormEmail from '@/components/form/email'
+import FormMoney from '@/components/form/money'
+import FormTime from '@/components/form/time'
+import FormRange from '@/components/form/range'
+import FormDate from '@/components/form/date'
+import FormTextarea from '@/components/form/textarea'
 import FormLocation from '@/components/form/location'
 import FormSelect from '@/components/form/select'
 import FormToggle from '@/components/form/toggle'
+
 import ImageUploader from '@/components/form/imageUploader'
 import SubmitButton from '@/components/form/submitButton'
 import Attachment from '@/components/form/attachment'
@@ -45,9 +55,17 @@ Vue.component('toggle-button', ToggleButton)
 Vue.component('overlay', Overlay)
 
 Vue.component('form-input', FormInput)
+Vue.component('form-numeric', FormNumeric)
+Vue.component('form-password', FormPassword)
+Vue.component('form-textarea', FormTextarea)
+Vue.component('form-email', FormEmail)
+Vue.component('form-time', FormTime)
+Vue.component('form-date', FormDate)
+Vue.component('form-money', FormMoney)
 Vue.component('form-location', FormLocation)
 Vue.component('form-select', FormSelect)
 Vue.component('form-toggle', FormToggle)
+Vue.component('form-range', FormRange)
 
 Vue.component('image-uploader', ImageUploader)
 Vue.component('submit-button', SubmitButton)
@@ -59,6 +77,7 @@ Vue.component('alert', AlertMessage)
 Vue.component('stats-donut', StatsDonut)
 Vue.component('media-thumbnail', MediaThumbnail)
 Vue.component('attachment', Attachment)
+Vue.component('rating', Rating)
 
 Vue.prototype.moment = moment
 Vue.prototype.delay = setTimeout(() => {}, 500)

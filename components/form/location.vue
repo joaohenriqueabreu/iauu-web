@@ -1,7 +1,11 @@
 <template>
   <div>
     <label :for="name">{{ label }}</label>
-    <input ref="placesElement" type="text" @input="handleDeparture" />
+    <div class="form-input">
+      <input ref="placesElement" type="text" @input="handleDeparture" />
+      <font-awesome icon="map-marker-alt"></font-awesome>
+    </div>
+
     <input ref="formElement" name="location" type="hidden" />
   </div>
 </template>

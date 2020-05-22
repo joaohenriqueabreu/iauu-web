@@ -1,72 +1,26 @@
 <template>
   <div>
     <label :for="name">{{ label }}</label>
-    <input
-      v-if="isSimpleText"
-      :value="value"
-      type="text"
-      :name="name"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      @input="$emit('input', $event.target.value)"
-      @keyup.enter="$emit('enter', value)"
-    />
-    <input
-      v-if="isPassword"
-      :value="value"
-      type="password"
-      :name="name"
-      placeholder="**********"
-      @input="$emit('input', $event.target.value)"
-      @keyup.enter="$emit('enter', value)"
-    />
-    <input
-      v-if="isNumeric"
-      :value="value"
-      type="number"
-      :name="name"
-      placeholder=""
-      @input="$emit('input', $event.target.value)"
-      @keyup.enter="$emit('enter', value)"
-    />
-    <input
-      v-if="isMasked"
-      v-mask="getMask"
-      :value="value"
-      type="text"
-      :name="name"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      @input="$emit('input', $event.target.value)"
-      @keyup.enter="$emit('enter', value)"
-    />
-    <textarea
-      v-if="isTextArea"
-      :value="value"
-      :rows="rows"
-      :name="name"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      @input="$emit('input', $event.target.value)"
-      @keyup.enter="$emit('enter', value)"
-    ></textarea>
-    <font-awesome v-if="icon" icon="icon"></font-awesome>
+    <div class="form-input">
+      <input
+        :value="value"
+        :type="type"
+        :name="name"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        @input="$emit('input', $event.target.value)"
+        @keyup.enter="$emit('enter', value)"
+      />
+      <font-awesome v-if="icon" :icon="icon"></font-awesome>
+    </div>
   </div>
 </template>
 
 <script>
 import VueFilters from 'vue2-filters'
-// import Location from '@/components/form/location'
 export default {
-  // components: {
-  //   location: Location
-  // },
   filters: {
     getFilter(value, type) {
-      // const convertToNumber = (value, precision) => {
-      //   return value.toString().replace(/\D/g, '')
-      // }
-
       if (type === 'numeric') {
         return VueFilters.Number(value)
       }
@@ -75,87 +29,85 @@ export default {
     }
   },
   props: {
-    rows: { type: Number, default: 0 },
     value: { type: [String, Number, Boolean], default: null },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
     placeholder: { type: String, default: '' },
-    type: { type: String, default: 'text' },
-    icon: { type: String, default: null },
-    disabled: { type: Boolean, default: false }
+    disabled: { type: Boolean, default: false },
+    iconHelper: { type: String, default: null }
   },
   computed: {
-    isSimpleText() {
-      return this.type === 'text' && this.rows === 0
+    type() {
+      return 'text'
     },
-    isPassword() {
-      return this.type === 'password'
-    },
-    isNumeric() {
-      return this.type === 'numeric' || this.type === 'number'
-    },
-    isTextArea() {
-      return this.type === 'text' && this.rows > 0
-    },
-    isMasked() {
-      return ['phone', 'document'].includes(this.type)
-    },
-    getMask() {
-      return ''
+    icon() {
+      return !this.$utils.isEmpty(this.iconHelper) ? this.iconHelper : 'search'
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-label {
-  font-weight: $bold;
-  margin-bottom: 2 * $space;
-  margin-right: 2 * $space;
-  color: $brand;
-  text-transform: capitalize;
-}
+<style lang="scss">
+.form-input {
+  position: relative;
 
-input,
-textarea {
-  transition: $transition;
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  outline-color: transparent;
-  font-size: $regular;
-  resize: none;
-  background-color: $layer1;
-  color: $white;
-  font-weight: $bold;
-  box-shadow: $lightShadow;
-  margin-bottom: 2 * $space;
-  padding: 2 * $space 1.5 * $space;
-  cursor: pointer;
-
-  &:focus {
-    outline-color: transparent;
+  [data-icon] {
+    position: absolute;
+    opacity: 0.5;
+    bottom: 35%;
+    right: 0;
   }
 
-  &:focus {
-    transition: $transition;
-    background: $layer5;
+  label {
+    font-weight: $bold;
+    margin-bottom: 2 * $space;
+    margin-right: 2 * $space;
     color: $brand;
+    text-transform: capitalize;
   }
-  &:hover {
-    background-color: $layer5;
+
+  input,
+  textarea,
+  select {
+    transition: $transition;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    outline-color: transparent;
+    font-size: $regular;
+    resize: none;
+    background-color: $layer1;
+    color: $white;
+    font-weight: $bold;
+    box-shadow: $lightShadow;
+    // margin-bottom: 2 * $space;
+    padding: 2 * $space 5 * $space 2 * $space 2 * $space;
+    cursor: pointer;
+
+    &:focus {
+      outline-color: transparent;
+    }
+
+    &:focus {
+      transition: $transition;
+      background: $layer5;
+      color: $brand;
+    }
+    &:hover {
+      background-color: $layer5;
+    }
   }
-}
 
-[data-icon] {
-  opacity: 0.5;
-  position: absolute;
-  right: 20px;
-  top: 40%;
-}
+  // [data-icon] {
+  //   opacity: 0.5;
+  //   position: absolute;
+  //   right: 20px;
+  //   top: 40%;
+  // }
 
-div.error {
-  position: absolute;
-  bottom: -30px;
+  div.error {
+    position: absolute;
+    bottom: -30px;
+  }
 }
 </style>

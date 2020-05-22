@@ -6,9 +6,6 @@
     <main>
       <nuxt />
     </main>
-    <footer>
-      <h1>this is a footer</h1>
-    </footer>
   </div>
 </template>
 
@@ -31,18 +28,11 @@ header {
   width: 100vw;
   z-index: $moveToTop;
   height: 10vh;
-  background: $layer1;
+  background: $layer2;
 }
 
 main {
   min-height: 100vh;
   padding-top: 10vh;
-}
-
-footer {
-  position: relative;
-  bottom: 0;
-  height: 20vh;
-  background: $layer1;
 }
 </style>

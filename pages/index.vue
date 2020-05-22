@@ -8,9 +8,9 @@
           v-model="term"
           class="funny"
           :placeholder="placeholder"
-          @enter="something"
+          @enter="search"
         ></form-input>
-        <nuxt-link to="search">Vamos lá!</nuxt-link>
+        <nuxt-link ref="searchLink" :to="searchUrl">Vamos lá!</nuxt-link>
       </div>
     </div>
     <div class="section even">
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -45,6 +46,12 @@ export default {
       ],
       placeholder: '',
       term: ''
+    }
+  },
+  computed: {
+    searchUrl() {
+      // return `/search?q=${encodeURI(this.term)}`
+      return 'search'
     }
   },
   watch: {
@@ -80,8 +87,10 @@ export default {
     }, 100)
   },
   methods: {
-    something(value) {
-      alert(value)
+    ...mapActions('app', ['setSearchFilters']),
+    search() {
+      this.setSearchFilters({ term: this.term })
+      this.$router.push(this.searchUrl)
     }
   }
 }

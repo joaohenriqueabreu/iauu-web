@@ -1,30 +1,43 @@
 <template>
   <div>
-    <label v-if="label" :for="name">{{ label }}</label>
-    <v-selectize :name="name" :settings="settings">
-      <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
-        >{{ option.display }}
-      </option>
-    </v-selectize>
-    <!-- <font-awesome v-if="icon" icon="icon"></font-awesome> -->
+    <label :for="name">{{ label }}</label>
+    <div class="form-input">
+      <v-selectize v-if="allowInput" :name="name" :settings="settings">
+        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
+          >{{ option.display }}
+        </option>
+      </v-selectize>
+      <select v-else>
+        <option>{{ placeholder }}</option>
+        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
+          >{{ option.display }}
+        </option>
+      </select>
+      <font-awesome :icon="icon"></font-awesome>
+    </div>
   </div>
 </template>
 
 <script>
 import VueSelectize from 'vue2-selectize'
+import Input from '@/components/form/input'
 export default {
   components: {
     'v-selectize': VueSelectize
   },
+  extends: Input,
   props: {
+    allowInput: { type: Boolean, default: true },
     options: { type: Array, default: () => [] },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
-    placeholder: { type: String, default: 'Digite para procurar' },
     autoOpen: { type: Boolean, default: false },
     hideSelected: { type: Boolean, default: false }
   },
   computed: {
+    icon() {
+      return !this.$utils.isEmpty(this.iconHelper) ? this.iconHelper : 'arrow-down'
+    },
     settings() {
       const self = this
       return {
@@ -91,44 +104,18 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-label {
-  font-weight: $bold;
-  margin-bottom: 5px;
-  color: $brand;
-}
-
 select {
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  outline-color: transparent;
-  font-size: $regular;
-  resize: none;
-  background-color: $layer1;
-  cursor: pointer;
-  color: $white;
-  font-weight: $bold;
-  box-shadow: $lightShadow;
+  padding-right: 0;
+  -webkit-appearance: none;
 
-  padding: 5px;
-  margin-bottom: $space;
-  &:focus {
-    outline-color: $layer1;
+  &::after {
+    content: none;
+    background: $layer1;
+    color: $layer1;
   }
-  &:hover {
-    background-color: $layer1;
+
+  &::-ms-expand {
+    display: none;
   }
-}
-
-[data-icon] {
-  opacity: 0.5;
-  position: absolute;
-  right: 20px;
-  top: 40%;
-}
-
-div.error {
-  position: absolute;
-  bottom: -30px;
 }
 </style>

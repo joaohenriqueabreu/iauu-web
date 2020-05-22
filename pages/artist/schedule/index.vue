@@ -7,18 +7,7 @@
           Veja e interaja com seus próximos eventos e responda a propostas de clientes
         </p>
       </div>
-      <div class="vertical text-right">
-        <div class="horizontal middle mb-2">
-          <span class="event-subtitle proposal"></span>
-          <span>Proposta</span>
-        </div>
-        <div class="horizontal middle mb-2">
-          <span class="event-subtitle presentation"></span>
-          <span>Apresentação</span>
-        </div>
-      </div>
     </div>
-
     <div v-if="timeslots">
       <full-calendar
         ref="fullcalendar"
@@ -42,6 +31,17 @@
           <presentation @update="closePresentationModal"></presentation>
         </template>
       </modal>
+    </div>
+
+    <div class="horizontal middle center text-right">
+      <div class="horizontal middle mr-4">
+        <span class="event-subtitle proposal"></span>
+        <h6>Proposta</h6>
+      </div>
+      <div class="horizontal middle">
+        <span class="event-subtitle presentation"></span>
+        <h6>Apresentação</h6>
+      </div>
     </div>
   </div>
 </template>

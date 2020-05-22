@@ -7,19 +7,10 @@
       <div class="new-product-form vertical p-4">
         <form v-if="!$utils.isEmpty(product)">
           <form-input v-model="product.name" label="Título"></form-input>
-          <form-input v-model="product.description" label="Descrição" :rows="3"></form-input>
+          <form-textarea v-model="product.description" label="Descrição"></form-textarea>
           <div class="horizontal middle center mb-4">
-            <form-input
-              v-model="product.price"
-              type="money"
-              class="mr-2"
-              label="Valor (R$)"
-            ></form-input>
-            <form-input
-              v-model="product.duration"
-              type="numeric"
-              label="Duração da apresentação"
-            ></form-input>
+            <form-money v-model="product.price" class="mr-2" label="Valor (R$)"></form-money>
+            <form-numeric v-model="product.duration" label="Duração da apresentação"></form-numeric>
           </div>
           <div class="horizontal d-flex justify-content-between mb-2">
             <h6>Adicionar documentos</h6>

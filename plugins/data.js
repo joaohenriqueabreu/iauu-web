@@ -6,6 +6,7 @@ import moment from 'moment'
 import VueFilters from 'vue2-filters'
 
 Vue.use(VueFilters, {
+  number: { thousandsSeparator: '.', decimalSeparator: ',' },
   currency: { symbol: 'R$ ', thousandsSeparator: '.', decimalSeparator: ',' }
 })
 

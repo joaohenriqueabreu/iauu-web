@@ -3,8 +3,8 @@
     <div class="bg"></div>
     <form>
       <h5>Entre</h5>
-      <form-input v-model="credentials.email"></form-input>
-      <form-input v-model="credentials.password" type="password"></form-input>
+      <form-email v-model="credentials.email"></form-email>
+      <form-password v-model="credentials.password"></form-password>
       <div class="mb-5"></div>
       <submit-button @submit="login">Login</submit-button>
     </form>
@@ -39,7 +39,7 @@ export default {
 .content {
   @extend .vertical, .middle, .center;
   position: relative;
-  height: 100%;
+  height: 100vh;
 
   form {
     @extend .vertical, .middle;

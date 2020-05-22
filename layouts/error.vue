@@ -8,6 +8,8 @@
 
 <script>
 export default {
-  props: { error: { type: String, default: '' } }
+  props: {
+    error: { type: Object, default: () => {} }
+  }
 }
 </script>

@@ -1,5 +1,8 @@
 export const state = () => ({
   showMenu: false,
+  searchFilters: {
+    term: ''
+  },
   alert: {
     type: null,
     message: null
@@ -20,6 +23,9 @@ export const mutations = {
   clear_message(state) {
     state.alert.message = null
     state.alert.type = null
+  },
+  set_search_filters(state, filters) {
+    state.searchFilters = filters
   }
 }
 
@@ -35,6 +41,9 @@ export const actions = {
     setTimeout(() => {
       commit('clear_message')
     }, this.$config.alertTimer)
+  },
+  setSearchFilters({ commit }, searchFilters) {
+    commit('set_search_filters', searchFilters)
   }
 }
 

@@ -9,17 +9,9 @@
           </h6>
         </div>
         <div class="horizontal middle mb-4">
-          <form-input
-            v-model="timeslot.start_time"
-            :disabled="timeslot.full_day"
-            type="time"
-          ></form-input>
+          <form-time v-model="timeslot.start_time" :disabled="timeslot.full_day"></form-time>
           <span class="space"></span>
-          <form-input
-            v-model="timeslot.end_time"
-            type="time"
-            :disabled="timeslot.full_day"
-          ></form-input>
+          <form-time v-model="timeslot.end_time" :disabled="timeslot.full_day"></form-time>
         </div>
         <div class="horizontal middle">
           <div class="horizontal middle center">

@@ -28,13 +28,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-nav {
-  transition: $transition;
-  background: $layer1;
+// nav {
+//   transition: $transition;
+//   background: $layer1;
 
-  .transparent {
-    transition: $transition;
-    background: transparent;
-  }
-}
+//   .transparent {
+//     transition: $transition;
+//     background: transparent;
+//   }
+// }
 </style>

@@ -19,12 +19,11 @@
         <h4>{{ available | currency }}</h4>
       </div>
       <div class="horizontal middle px-5 py-2 mb-4">
-        <form-input
+        <form-numeric
           v-model="amount"
-          type="numeric"
           label="Solicito sacar o seguinte valor"
           :max="available"
-        ></form-input>
+        ></form-numeric>
       </div>
     </template>
     <template v-slot:footer>

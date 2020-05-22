@@ -39,6 +39,7 @@ header {
   min-height: 10vh;
   padding: 10px 0;
   z-index: $moveToTop;
+  background: transparent;
 }
 
 main {
