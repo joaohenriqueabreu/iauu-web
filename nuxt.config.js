@@ -92,7 +92,8 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/sentry'
   ],
   optimizedImages: {
     optimizeImages: true,
@@ -127,6 +128,10 @@ export default {
       // resetOnError: true
     }
   },
+  sentry: {
+    dsn: 'https://8ef7b2ffff514abc800bcb8685bc5387@o60001.ingest.sentry.io/5250856',
+    config: {},
+  }
   /*
    ** Build configuration
    */
