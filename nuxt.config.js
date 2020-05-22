@@ -130,8 +130,8 @@ export default {
   },
   sentry: {
     dsn: 'https://8ef7b2ffff514abc800bcb8685bc5387@o60001.ingest.sentry.io/5250856',
-    config: {},
-  }
+    config: {}
+  },
   /*
    ** Build configuration
    */
