@@ -142,7 +142,10 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    minimize: false,
+    optimization: {
+      minimize: false
+    },
+
     extend(config, ctx) {}
     // babelrc: true
   }
