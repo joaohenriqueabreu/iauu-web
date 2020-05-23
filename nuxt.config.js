@@ -124,9 +124,9 @@ export default {
           logout: { url: 'login', method: 'delete' },
           user: { url: 'validate', method: 'post', propertyName: false }
         }
-      },
-      tokenRequired: false,
-      tokenType: false
+      }
+      // tokenRequired: false,
+      // tokenType: 'bearer'
     }
   },
   sentry: {

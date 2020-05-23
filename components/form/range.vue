@@ -2,7 +2,7 @@
   <div class="range">
     <label :for="name">{{ label }}</label>
     <div class="horizontal">
-      {{ min | applyFilter(this) }}
+      <b>{{ min | applyFilter(this) }}</b>
       <range-slider
         v-model="selected"
         class="slider"
@@ -15,7 +15,7 @@
           <div class="knob-content">{{ selected | number('0,0.0') }}</div>
         </template>
       </range-slider>
-      {{ max | applyFilter(this) }}
+      <b>{{ max | applyFilter(this) }}</b>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   props: {
     min: { type: Number, default: 0 },
     max: { type: Number, default: 10000 },
-    step: { type: Number, default: 10 },
+    step: { type: Number, default: 100 },
     filterName: { type: String, default: '' }
   },
   data() {
@@ -70,6 +70,7 @@ export default {
     position: absolute;
     top: -20px;
     left: -10px;
+    font-weight: $bold;
   }
 }
 </style>

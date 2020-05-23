@@ -5,6 +5,9 @@ export default {
   computed: {
     type() {
       return 'password'
+    },
+    icon() {
+      return 'lock'
     }
   }
 }

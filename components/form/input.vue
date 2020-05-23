@@ -54,7 +54,7 @@ export default {
   [data-icon] {
     position: absolute;
     opacity: 0.5;
-    bottom: 35%;
+    bottom: 50%;
     right: 0;
   }
 
@@ -97,13 +97,6 @@ export default {
       background-color: $layer5;
     }
   }
-
-  // [data-icon] {
-  //   opacity: 0.5;
-  //   position: absolute;
-  //   right: 20px;
-  //   top: 40%;
-  // }
 
   div.error {
     position: absolute;

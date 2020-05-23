@@ -5,6 +5,9 @@ export default {
   computed: {
     type() {
       return 'email'
+    },
+    icon() {
+      return 'envelope'
     }
   }
 }

@@ -65,3 +65,25 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+// Overwrite places-autocomplete style
+.pac-container {
+  background: $layer1;
+  color: $brand;
+  border-top: none;
+  padding: $space;
+  font-family: Gotham;
+  .pac-item {
+    // background: $layer2;
+    cursor: pointer;
+    border-top: none;
+  }
+  .pac-item-query {
+    color: $brandLayer;
+  }
+  .pac-logo {
+    color: $layer2;
+  }
+}
+</style>

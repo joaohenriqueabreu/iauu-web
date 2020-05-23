@@ -51,10 +51,11 @@ import {
   faReceipt,
   faGuitar,
   faArrowDown,
-  faSortAlphaDown
+  faSortAlphaDown,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons'
 import {
-  faEnvelope,
+  faEnvelope as farEnvelope,
   faStar as farStar,
   faComment,
   faQuestionCircle,
@@ -142,7 +143,8 @@ library.add(
   faReceipt,
   faGuitar,
   faArrowDown,
-  faSortAlphaDown
+  faSortAlphaDown,
+  farEnvelope
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

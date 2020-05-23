@@ -3,7 +3,7 @@ import Artist from '@/models/product'
 
 export const state = () => ({
   artists: [],
-  selectedArtistId: 0
+  artist: null
 })
 
 export const mutations = {
@@ -17,7 +17,8 @@ export const mutations = {
     state.selectedArtistId = id
   },
   set_artist(state, artistData) {
-    state.artists.unshift(new Artist(artistData))
+    state.artist = new Artist(artistData)
+    // state.artists.unshift(new Artist(artistData))
   },
   remove_artist(state, id) {
     Vue.delete(
@@ -32,10 +33,10 @@ export const actions = {
     const { data } = await this.$axios.get('artists', { params: JSON.stringify(filters) })
     commit('set_artists', data)
   },
-  selectArtist({ commit }, id) {
-    commit('select_artist', id)
-  },
-  async loadArtist({ commit }) {}
+  async loadArtist({ commit }, slug) {
+    const { data } = await this.$axios.get(`artists/${slug}`)
+    commit('set_artist', data)
+  }
 }
 
 export const getters = {}

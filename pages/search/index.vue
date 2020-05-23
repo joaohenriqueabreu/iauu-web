@@ -5,7 +5,7 @@
         <form-input
           v-model="term"
           class="col-sm-4"
-          placeholder="Aniversário, Casamento"
+          placeholder="Aniversário, Casamento, Rock Anos 80, ..."
         ></form-input>
         <form-location v-model="location" class="col-sm-3" placeholder="Próximo de"></form-location>
         <form-range v-model="price" filter-name="currency" class="col-sm-3"></form-range>
@@ -14,13 +14,14 @@
           class="col-sm-2"
           icon-helper="sort-alpha-down"
           placeholder="Ordenar por"
+          :options="['Relevância', 'Núm de Apresentações', 'Avaliação']"
         ></form-select>
       </div>
     </client-only>
     <div class="full-width px-4">
       <hr />
     </div>
-    <div class="p-4">
+    <div class="px-4 py-2">
       <h4 v-if="!$utils.isEmpty(term)">Resultados para "{{ term }}"</h4>
       <h4 v-else>Artistas encontrados</h4>
     </div>
@@ -63,7 +64,6 @@ export default {
   methods: {
     ...mapActions('contractor', ['selectArtist']),
     selectedArtist(artist) {
-      this.selectArtist(artist.id)
       this.$router.push(`/search/artists/${artist.slug}`)
     }
   }

@@ -28,7 +28,7 @@ header {
   width: 100vw;
   z-index: $moveToTop;
   height: 10vh;
-  background: $layer2;
+  background: transparent;
 }
 
 main {
