@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="simple" class="simple-container d-flex justify-content-between">
+    <div v-if="avatar && !simple">
+      <avatar :size="50" :src="networkIcon" class="mr-4"></avatar>
+    </div>
+    <div v-if="simple && !avatar" class="simple-container d-flex justify-content-between">
       <div class="horizontal middle">
         <avatar :size="50" :src="networkIcon" class="mr-4"></avatar>
         <a :href="media.url" target="_blank">
@@ -19,7 +22,7 @@
         @click="$emit('remove')"
       ></font-awesome>
     </div>
-    <link-preview v-else :url="media.url">
+    <link-preview v-if="!simple && !avatar" :url="media.url">
       <template slot="loading">
         <div class="loading"></div>
       </template>
@@ -45,6 +48,7 @@ export default {
   props: {
     media: { type: Object, default: () => {} },
     simple: { type: Boolean, default: false },
+    avatar: { type: Boolean, default: false },
     removable: { type: Boolean, default: false }
   },
   computed: {

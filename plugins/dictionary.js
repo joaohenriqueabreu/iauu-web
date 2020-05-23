@@ -6,6 +6,20 @@ const dictionary = {
       pending: 'Pendente',
       total: 'Total'
     }
+  },
+  artist: {
+    stats: {
+      label: {
+        presentations: 'Apresentações',
+        public: 'Méd. Público',
+        score: 'Avaliações'
+      },
+      icon: {
+        presentations: 'music',
+        public: 'child',
+        score: 'star'
+      }
+    }
   }
 }
 

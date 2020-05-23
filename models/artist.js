@@ -11,7 +11,8 @@ export default class Artist extends Model {
       company_name: '',
       is_verified: '',
       photo: new Media(),
-      ratings: []
+      ratings: [],
+      medias: []
     }
   }
 }

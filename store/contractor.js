@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import Artist from '@/models/product'
+import Artist from '@/models/artist'
+import Media from '@/models/media'
 
 export const state = () => ({
   artists: [],
@@ -18,7 +19,12 @@ export const mutations = {
   },
   set_artist(state, artistData) {
     state.artist = new Artist(artistData)
-    // state.artists.unshift(new Artist(artistData))
+
+    // TODO Should move this to the model
+    state.artist.medias = []
+    artistData.medias.forEach((mediaURL) => {
+      state.artist.medias.push(new Media({ url: mediaURL }))
+    })
   },
   remove_artist(state, id) {
     Vue.delete(
