@@ -26,10 +26,9 @@ export default {
     ...mapActions('auth', ['login']),
     async login() {
       try {
-        await this.$auth.loginWith('local', {
+        await this.$auth.login('local', {
           data: this.credentials
         })
-        // await this.login(this.credentials)
         this.$router.push('/artist/schedule')
       } catch (error) {
         // this.$sentry.captureException(error)

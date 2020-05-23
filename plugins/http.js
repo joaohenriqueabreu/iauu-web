@@ -1,8 +1,8 @@
-import axios from 'axios'
+// import axios from 'axios'
 
-const http = axios.create({
-  baseURL: process.env.NUXT_ENV_API_URL
-})
+// const http = axios.create({
+//   baseURL: process.env.NUXT_ENV_API_URL
+// })
 
 // TODO include token on requests call - nuxt has server/client and sometimes this gets called by serverside
 //  need to check how to make it work
@@ -19,6 +19,6 @@ const http = axios.create({
 // }
 // }
 
-export default ({ app }, inject) => {
-  inject('http', http)
+export default ({ $axios, redirect }, inject) => {
+  $axios.setBaseURL(process.env.NUXT_ENV_API_URL)
 }

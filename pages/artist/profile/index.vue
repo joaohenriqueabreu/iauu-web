@@ -82,8 +82,8 @@ export default {
     'artist-categories': ArtistCategories,
     'profile-stats': ProfileStats
   },
-  async asyncData({ app }) {
-    const { data } = await app.$http.get('categories')
+  async asyncData({ $axios }) {
+    const { data } = await $axios.get('categories')
     return { categories: data }
   },
   data() {

@@ -25,11 +25,11 @@ export const mutations = {
 
 export const actions = {
   async loadProducts({ commit }) {
-    const { data } = await this.$http.get('products')
+    const { data } = await this.$axios.get('products')
     commit('set_products', data)
   },
   async saveProduct({ commit }, product) {
-    const { data } = await this.$http.post('products', product)
+    const { data } = await this.$axios.post('products', product)
 
     // Reactivity only watches for push operations and does not recognize assignment
     if (!this.$utils.isEmpty(product.id)) {
@@ -40,7 +40,7 @@ export const actions = {
     commit('set_product', data)
   },
   async removeProduct({ commit }, id) {
-    await this.$http.delete(`products/${id}`)
+    await this.$axios.delete(`products/${id}`)
     commit('remove_product', id)
   }
 }

@@ -76,7 +76,7 @@ export default {
   methods: {
     async getSubcategories(category) {
       this.selectedCategory = category.name
-      const { data } = await this.$http.get(
+      const { data } = await this.$axios.get(
         `categories/${encodeURI(this.selectedCategory)}/subcategories`
       )
 

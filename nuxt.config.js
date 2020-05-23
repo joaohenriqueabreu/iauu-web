@@ -60,6 +60,7 @@ export default {
     { src: '@/plugins/config' },
     { src: '@/plugins/utils' },
     { src: '@/plugins/http' },
+    // { src: '@/plugins/auth' },
 
     // { src: '@/plugins/ui' },
     { src: '@/plugins/icons' },
@@ -111,22 +112,21 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env.BASE_URL
+    baseURL: process.env.NUXT_ENV_API_URL
   },
 
   auth: {
     scopeKey: 'type',
     strategies: {
       local: {
-        token: {
-          property: 'token'
-        },
         endpoints: {
-          login: { url: 'login', method: 'post' },
+          login: { url: 'login', method: 'post', propertyName: false },
           logout: { url: 'login', method: 'delete' },
-          user: { url: 'validate', method: 'post', propertyName: 'user' }
+          user: { url: 'validate', method: 'post', propertyName: false }
         }
-      }
+      },
+      tokenRequired: false,
+      tokenType: false
       // tokenRequired: false,
       // resetOnError: true
     }
@@ -142,9 +142,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    optimization: {
-      minimize: false
-    },
 
     extend(config, ctx) {}
     // babelrc: true

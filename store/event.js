@@ -17,27 +17,27 @@ export const mutations = {
 
 export const actions = {
   async loadProposal({ commit }, id) {
-    const response = await this.$http.get(`proposals/${id}`)
+    const response = await this.$axios.get(`proposals/${id}`)
     commit('set_proposal', response.data)
   },
   async acceptProposal({ commit }, id) {
-    const response = await this.$http.post(`proposals/${id}`)
+    const response = await this.$axios.post(`proposals/${id}`)
     this.dispatch('schedule/appendTimeslot', response.data)
     this.dispatch('schedule/removeTimeslot', { type: 'proposal', id })
   },
   async rejectProposal({ commit }, id) {
-    await this.$http.delete(`proposals/${id}`)
+    await this.$axios.delete(`proposals/${id}`)
     this.dispatch('schedule/removeTimeslot', { type: 'proposal', id })
     this.dispatch('app/showMessage', {
       message: 'Proposta recusada com sucesso'
     })
   },
   async loadPresentation({ commit }, id) {
-    const response = await this.$http.get(`presentations/${id}`)
+    const response = await this.$axios.get(`presentations/${id}`)
     commit('set_presentation', response.data)
   },
   async confirmPresentation({ commit }, id) {
-    await this.$http.post(`presentations/${id}`)
+    await this.$axios.post(`presentations/${id}`)
     this.dispatch('schedule/removeTimeslot', { type: 'presentation', id })
     this.dispatch('app/showMessage', {
       message:
@@ -45,7 +45,7 @@ export const actions = {
     })
   },
   async cancelPresentation({ commit }, id) {
-    await this.$http.delete(`presentations/${id}`)
+    await this.$axios.delete(`presentations/${id}`)
     this.dispatch('schedule/removeTimeslot', { type: 'presentation', id })
   }
 }
