@@ -127,8 +127,6 @@ export default {
       },
       tokenRequired: false,
       tokenType: false
-      // tokenRequired: false,
-      // resetOnError: true
     }
   },
   sentry: {
