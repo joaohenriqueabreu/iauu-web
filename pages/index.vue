@@ -134,6 +134,7 @@ export default {
   .funny {
     min-width: 35vw;
     margin-right: 2 * $space;
+    margin-bottom: 4 * $space;
   }
 
   a {

@@ -25,13 +25,11 @@
       <h4 v-if="!$utils.isEmpty(term)">Resultados para "{{ term }}"</h4>
       <h4 v-else>Artistas encontrados</h4>
     </div>
-    <perfect-scrollbar>
-      <div class="search-results">
-        <div v-for="(artist, index) in artists" :key="index" class="px-4 mb-4">
-          <artist-info :artist="artist" @select="selectedArtist"></artist-info>
-        </div>
+    <div class="search-results">
+      <div v-for="(artist, index) in artists" :key="index" class="px-4 mb-4">
+        <artist-info :artist="artist" @select="selectedArtist"></artist-info>
       </div>
-    </perfect-scrollbar>
+    </div>
   </div>
 </template>
 

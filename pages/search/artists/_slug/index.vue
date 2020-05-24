@@ -40,6 +40,14 @@
         </div>
       </div>
     </div>
+    <div v-if="artist.is_verified" class="verified">
+      <h1 class="mr-4">
+        <font-awesome icon="grin-stars"></font-awesome>
+      </h1>
+      <h6>
+        Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
+      </h6>
+    </div>
     <div class="story">
       <h4 class="mb-5">Nossa história</h4>
       {{ artist.story }}
@@ -72,13 +80,17 @@
           <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ avgDuration }} horas</h4>
         </div>
         <div class="col-sm-4 col-12 horizontal middle center">
-          <submit-button v-if="$auth.loggedIn">
+          <nuxt-link
+            v-if="$auth.loggedIn && $auth.hasScope('contractor')"
+            class="brand-btn"
+            :to="`/contractor/proposal/to/artist/${artist.id}`"
+          >
             Enviar proposta
-          </submit-button>
-          <div v-else>
+          </nuxt-link>
+          <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/login">
             <h6 class="hide-mobile">Cadastre-se para contratar este artista</h6>
             <h6 class="hide-desktop">Cadastre-se</h6>
-          </div>
+          </nuxt-link>
         </div>
       </div>
     </div>
@@ -179,9 +191,17 @@ div:not(.bg) {
   }
 }
 
+.verified {
+  @extend .horizontal, .middle, .center;
+  background: $layer5;
+  border-radius: $edges;
+  box-shadow: $shadow;
+  padding: 4 * $space;
+  margin: 5 * $space 4 * $space;
+}
+
 .story {
   padding: 4 * $space;
-  // background: $layer3;
   border-radius: $edges;
   box-shadow: $shadow;
   margin: 5 * $space 4 * $space;

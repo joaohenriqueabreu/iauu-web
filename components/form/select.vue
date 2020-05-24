@@ -7,8 +7,8 @@
           >{{ option.display }}
         </option>
       </v-selectize>
-      <select v-else>
-        <option>{{ placeholder }}</option>
+      <select v-else required>
+        <option disabled selected hidden value="" class="placeholder">{{ placeholder }}</option>
         <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
           >{{ option.display }}
         </option>
@@ -107,6 +107,10 @@ export default {
 select {
   padding-right: 0;
   -webkit-appearance: none;
+
+  &:invalid {
+    color: gray;
+  }
 
   &::after {
     content: none;

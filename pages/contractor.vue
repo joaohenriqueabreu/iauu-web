@@ -1,15 +1,11 @@
 <template>
-  <div>
-    <h1>this is a contractors page</h1>
-    <nuxt-child />
-  </div>
+  <nuxt-child />
 </template>
 
 <script>
 export default {
-  layout: 'app'
-  // TODO enable when we implement auth layer
-  // middleware: ['auth']
+  layout: 'app',
+  middleware: ['auth', 'contractor']
 }
 </script>
 

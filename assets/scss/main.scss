@@ -148,3 +148,17 @@ p, span, a {
 		display: none;
 	}
 }
+
+.brand-btn {
+	padding: 2 * $space 4 *$space;
+	background: $brand;
+	transition: $transition;
+	border-radius: $rounded;
+	box-shadow: $shadow;
+	color: $layer1;
+	
+	&:hover {
+		transition: $transition;
+		background: $brandLayer;
+	}
+}

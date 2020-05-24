@@ -1,13 +1,12 @@
 <template>
   <div>
-    <nuxt-child />
+    <h1>This is a proposal</h1>
   </div>
 </template>
 
 <script>
 export default {
-  layout: 'app',
-  middleware: ['auth', 'artist']
+  layout: 'guest'
 }
 </script>
 
