@@ -136,3 +136,15 @@ p, span, a {
 .disable-scroll {
 	overflow: hidden !important;
 }
+
+.hide-mobile {
+	@include mobile {
+		display: none;
+	}
+}
+
+.hide-desktop {
+	@include desktop {
+		display: none;
+	}
+}

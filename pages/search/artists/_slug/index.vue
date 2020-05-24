@@ -16,19 +16,15 @@
     </div>
     <perfect-scrollbar>
       <div class="horizontal center middle half-width mb-5">
-        <div
-          v-for="(media, mediaIndex) in $array.slice(artist.medias, 0, 5)"
-          :key="mediaIndex"
-          class="mx-4"
-        >
+        <div v-for="(media, mediaIndex) in socialMedias" :key="mediaIndex" class="mx-4">
           <a :href="media.url" target="_blank">
             <media-thumbnail :media="media" avatar></media-thumbnail>
           </a>
         </div>
       </div>
     </perfect-scrollbar>
-    <div class="horizontal center middle mb-5">
-      <div v-for="(stat, statName) in artist.stats" :key="statName" class="stats">
+    <div class="stats mb-5">
+      <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
         <div class="horizontal d-flex align-items-end mb-3">
           <h2 v-if="statName === 'score'" class="mr-2 mb-0">{{ stat | number('0.0') }}</h2>
           <h2 v-if="statName === 'fans' && stat >= 100000" class="mr-2 mb-0">
@@ -60,25 +56,33 @@
         </div>
       </div>
     </div>
-    <div class="proposal d-flex justify-content-between">
-      <div class="vertical">
-        <small
-          ><font-awesome icon="dollar-sign" class="mr-1"></font-awesome>
-          <span v-if="$auth.loggedIn">Valor da apresentação</span>
-          <span v-else>Valor aproximado da apresentação</span>
-        </small>
-        <h4 v-if="$auth.loggedIn">{{ artist.rate | currency }}</h4>
-        <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4>
+    <div class="proposal">
+      <div class="row">
+        <div class="vertical col-sm-4 col-6">
+          <small class="hide-mobile">
+            <span v-if="$auth.loggedIn">Valor da apresentação</span>
+            <span v-else>Valor aproximado da apresentação</span>
+          </small>
+          <h4 v-if="$auth.loggedIn">{{ artist.rate | currency }}</h4>
+          <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4>
+          <div class="mb-4 hide-desktop"></div>
+        </div>
+        <div class="vertical col-sm-4 col-6">
+          <small>
+            <span class="hide-mobile">Duração média</span>
+          </small>
+          <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ avgDuration }} horas</h4>
+        </div>
+        <div class="col-sm-4 col-12 horizontal middle center">
+          <submit-button v-if="$auth.loggedIn">
+            Enviar proposta
+          </submit-button>
+          <div v-else>
+            <h6 class="hide-mobile">Cadastre-se para contratar este artista</h6>
+            <h6 class="hide-desktop">Cadastre-se</h6>
+          </div>
+        </div>
       </div>
-      <div class="vertical">
-        <small><font-awesome icon="clock" class="mr-1"></font-awesome> Duração média</small>
-        <h4>{{ avgDuration }} horas</h4>
-      </div>
-      <div class="vertical"></div>
-      <submit-button v-if="$auth.loggedIn">
-        Enviar proposta
-      </submit-button>
-      <h6 v-else>Cadastre-se para contratar este artista</h6>
     </div>
     <div class="compensate">&nbsp;</div>
   </div>
@@ -94,6 +98,9 @@ export default {
     ...mapState({ artist: (state) => state.contractor.artist }),
     bgImage() {
       return require('@/assets/imgs/concert.png?webp')
+    },
+    socialMedias() {
+      return this.$array.slice(this.artist.medias, 0, 4)
     },
     rateMin() {
       return Math.round(this.artist.rate * 0.5)
@@ -139,15 +146,39 @@ div:not(.bg) {
   margin: 0 2 * $space;
 }
 
+@include desktop {
+  .stats {
+    display: flex;
+    flex-direction: row;
+    .stat {
+      margin: 0 4 * $space;
+    }
+  }
+}
+
+@include mobile {
+  .stats {
+    display: flex;
+    flex-direction: column;
+
+    .stat {
+      margin-bottom: 4 * $space;
+    }
+  }
+}
+
 .stats {
-  @extend .vertical, .middle, .center;
-  width: 150px;
-  height: 150px;
-  border-radius: $rounded;
-  background: $layer3;
-  margin: 0 4 * $space;
-  box-shadow: $shadow;
-  border: 5px solid $brand;
+  justify-content: center;
+  align-items: center;
+  .stat {
+    @extend .vertical, .middle, .center;
+    width: 150px;
+    height: 150px;
+    border-radius: $rounded;
+    background: $layer3;
+    box-shadow: $shadow;
+    border: 5px solid $brand;
+  }
 }
 
 .story {
@@ -170,7 +201,8 @@ div:not(.bg) {
 }
 
 .proposal {
-  @extend .horizontal, .center, .middle, .full-width;
+  // @extend .horizontal, .center, .middle, .full-width;
+  @extend .full-width;
   padding: 2 * $space;
   position: fixed;
   bottom: 0;
