@@ -14,15 +14,13 @@
         <h6 class="mb-0">{{ subcategory }}</h6>
       </div>
     </div>
-    <perfect-scrollbar>
-      <div class="horizontal center middle half-width mb-5">
-        <div v-for="(media, mediaIndex) in socialMedias" :key="mediaIndex" class="mx-4">
-          <a :href="media.url" target="_blank">
-            <media-thumbnail :media="media" avatar></media-thumbnail>
-          </a>
-        </div>
+    <div class="horizontal center middle half-width mb-5">
+      <div v-for="(media, mediaIndex) in socialMedias" :key="mediaIndex" class="mx-2">
+        <a :href="media.url" target="_blank">
+          <media-thumbnail :media="media" avatar></media-thumbnail>
+        </a>
       </div>
-    </perfect-scrollbar>
+    </div>
     <div class="stats mb-5">
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
         <div class="horizontal d-flex align-items-end mb-3">

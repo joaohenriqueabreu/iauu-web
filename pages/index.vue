@@ -2,7 +2,7 @@
   <div>
     <div class="section main"></div>
     <div class="section search">
-      <h1>Sumpimpe seu evento</h1>
+      <h1>Supimpe seu evento</h1>
       <div class="half-width vertical middle center">
         <form-input
           v-model="term"
