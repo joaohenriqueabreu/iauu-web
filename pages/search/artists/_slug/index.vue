@@ -16,7 +16,11 @@
     </div>
     <perfect-scrollbar>
       <div class="horizontal center middle half-width mb-5">
-        <div v-for="(media, mediaIndex) in artist.medias" :key="mediaIndex" class="mx-4">
+        <div
+          v-for="(media, mediaIndex) in $array.slice(artist.medias, 0, 5)"
+          :key="mediaIndex"
+          class="mx-4"
+        >
           <a :href="media.url" target="_blank">
             <media-thumbnail :media="media" avatar></media-thumbnail>
           </a>
@@ -27,7 +31,13 @@
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stats">
         <div class="horizontal d-flex align-items-end mb-3">
           <h2 v-if="statName === 'score'" class="mr-2 mb-0">{{ stat | number('0.0') }}</h2>
-          <h2 v-else class="mr-2 mb-0">{{ stat | number('0,0') }}</h2>
+          <h2 v-if="statName === 'fans' && stat >= 100000" class="mr-2 mb-0">
+            {{ stat | number('0a') }}
+          </h2>
+          <h2 v-if="statName === 'fans' && stat < 100000" class="mr-2 mb-0">
+            {{ stat | number('0,0') }}
+          </h2>
+          <h2 v-if="statName === 'presentations'" class="mr-2 mb-0">{{ stat | number('0,0') }}</h2>
           <h6><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
         </div>
         <div class="horizontal">
@@ -37,13 +47,40 @@
       </div>
     </div>
     <div class="story">
+      <h4 class="mb-5">Nossa história</h4>
       {{ artist.story }}
     </div>
-    <div class="my-5 half-width">
-      <submit-button>
+    <div class="mb-5 mx-5">
+      <h4 class="mb-5">O que falam sobre nosso show?</h4>
+      <div v-for="(testemonial, index) in artist.testemonials" :key="index" class="horizontal">
+        <avatar :src="testemonial.photo" :size="50" class="mr-1"></avatar>
+        <div class="testemonial">
+          <h6>{{ testemonial.user }}</h6>
+          <i>{{ testemonial.content }}</i>
+        </div>
+      </div>
+    </div>
+    <div class="proposal d-flex justify-content-between">
+      <div class="vertical">
+        <small
+          ><font-awesome icon="dollar-sign" class="mr-1"></font-awesome>
+          <span v-if="$auth.loggedIn">Valor da apresentação</span>
+          <span v-else>Valor aproximado da apresentação</span>
+        </small>
+        <h4 v-if="$auth.loggedIn">{{ artist.rate | currency }}</h4>
+        <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4>
+      </div>
+      <div class="vertical">
+        <small><font-awesome icon="clock" class="mr-1"></font-awesome> Duração média</small>
+        <h4>{{ avgDuration }} horas</h4>
+      </div>
+      <div class="vertical"></div>
+      <submit-button v-if="$auth.loggedIn">
         Enviar proposta
       </submit-button>
+      <h6 v-else>Cadastre-se para contratar este artista</h6>
     </div>
+    <div class="compensate">&nbsp;</div>
   </div>
 </template>
 
@@ -58,10 +95,14 @@ export default {
     bgImage() {
       return require('@/assets/imgs/concert.png?webp')
     },
-    stats() {
-      const stats = this.$object.clone(this.artist.stats)
-      stats[`${this.artist.rating.amount} avaliações`] = this.artist.rating.rate
-      return stats
+    rateMin() {
+      return Math.round(this.artist.rate * 0.5)
+    },
+    rateMax() {
+      return Math.round(this.artist.rate * 1.5)
+    },
+    avgDuration() {
+      return Math.round(this.$math.mean(this.$collection.map(this.artist.products, 'duration')))
     }
   }
 }
@@ -110,11 +151,34 @@ div:not(.bg) {
 }
 
 .story {
-  @extend .half-width;
   padding: 4 * $space;
   // background: $layer3;
   border-radius: $edges;
   box-shadow: $shadow;
-  margin-bottom: 5 * $space;
+  margin: 5 * $space 4 * $space;
+}
+
+.testemonial {
+  background: $layer3;
+  margin: 2 * $space 0 2 * $space 4 * $space;
+  padding: 3 * $space;
+  box-shadow: $shadow;
+  border-top-right-radius: $rounded;
+  border-bottom-right-radius: $rounded;
+  border-bottom-left-radius: $rounded;
+  max-width: 80vw;
+}
+
+.proposal {
+  @extend .horizontal, .center, .middle, .full-width;
+  padding: 2 * $space;
+  position: fixed;
+  bottom: 0;
+  height: 15vh;
+  background: $layer1;
+}
+
+.compensate {
+  margin-bottom: 20vh; // compenstate fixed send proposal area
 }
 </style>

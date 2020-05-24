@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import array from 'lodash/array'
 import collection from 'lodash/collection'
+import math from 'lodash/math'
 import clone from 'lodash/cloneDeep'
 import moment from 'moment'
 import VueFilters from 'vue2-filters'
@@ -26,5 +27,6 @@ Vue.filter('datetime', datetimeFilter)
 export default ({ app }, inject) => {
   inject('array', array)
   inject('collection', collection)
+  inject('math', math)
   inject('object', { clone })
 }
