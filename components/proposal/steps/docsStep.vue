@@ -1,13 +1,11 @@
 <template>
   <div>
-    <h1>This is a proposal</h1>
+    docs
   </div>
 </template>
 
 <script>
-export default {
-  layout: 'guest'
-}
+export default {}
 </script>
 
 <style></style>

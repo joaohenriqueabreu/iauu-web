@@ -27,7 +27,6 @@
       :slot-label-format="slotLabelFormat"
       :event-time-format="eventTimeFormat"
       :dates-destroy="datesDestroy"
-      :valid-range="validRange"
       @dateClick="dateClick"
       @eventClick="eventClick"
     />
@@ -35,7 +34,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+// import { mapActions } from 'vuex'
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -47,6 +46,10 @@ export default {
   components: {
     FullCalendar // make the <FullCalendar> tag available
   },
+  props: {
+    readOnly: { type: Boolean, default: true },
+    timeslots: { type: Array, default: () => {} }
+  },
   data() {
     return {
       calendarPlugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, bootstrapPlugin],
@@ -55,11 +58,9 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      timeslots: (state) => state.schedule.schedule.timeslots,
-      removedId: (state) => state.schedule.lastRemovedTimeslotId,
-      newTimeslot: (state) => state.schedule.newlyAddedTimeslot
-    }),
+    busyTimeslots() {
+      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'busy')
+    },
     unavailableTimeslots() {
       return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'unavailable')
     },
@@ -110,31 +111,31 @@ export default {
       return this.$refs.fullcalendar.getApi()
     }
   },
-  watch: {
-    // TODO refactor op - We can move this to
-    removedId(eventId) {
-      this.fullcalendarApi.getEventById(eventId).remove()
-    },
-    newTimeslot(timeslot) {
-      this.fullcalendarApi.addEvent(this.formatFullcalendarTimeslot(timeslot))
-    }
-  },
   mounted() {
     this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
     this.loadCalendarEvents()
   },
   methods: {
-    ...mapActions('schedule', ['removeTimeslot']),
-    ...mapActions('app', ['showMessage']),
     eventClick({ event }) {
-      if (event.extendedProps.type === 'unavailable') {
-        this.removeTimeslot(event.extendedProps)
-        return
-      }
-
-      this.$emit('event-click', event.extendedProps)
+      this.$emit('event-click', {
+        eventId: event.id,
+        timeslotId: event.extendedProps.id,
+        type: event.extendedProps.type
+      })
     },
-    validRange(something) {},
+    addEvent(timeslot) {
+      this.calendarEvents.push(this.formatFullcalendarTimeslot(timeslot))
+    },
+    removeEvent(eventId) {
+      this.fullcalendarApi.getEventById(eventId).remove()
+    },
+    removeEventFromTimeslot(timeslotId) {
+      const event = this.$collection.find(this.fullcalendarApi.getEvents(), (event) => {
+        return event.extendedProps.id === timeslotId
+      })
+
+      event.remove()
+    },
     datesDestroy() {
       // This method is called right after every view switch on calendar,
       // when we switch years, append new events data
@@ -168,12 +169,15 @@ export default {
 
       return fullcalendarEvent
     },
-    // Can be called by parent
     loadCalendarEvents() {
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
         this.calendarEvents.push(this.formatFullcalendarTimeslot(timeslot))
       })
+    },
+    refresh() {
+      this.calendarEvents = []
+      this.loadCalendarEvents()
     }
   }
 }

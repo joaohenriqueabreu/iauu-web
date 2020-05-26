@@ -1,26 +1,28 @@
-import Schedule from '@/models/schedule'
+import Vue from 'vue'
+// import Schedule from '@/models/schedule'
 import Timeslot from '@/models/timeslot'
 
 export const state = () => ({
-  schedule: new Schedule(),
+  // schedule: new Schedule(),
+  timeslots: [],
   lastRemovedTimeslotId: null,
   newlyAddedTimeslot: null
 })
 
 export const mutations = {
   set_schedule(state, { id, type, timeslots }) {
-    state.schedule = new Schedule({ id, type })
-    timeslots.forEach((timeslotData) => state.schedule.timeslots.push(new Timeslot(timeslotData)))
+    // state.schedule = new Schedule({ id, type })
+    state.timeslots = []
+    timeslots.forEach((timeslotData) => state.timeslots.push(new Timeslot(timeslotData)))
   },
   append_timeslot(state, timeslotData) {
-    state.schedule.timeslots.push(new Timeslot(timeslotData))
-
-    state.newlyAddedTimeslot = this.$array.last(state.schedule.timeslots)
+    Vue.set(state.timeslots, state.timeslots.length, new Timeslot(timeslotData))
   },
   remove_timeslot(state, { type, id }) {
-    this.$array.remove(state.schedule.timeslots, (timeslot) => timeslot.id === parseInt(id))
-
-    state.lastRemovedTimeslotId = `${type}_${id}`
+    Vue.delete(
+      state.timeslots,
+      this.$array.findIndex(state.timeslots, (timeslot) => timeslot.id === parseInt(id))
+    )
   }
 }
 
@@ -45,12 +47,12 @@ export const actions = {
 
 export const getters = {
   lastTimeslot(state) {
-    return this.$array.last(state.schedule.timeslots)
+    return this.$array.last(state.timeslots)
   },
   presentations(state) {
-    return state.schedule.timeslots.filter((timeslot) => timeslot.type === 'presentation')
+    return state.timeslots.filter((timeslot) => timeslot.type === 'presentation')
   },
   proposals(state) {
-    return state.schedule.timeslots.filter((timeslot) => timeslot.type === 'proposal')
+    return state.timeslots.filter((timeslot) => timeslot.type === 'proposal')
   }
 }

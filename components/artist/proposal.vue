@@ -1,57 +1,59 @@
 <template>
   <div class="container">
-    <header>
-      <div class="horizontal middle">
-        <avatar :src="proposal.contractor.photo" :username="proposal.contractor.name"></avatar>
-        <h5>{{ proposal.contractor.name }}</h5>
-      </div>
-      <span class="identifier">Proposta</span>
-    </header>
-    <div></div>
-    <main>
-      <perfect-scrollbar>
+    <modal ref="modal">
+      <template v-slot:header>
+        <div class="horizontal d-flex justify-content-between">
+          <div class="horizontal middle">
+            <avatar
+              :src="proposal.contractor.photo.url"
+              :username="proposal.contractor.name"
+            ></avatar>
+            <h5>{{ proposal.contractor.name }}</h5>
+          </div>
+          <div class="d-flex align-items-end">
+            <span class="identifier">Proposta</span>
+          </div>
+        </div>
+      </template>
+      <template v-slot:main>
         <event-details :event="proposal"></event-details>
-      </perfect-scrollbar>
-    </main>
-    <footer>
-      <div class="mr-5">
-        <submit-button @submit="accept">Aceitar</submit-button>
-      </div>
-      <div>
-        <h5 @click="reject">Recusar</h5>
-      </div>
-    </footer>
+      </template>
+      <template v-slot:footer>
+        <div class="horizontal center middle full-height">
+          <div class="mr-5">
+            <submit-button @submit="accept">Aceitar</submit-button>
+          </div>
+          <div>
+            <h5 @click="reject">Recusar</h5>
+          </div>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 import EventDetails from '@/components/artist/eventDetails'
 
 export default {
   components: {
     'event-details': EventDetails
   },
-  computed: {
-    ...mapState({ proposal: (state) => state.event.proposal })
+  props: {
+    proposal: { type: Object, default: () => {} }
   },
   methods: {
-    ...mapActions('event', ['acceptProposal', 'rejectProposal']),
-    async accept() {
-      try {
-        await this.acceptProposal(this.proposal.id)
-      } catch (error) {
-      } finally {
-        this.$emit('update')
-      }
+    openModal() {
+      return this.$refs.modal.open()
     },
-    async reject() {
-      try {
-        await this.rejectProposal(this.proposal.id)
-      } catch (error) {
-      } finally {
-        this.$emit('update')
-      }
+    closeModal() {
+      return this.$refs.modal.close()
+    },
+    accept() {
+      this.$emit('accept', this.proposal.id)
+    },
+    reject() {
+      this.$emit('reject', this.proposal.id)
     }
   }
 }

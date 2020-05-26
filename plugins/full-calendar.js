@@ -7,4 +7,4 @@ import Vue from 'vue'
 import brBLocale from '@fullcalendar/core/locales/pt-br'
 import Calendar from '@/components/events/calendar'
 
-Vue.component('full-calendar', Calendar, { locale: brBLocale })
+Vue.component('calendar', Calendar, { locale: brBLocale })

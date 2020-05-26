@@ -1,55 +1,62 @@
 <template>
-  <div class="container">
-    <header>
-      <div class="horizontal middle">
-        <avatar
-          :src="presentation.contractor.photo"
-          :username="presentation.contractor.name"
-        ></avatar>
-        <h5>{{ presentation.contractor.name }}</h5>
-      </div>
-      <span class="identifier">Apresentação</span>
-    </header>
-    <div class="my-4 countdown horizontal middle center">
-      <countdown v-if="!isPresentationPast" :time="timeUntilPresentation">
-        <template slot-scope="props">
-          <h5>
-            Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos
-          </h5>
-        </template>
-      </countdown>
-      <div v-else>
-        <p>
-          Conta pra gente como foi a apresentação!
-          <a href="#" @click.prevent="confirm">Confirme a Realização</a> para podermos finalizar o
-          processo de pagamento.
-        </p>
-        <p>
-          Caso a apresentação não seja confirmada por ambas as partes em até
-          <b>{{ $config.closePresentationDeadline }} dias</b> ela será automaticamente encerrada.
-        </p>
-      </div>
-    </div>
-    <main>
-      <perfect-scrollbar>
+  <div>
+    <modal ref="modal">
+      <template v-slot:header>
+        <div class="horizontal d-flex justify-content-between">
+          <div class="horizontal middle">
+            <avatar
+              class="mr-4"
+              :src="presentation.contractor.photo.url"
+              :username="presentation.contractor.name"
+            ></avatar>
+            <h5>{{ presentation.contractor.name }}</h5>
+          </div>
+          <div class="d-flex align-items-end">
+            <span class="identifier">Apresentação</span>
+          </div>
+        </div>
+      </template>
+      <template v-slot:main>
+        <div class="my-4 countdown horizontal middle center">
+          <countdown v-if="!isPresentationPast" :time="timeUntilPresentation">
+            <template slot-scope="props">
+              <h5>
+                Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos
+              </h5>
+            </template>
+          </countdown>
+          <div v-else>
+            <p>
+              Conta pra gente como foi a apresentação!
+              <a href="#" @click.prevent="confirm">Confirme a Realização</a> para podermos finalizar
+              o processo de pagamento.
+            </p>
+            <p>
+              Caso a apresentação não seja confirmada por ambas as partes em até
+              <b>{{ $config.closePresentationDeadline }} dias</b> ela será automaticamente
+              encerrada.
+            </p>
+          </div>
+        </div>
         <event-details :event="presentation"></event-details>
-      </perfect-scrollbar>
-    </main>
-    <footer v-if="!readOnly">
-      <div class="mr-5">
-        <submit-button @submit="confirm">
-          Confirmar Realização
-        </submit-button>
-      </div>
-      <div>
-        <h5 v-if="!isPresentationPast" @click="cancel">Cancelar</h5>
-      </div>
-    </footer>
+      </template>
+      <template v-if="!readOnly" v-slot:footer>
+        <div class="horizontal center middle full-height">
+          <div class="mr-5">
+            <submit-button @submit="confirm">
+              Confirmar Realização
+            </submit-button>
+          </div>
+          <div>
+            <h5 v-if="!isPresentationPast" @click="cancel">Cancelar</h5>
+          </div>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import EventDetails from '@/components/artist/eventDetails'
 
@@ -59,10 +66,10 @@ export default {
     eventDetails: EventDetails
   },
   props: {
-    readOnly: { type: Boolean, default: true }
+    readOnly: { type: Boolean, default: true },
+    presentation: { type: Object, default: () => {} }
   },
   computed: {
-    ...mapState({ presentation: (state) => state.event.presentation }),
     timeUntilPresentation() {
       return this.moment
         .duration(this.moment().diff(this.moment(this.presentation.start_dt)))
@@ -72,91 +79,91 @@ export default {
       // const endDate = this.moment(this.presentation.end_dt)
       // const now = this.moment()
       // TODO usar moment#isAfter
-      return true
+      return false
     }
   },
   methods: {
-    ...mapActions('event', ['confirmPresentation', 'cancelPresentation']),
-    async confirm() {
-      try {
-        await this.confirmPresentation(this.presentation.id)
-      } catch (error) {
-      } finally {
-        this.$emit('update')
-      }
+    openModal() {
+      this.$refs.modal.open()
     },
-    async cancel() {
-      try {
-        await this.cancelPresentation(this.presentation.id)
-      } catch (error) {
-      } finally {
-        this.$emit('update')
-      }
+    closeModal() {
+      this.$refs.modal.close()
+    },
+    confirm() {
+      this.$emit('confirm', this.presentation.id)
+      // try {
+      //   await this.confirmPresentation(this.presentation.id)
+      // } catch (error) {
+      // } finally {
+      //   this.$emit('update')
+      // }
+    },
+    cancel() {
+      this.$emit('cancel', this.presentation.id)
+      // try {
+      //   await this.cancelPresentation(this.presentation.id)
+      // } catch (error) {
+      // } finally {
+      //   this.$emit('update')
+      // }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.container {
+.identifier {
+  text-transform: uppercase;
+  letter-spacing: $space / 2;
+  color: $layer3;
+  padding-right: 10 * $space;
+  font-weight: $bold;
+  border-bottom: 5px solid $layer3;
+  border-radius: rounded;
+}
+
+.countdown {
+  width: 100%;
+  background: $layer3;
+  box-shadow: $shadow;
+  padding: 2 * $space;
+  border-radius: $edges;
+}
+
+header {
+  @extend .horizontal, .middle;
+  justify-content: space-between;
+  width: 100%;
+
+  .vue-avatar--wrapper {
+    margin-right: 2 * $space;
+  }
+}
+
+main {
   @extend .vertical;
-  padding: 10px;
-  max-height: 100%;
-  position: relative;
+  margin-top: 2 * $space;
+  margin-bottom: 2 * $space;
+  padding: 2 * $space;
+  box-shadow: $shadow;
+  background: $layer3;
+  border-radius: $edges;
+  width: 100%;
+  max-height: 60vh;
+}
 
-  .identifier {
-    text-transform: uppercase;
-    letter-spacing: $space / 2;
-    color: $layer3;
-    padding-right: 10 * $space;
-    font-weight: $bold;
-    border-bottom: 5px solid $layer3;
-    border-radius: rounded;
-  }
+footer {
+  @extend .horizontal, .center, .middle;
+  margin-top: $space;
 
-  .countdown {
-    width: 100%;
-    background: $layer3;
-    box-shadow: $shadow;
-    padding: 2 * $space;
-    border-radius: $edges;
-  }
+  h5 {
+    color: transparentize($brand, 0.2);
+    cursor: pointer;
+    transition: $transition;
 
-  header {
-    @extend .horizontal, .middle;
-    justify-content: space-between;
-    width: 100%;
-
-    .vue-avatar--wrapper {
-      margin-right: 2 * $space;
-    }
-  }
-
-  main {
-    @extend .vertical;
-    margin-top: 2 * $space;
-    margin-bottom: 2 * $space;
-    padding: 2 * $space;
-    box-shadow: $shadow;
-    background: $layer3;
-    border-radius: $edges;
-    width: 100%;
-    max-height: 60vh;
-  }
-
-  footer {
-    @extend .horizontal, .center, .middle;
-    margin-top: $space;
-
-    h5 {
-      color: transparentize($brand, 0.2);
-      cursor: pointer;
+    &:hover {
       transition: $transition;
-
-      &:hover {
-        transition: $transition;
-        color: $brand;
-      }
+      color: $brand;
     }
   }
 }

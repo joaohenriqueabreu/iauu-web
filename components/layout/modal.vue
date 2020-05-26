@@ -8,18 +8,18 @@
       @before-open="disableBodyScroll"
       @before-close="enableBodyScroll"
     >
-      <div :class="height">
+      <div class="modal-content" :class="height">
         <header>
           <div class="close" @click="close">
             <font-awesome icon="times"></font-awesome>
           </div>
           <slot name="header"></slot>
         </header>
-        <main>
-          <perfect-scrollbar>
+        <perfect-scrollbar>
+          <main :class="height">
             <slot name="main"></slot>
-          </perfect-scrollbar>
-        </main>
+          </main>
+        </perfect-scrollbar>
         <footer>
           <slot name="footer"></slot>
         </footer>
@@ -68,71 +68,76 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-// main {
-//   overflow: hidden;
-//   position: relative;
-//   background: $layer2;
-// }
+.modal-content {
+  z-index: $above;
+  background: $layer2;
+  padding: 2 * $space;
 
-.tiny {
-  min-height: 30vh;
-}
-.small {
-  min-height: 50vh;
-}
-.regular {
-  min-height: 75vh;
-}
-
-header {
-  @extend .vertical, .middle, .center;
-  width: 100%;
-  min-height: 5vh;
-  position: relative;
-  .close {
-    text-align: center;
-    position: absolute;
-    cursor: pointer;
-    top: -10px;
-    right: -10px;
-    padding: 5px;
-    border-radius: $rounded;
-    background: $layer4;
-    box-shadow: $shadow;
-    width: 30px;
-    height: 30px;
-    opacity: 1; // overwrite from some other style
-    padding-left: 9px;
-    z-index: $moveToTop;
+  &.tiny {
+    height: 50vh;
   }
-}
+  &.small {
+    height: 70vh;
+  }
+  &.regular {
+    height: 95vh;
+  }
 
-main {
-  position: relative;
-  min-height: 20vh;
-  div {
-    .ps {
-      height: 100%;
+  header {
+    // @extend .vertical, .middle, .center;
+    width: 100%;
+    height: 10vh;
+    position: relative;
+    .close {
+      text-align: center;
+      position: absolute;
+      cursor: pointer;
+      top: -10px;
+      right: -10px;
+      padding: 5px;
+      border-radius: $rounded;
+      background: $layer4;
+      box-shadow: $shadow;
+      width: 30px;
+      height: 30px;
+      opacity: 1; // overwrite from some other style
+      padding-left: 9px;
+      z-index: $moveToTop;
     }
   }
-}
 
-footer {
-  position: absolute;
-  width: 100%;
-  bottom: 10px;
-  height: 5vh;
-}
+  main {
+    position: relative;
 
-[data-icon] {
-  transition: $transition;
-  color: $brand;
-  font-size: $huge;
-  cursor: pointer;
-  z-index: $moveToTop;
-  &:hover {
+    &.tiny {
+      height: 30vh;
+    }
+    &.small {
+      height: 50vh;
+    }
+    &.regular {
+      height: 75vh;
+    }
+  }
+
+  footer {
+    position: relative;
+    // width: 100%;
+    // bottom: 10px;
+    height: 10vh;
+    padding: 0 4 * $space;
+  }
+
+  [data-icon] {
     transition: $transition;
-    color: $layer3;
+    color: $brand;
+    font-size: $huge;
+    cursor: pointer;
+    z-index: $moveToTop;
+    &:hover {
+      transition: $transition;
+      color: $layer3;
+    }
   }
 }
 </style>

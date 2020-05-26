@@ -54,14 +54,15 @@ import {
   faSortAlphaDown,
   faEnvelope,
   faChild,
-  faGrinStars
+  faGrinStars,
+  faFrown
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
   faStar as farStar,
   faComment,
   faQuestionCircle,
-  faFrown
+  faFrown as farFrown
 } from '@fortawesome/free-regular-svg-icons'
 import {
   faGoogle,
@@ -132,7 +133,7 @@ library.add(
   faComment,
   faQuestionCircle,
   faHeart,
-  faFrown,
+  farFrown,
   faMusic,
   faSearchDollar,
   faClock,
@@ -148,7 +149,8 @@ library.add(
   faSortAlphaDown,
   farEnvelope,
   faChild,
-  faGrinStars
+  faGrinStars,
+  faFrown
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

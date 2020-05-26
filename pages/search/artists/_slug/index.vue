@@ -83,7 +83,7 @@
           <nuxt-link
             v-if="$auth.loggedIn && $auth.hasScope('contractor')"
             class="brand-btn"
-            :to="`/contractor/proposal/to/artist/${artist.id}`"
+            :to="`/proposal/to/artist/${artist.id}`"
           >
             Enviar proposta
           </nuxt-link>

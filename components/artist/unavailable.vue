@@ -1,13 +1,15 @@
 <template>
   <div>
-    <form class="container">
-      <main>
+    <modal ref="modal" height="small">
+      <template v-slot:header>
         <div class="horizontal middle">
           <h4 class="h-bar">{{ timeslot.date }}</h4>
           <h6>
             Deseja tornar essa data indisponível?
           </h6>
         </div>
+      </template>
+      <template v-slot:main>
         <div class="horizontal middle mb-4">
           <form-time v-model="timeslot.start_time" :disabled="timeslot.full_day"></form-time>
           <span class="space"></span>
@@ -20,16 +22,16 @@
           <span class="space"></span>
           <form-select v-model="timeslot.frequency" :options="repeatOptions"></form-select>
         </div>
-      </main>
-      <footer>
-        <submit-button @submit="submit">Salvar</submit-button>
-      </footer>
-    </form>
+      </template>
+      <template v-slot:footer>
+        <submit-button @submit="save">Salvar</submit-button>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+// import { mapActions } from 'vuex'
 import Timeslot from '@/models/timeslot'
 export default {
   props: {
@@ -58,14 +60,14 @@ export default {
     })
   },
   methods: {
-    ...mapActions('schedule', ['saveTimeslot']),
-    async submit() {
-      try {
-        await this.saveTimeslot(this.timeslot)
-      } catch (error) {
-      } finally {
-        this.$emit('save')
-      }
+    openModal() {
+      this.$refs.modal.open()
+    },
+    closeModal() {
+      this.$refs.modal.close()
+    },
+    save() {
+      this.$emit('save', this.timeslot)
     }
   }
 }
@@ -90,21 +92,5 @@ h4 {
   margin-right: 4 * $space;
   padding-right: 4 * $space;
   border-right: 5px solid $layer3;
-}
-
-main {
-  @extend .vertical, .middle, .center;
-  padding-top: 2 * $space;
-}
-
-footer {
-  @extend .horizontal, .center;
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  padding-bottom: 2 * $space;
-  div {
-    width: 30%;
-  }
 }
 </style>

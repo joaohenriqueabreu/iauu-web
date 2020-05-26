@@ -64,7 +64,11 @@ export default {
   },
   computed: {
     encodedMapsLocation() {
-      return encodeURI(`http://maps.google.com/maps?q=${this.event.location.display}`)
+      if (!this.$utils.isEmpty(this.event.location)) {
+        return encodeURI(`http://maps.google.com/maps?q=${this.event.location.display}`)
+      }
+
+      return ''
     },
     eventTime() {
       return (

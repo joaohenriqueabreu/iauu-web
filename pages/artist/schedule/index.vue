@@ -1,38 +1,40 @@
 <template>
   <div>
     <div class="d-flex justify-content-between">
-      <div class="vertical">
-        <h4>Bem vindo a Sua Agenda</h4>
-        <p>
-          Veja e interaja com seus próximos eventos e responda a propostas de clientes
-        </p>
+      <div class="vertical mb-4">
+        <span>Veja e interaja com seus próximos eventos e responda a propostas de clientes</span>
       </div>
     </div>
     <div v-if="timeslots">
-      <full-calendar
-        ref="fullcalendar"
+      <calendar
+        ref="calendar"
         class="content"
-        @reload-events="reloadEvents"
-        @event-click="openEvent"
+        :timeslots="timeslots"
+        @reload-events="reloadTimeslotsForYear"
+        @event-click="handleEvent"
         @date-click="openUnavailable"
-      ></full-calendar>
-      <modal ref="unavailableModal" height="small">
-        <template v-slot:main>
-          <unavailable :default="selectedTimeslot" @save="closeUnavailableModal"></unavailable>
-        </template>
-      </modal>
-      <modal ref="proposalModal">
-        <template v-slot:main>
-          <proposal @update="closeProposalModal"></proposal>
-        </template>
-      </modal>
-      <modal ref="presentationModal">
-        <template v-slot:main>
-          <presentation @update="closePresentationModal"></presentation>
-        </template>
-      </modal>
+      ></calendar>
+      <unavailable
+        ref="unavailable"
+        :default="selectedTimeslot"
+        @save="saveUnavailableTimeslot"
+      ></unavailable>
+      <proposal
+        v-if="!$utils.isEmpty(proposal)"
+        ref="proposal"
+        :proposal="proposal"
+        @accept="handleAcceptProposal"
+        @reject="handleRejectProposal"
+      ></proposal>
+      <presentation
+        v-if="!$utils.isEmpty(presentation)"
+        ref="presentation"
+        :read-only="false"
+        :presentation="presentation"
+        @confirm="handleConfirmPresentation"
+        @cancel="handleCancelPresentation"
+      ></presentation>
     </div>
-
     <div class="horizontal middle center text-right">
       <div class="horizontal middle mr-4">
         <span class="event-subtitle proposal"></span>
@@ -71,15 +73,24 @@ export default {
     }
   },
   computed: {
-    ...mapState({ timeslots: (state) => state.schedule.schedule.timeslots })
+    ...mapState({ timeslots: (state) => state.schedule.timeslots }),
+    ...mapState({ presentation: (state) => state.event.presentation }),
+    ...mapState({ proposal: (state) => state.event.proposal })
   },
   methods: {
-    ...mapActions('event', ['loadProposal', 'loadPresentation']),
-    ...mapActions('schedule', ['loadSchedule']),
+    ...mapActions('event', [
+      'loadProposal',
+      'loadPresentation',
+      'acceptProposal',
+      'rejectProposal',
+      'confirmPresentation',
+      'cancelPresentation'
+    ]),
+    ...mapActions('schedule', ['loadSchedule', 'saveTimeslot', 'removeTimeslot']),
     ...mapActions('app', ['showMessage']),
-    async reloadEvents(year) {
+    async reloadTimeslotsForYear(year) {
       await this.loadSchedule({ id: this.$auth.user.id, year })
-      this.$refs.fullcalendar.loadCalendarEvents()
+      this.$refs.calendar.loadCalendarEvents()
     },
     openUnavailable({ dateStr }) {
       if (this.haveEventsOnDate(dateStr)) {
@@ -93,28 +104,43 @@ export default {
       }
 
       this.selectedTimeslot = dateStr
-      this.$refs.unavailableModal.open()
+      this.$refs.unavailable.openModal()
     },
-    async openEvent({ id, type }) {
+    async handleEvent({ eventId, timeslotId, type }) {
+      if (type === 'unavailable') {
+        await this.removeTimeslot(timeslotId)
+        this.$refs.calendar.removeEvent(eventId)
+      }
+
       if (type === 'proposal') {
-        await this.loadProposal(id)
-        this.$refs.proposalModal.open()
+        await this.loadProposal(timeslotId)
+        this.$refs.proposal.openModal()
       }
 
       if (type === 'presentation') {
-        await this.loadPresentation(id)
-        this.$refs.presentationModal.open()
+        await this.loadPresentation(timeslotId)
+        this.$refs.presentation.openModal()
       }
     },
-    closeUnavailableModal() {
+    async saveUnavailableTimeslot(timeslot) {
+      await this.saveTimeslot(timeslot)
+      this.$refs.calendar.addEvent(timeslot)
       this.$refs.unavailableModal.close()
     },
-    closeProposalModal() {
-      this.$refs.proposalModal.close()
+    async handleAcceptProposal(id) {
+      await this.acceptProposal(id)
+      this.$refs.calendar.refresh()
+      this.$refs.proposal.closeModal()
     },
-    closePresentationModal() {
-      this.$refs.presentationModal.close()
+    async handleRejectProposal(id) {
+      await this.rejectProposal(id)
+      this.$refs.proposal.closeModal()
     },
+    async handleConfirmPresentation(id) {
+      await this.confirmPresentation(id)
+      this.$refs.presentation.closeModal()
+    },
+    async handleCancelPresentation(id) {},
     haveEventsOnDate(date) {
       const indexOfEvent = this.$array.findIndex(this.timeslots, (timeslot) => {
         return (
