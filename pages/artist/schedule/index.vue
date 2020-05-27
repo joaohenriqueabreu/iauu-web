@@ -125,7 +125,7 @@ export default {
     async saveUnavailableTimeslot(timeslot) {
       await this.saveTimeslot(timeslot)
       this.$refs.calendar.addEvent(timeslot)
-      this.$refs.unavailableModal.close()
+      this.$refs.unavailable.closeModal()
     },
     async handleAcceptProposal(id) {
       await this.acceptProposal(id)
@@ -134,13 +134,19 @@ export default {
     },
     async handleRejectProposal(id) {
       await this.rejectProposal(id)
+      this.$refs.calendar.refresh()
       this.$refs.proposal.closeModal()
     },
     async handleConfirmPresentation(id) {
       await this.confirmPresentation(id)
+      this.$refs.calendar.refresh()
       this.$refs.presentation.closeModal()
     },
-    async handleCancelPresentation(id) {},
+    async handleCancelPresentation(id) {
+      await this.cancelPresentation(id)
+      this.$refs.calendar.refresh()
+      this.$refs.presentation.closeModal()
+    },
     haveEventsOnDate(date) {
       const indexOfEvent = this.$array.findIndex(this.timeslots, (timeslot) => {
         return (

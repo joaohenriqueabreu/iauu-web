@@ -176,6 +176,7 @@ export default {
       })
     },
     refresh() {
+      // TODO think about a way of triggering reactivity without having to reload
       this.calendarEvents = []
       this.loadCalendarEvents()
     }
