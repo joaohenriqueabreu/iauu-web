@@ -25,13 +25,15 @@
 </template>
 
 <script>
+import Step from '@/components/proposal/steps/step'
 export default {
-  props: {
-    completed: { type: Array, default: () => {} }
-  },
+  extends: Step,
   computed: {
     areAllStepsCompleted() {
-      return !this.$utils.isEmpty(this.completed) && this.completed.length === 4
+      return (
+        !this.$utils.isEmpty(this.completedSteps) &&
+        this.completedSteps.length === this.steps.length
+      )
     }
   }
 }

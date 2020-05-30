@@ -1,15 +1,14 @@
-import { Model } from 'vue-mc'
+import Model from '@/models/model'
 
 export default class Timeslot extends Model {
-  defaults() {
-    return {
-      id: null,
-      calendarId: null,
-      start_dt: null,
-      end_dt: null,
-      type: null,
-      full_day: false,
-      frequency: null
-    }
+  constructor(timeslot) {
+    super()
+    this.start_dt = null
+    this.end_dt = null
+    this.type = null
+    this.full_day = false
+    this.frequency = null
+
+    this.assign(timeslot)
   }
 }

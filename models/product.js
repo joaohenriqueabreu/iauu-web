@@ -1,15 +1,15 @@
-import { Model } from 'vue-mc'
+import Model from './model'
 
 export default class Product extends Model {
-  defaults() {
-    return {
-      id: null,
-      name: '',
-      description: '',
-      price: 0,
-      duration: 0,
-      documents: [],
-      medias: []
-    }
+  constructor(product) {
+    super()
+    this.name = ''
+    this.description = ''
+    this.price = 0
+    this.duration = 0
+    this.documents = []
+    this.medias = []
+
+    this.assign(product)
   }
 }

@@ -5,7 +5,7 @@
     </template>
     <template v-slot:main>
       <div class="new-product-form vertical p-4">
-        <form v-if="!$utils.isEmpty(product)">
+        <form>
           <form-input v-model="product.name" label="Título"></form-input>
           <form-textarea v-model="product.description" label="Descrição"></form-textarea>
           <div class="horizontal middle center mb-4">
@@ -82,7 +82,9 @@ export default {
     openModal(product) {
       if (!this.$utils.isEmpty(product)) {
         // Need to copy object as js assignments are passed by reference
-        this.$set(this, 'product', this.$object.clone(product.attributes))
+        this.$set(this, 'product', this.$object.clone(product))
+      } else {
+        this.product = new Product()
       }
 
       this.$refs.form.open()

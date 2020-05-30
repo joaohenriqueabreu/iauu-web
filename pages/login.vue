@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="login">
     <div class="bg"></div>
     <form>
       <h5>Entre</h5>
@@ -26,7 +26,7 @@ export default {
     ...mapActions('auth', ['login']),
     async login() {
       try {
-        await this.$auth.login('local', {
+        await this.$auth.loginWith('local', {
           data: this.credentials
         })
         this.$router.push('/artist/schedule')
@@ -39,10 +39,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content {
+.login {
   @extend .vertical, .middle, .center;
   position: relative;
-  height: 100%;
+  height: 100vh;
 
   form {
     @extend .vertical, .middle;

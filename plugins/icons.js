@@ -55,7 +55,10 @@ import {
   faEnvelope,
   faChild,
   faGrinStars,
-  faFrown
+  faFrown,
+  faShoppingCart,
+  faTimesCircle,
+  faCalendarTimes
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
@@ -150,7 +153,10 @@ library.add(
   farEnvelope,
   faChild,
   faGrinStars,
-  faFrown
+  faFrown,
+  faShoppingCart,
+  faTimesCircle,
+  faCalendarTimes
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

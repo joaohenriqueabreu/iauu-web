@@ -3,26 +3,38 @@
     <form @submit.prevent="submit">
       <main>
         <fade-transition mode="out-in">
+          <!-- Timeslots is only required for dateSteps -->
           <component
             :is="stepComponent"
+            :timeslots="timeslots"
+            :proposal="proposal"
+            :products="products"
             class="step"
-            :completed="completed"
+            :steps="stepComponents"
+            :completed-steps="completedSteps"
             @complete="completeStep"
+            @incomplete="revertStep"
+            @next="nextStep"
           ></component>
         </fade-transition>
       </main>
     </form>
     <footer class="row">
-      <div class="col-4">
+      <div class="col-2 d-flex justify-content-start">
         <!-- Including any content so that col- will be displayed eventhough the arrow btn is hidden -->
         &nbsp;
         <font-awesome v-show="canPrevious" icon="arrow-left" @click="previousStep"></font-awesome>
       </div>
-      <div class="col-4 horizontal center middle">
+      <div class="col-8 horizontal center middle">
         &nbsp;
-        <steps-counter :steps="stepComponents.length" :completed="completedSteps"></steps-counter>
+        <steps-counter
+          :steps="stepComponents.length"
+          :completed="completedSteps"
+          :current="currentStep"
+          @goto="goToStep"
+        ></steps-counter>
       </div>
-      <div class="col-4 d-flex justify-content-end">
+      <div class="col-2 d-flex justify-content-end pr-3">
         &nbsp;
         <font-awesome v-show="canNext" icon="arrow-right" @click="nextStep"></font-awesome>
       </div>
@@ -31,8 +43,10 @@
 </template>
 
 <script>
+// import Proposal from '@/models/proposal'
 import StepsCounter from '@/components/proposal/steps/counter'
 import DateStep from '@/components/proposal/steps/dateStep'
+import ProductStep from '@/components/proposal/steps/productStep'
 import DocsStep from '@/components/proposal/steps/docsStep'
 import DetailsStep from '@/components/proposal/steps/detailsStep'
 import ConfirmStep from '@/components/proposal/steps/confirmStep'
@@ -41,21 +55,35 @@ export default {
   components: {
     'steps-counter': StepsCounter
   },
-  // Load artist schedule, required for dateStep
-  async asyncData({ store, query }) {
-    await store.dispatch('schedule/loadSchedule', {
-      id: query.id, // artist id
-      year: new Date().getFullYear()
-    })
+  // Load all required data for components (they get re-rendered everytime we switch components)
+  // Variables are passed by reference so it's ok.
+  async asyncData({ app, store, query }) {
+    // Required for all components
+    store.dispatch('event/resetProposal')
+
+    await Promise.all([
+      // Required for dateStep
+      store.dispatch('schedule/loadSchedule', { id: query.id, year: app.$moment().year }),
+
+      // Required for productsStep
+      store.dispatch('artist/loadProducts', query.id)
+    ])
+
+    return {
+      proposal: store.state.event.proposal,
+      products: store.state.artist.products,
+      timeslots: store.state.schedule.timeslots
+    }
   },
   data() {
     return {
       currentStep: 0,
       completedSteps: [],
-      stepComponents: [DateStep, DocsStep, DetailsStep, ConfirmStep]
+      stepComponents: [DateStep, ProductStep, DocsStep, DetailsStep, ConfirmStep]
     }
   },
   computed: {
+    // ...mapState({ timeslots: (state) => state.schedule.timeslots }),
     stepComponent() {
       return this.stepComponents[this.currentStep]
     },
@@ -72,13 +100,18 @@ export default {
     },
     completeStep() {
       this.completedSteps.push(this.currentStep)
-      this.nextStep()
+    },
+    revertStep() {
+      this.$delete(this.completedSteps, this.currentStep)
     },
     nextStep() {
       this.currentStep++
     },
     previousStep() {
       this.currentStep--
+    },
+    goToStep(step) {
+      this.currentStep = step
     }
   }
 }
@@ -89,12 +122,13 @@ main {
   // @extend .vertical, .center, .middle;
   padding: 4 * $space;
   .step {
-    height: 70vh;
+    min-height: 75vh;
     width: 100%;
     background: $layer3 !important; // overwrite main.scss
     border-radius: $edges;
     box-shadow: $shadow;
     padding: 4 * $space;
+    margin-bottom: 20vh;
   }
 }
 
@@ -106,6 +140,7 @@ footer {
   height: 10vh;
   width: 100vw;
   margin: 0;
+  z-index: $moveToTop;
 
   [data-icon] {
     cursor: pointer;

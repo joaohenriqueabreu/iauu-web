@@ -1,9 +1,14 @@
 <template>
   <div>
-    <font-awesome icon="calendar-alt" :class="{ completed: isStepCompleted(0) }"></font-awesome>
-    <font-awesome icon="coffee" :class="{ completed: isStepCompleted(1) }"></font-awesome>
-    <font-awesome icon="child" :class="{ completed: isStepCompleted(2) }"></font-awesome>
-    <font-awesome icon="guitar" :class="{ completed: isStepCompleted(3) }"></font-awesome>
+    <div v-if="!$utils.isEmpty(steps)">
+      <font-awesome
+        v-for="(data, step) in steps"
+        :key="step"
+        :icon="icons[step]"
+        :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"
+        @click="goToStep(step)"
+      ></font-awesome>
+    </div>
   </div>
 </template>
 
@@ -11,11 +16,23 @@
 export default {
   props: {
     steps: { type: Number, default: 0 },
-    completed: { type: Array, default: () => {} }
+    completed: { type: Array, default: () => {} },
+    current: { type: Number, default: 0 }
+  },
+  data() {
+    return {
+      icons: ['calendar-alt', 'shopping-cart', 'coffee', 'child', 'guitar']
+    }
   },
   methods: {
     isStepCompleted(step) {
       return this.completed.includes(step)
+    },
+    isCurrentStep(step) {
+      return step === this.current
+    },
+    goToStep(step) {
+      this.$emit('goto', step)
     }
   }
 }
@@ -23,14 +40,29 @@ export default {
 
 <style lang="scss" scoped>
 [data-icon] {
-  margin-right: 4 * $space;
+  @include desktop {
+    margin-right: 4 * $space;
+  }
+
+  @include mobile {
+    // margin-right: $space;
+  }
+
+  height: 100%;
   transition: $transition;
   color: $layer5;
   font-size: $huge;
+  cursor: pointer;
+  padding-bottom: $space;
 
   &.completed {
     transition: $transition;
     color: $brand;
+  }
+
+  &.current {
+    transition: $transition;
+    border-bottom: solid 4px $brand;
   }
 }
 </style>

@@ -2,9 +2,11 @@
   <div>
     <FullCalendar
       ref="fullcalendar"
+      default-view="dayGridMonth"
+      :nav-links="weekMode"
+      nav-link-day-click="timeGridWeek"
       :events="calendarEvents"
       theme="bootstrap"
-      default-view="dayGridMonth"
       locale="pt-br"
       :plugins="calendarPlugins"
       content-height="auto"
@@ -19,7 +21,6 @@
       :event-overlap="true"
       :now-indicator="false"
       :all-day-slot="false"
-      :all-day-maintain-duration="true"
       :show-non-current-dates="false"
       :header="headerButtons"
       :button-text="buttonText"
@@ -27,6 +28,7 @@
       :slot-label-format="slotLabelFormat"
       :event-time-format="eventTimeFormat"
       :dates-destroy="datesDestroy"
+      @select="selected"
       @dateClick="dateClick"
       @eventClick="eventClick"
     />
@@ -41,13 +43,15 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import moment from 'moment'
+import Timeslot from '@/models/timeslot'
 
 export default {
   components: {
-    FullCalendar // make the <FullCalendar> tag available
+    FullCalendar
   },
   props: {
     readOnly: { type: Boolean, default: true },
+    weekMode: { type: Boolean, default: false },
     timeslots: { type: Array, default: () => {} }
   },
   data() {
@@ -58,8 +62,17 @@ export default {
     }
   },
   computed: {
-    busyTimeslots() {
-      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'busy')
+    defaultView() {
+      return this.weekMode ? 'timeGridWeek' : 'dayGridMonth'
+    },
+    // TODO maybe would be a good thing to move this to some "prevented-dates" prop instead
+    busyDates() {
+      const busyTimeslots = this.$collection.filter(
+        this.timeslots,
+        (timeslot) => timeslot.type === 'busy'
+      )
+
+      return this.$collection.map(busyTimeslots, 'start_dt')
     },
     unavailableTimeslots() {
       return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'unavailable')
@@ -67,8 +80,8 @@ export default {
     headerButtons: () => {
       return {
         left: 'title',
-        center: '',
-        right: 'timeWeekGrid, today, prev, next'
+        center: 'timeGridWeek, dayGridMonth',
+        right: 'today, prev, next, nextYear'
       }
     },
     buttonText: () => {
@@ -111,6 +124,12 @@ export default {
       return this.$refs.fullcalendar.getApi()
     }
   },
+  watch: {
+    // Timeslots may get updated not only when loading the component
+    timeslots(timeslots) {
+      this.refresh()
+    }
+  },
   mounted() {
     this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
     this.loadCalendarEvents()
@@ -124,7 +143,7 @@ export default {
       })
     },
     addEvent(timeslot) {
-      this.calendarEvents.push(this.formatFullcalendarTimeslot(timeslot))
+      this.calendarEvents.push(this.formatEventFromTimeslot(timeslot))
     },
     removeEvent(eventId) {
       this.fullcalendarApi.getEventById(eventId).remove()
@@ -144,41 +163,70 @@ export default {
         this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
       }
     },
-    dateClick(date) {
-      this.$emit('date-click', date)
+    selected(selection) {
+      if (this.isBusyDay(selection.start)) {
+        // do nothing if it's a busy day - don't allow actions here
+        return
+      }
+
+      if (this.weekMode && selection.allDay) {
+        this.fullcalendarApi.changeView('timeGridWeek', selection.start)
+        return
+      }
+
+      this.$emit('selected', this.formatTimeslotFromEvent(selection))
     },
-    formatFullcalendarTimeslot(timeslot) {
+    dateClick(day) {
+      this.$emit('date-click', day)
+    },
+    formatEventFromTimeslot(timeslot, isFullDay, isBackground) {
+      let startDt = moment(timeslot.start_dt).toISOString()
+      const endDt = moment(timeslot.end_dt).toISOString()
+
+      if (timeslot.type === 'unavailable') {
+        startDt = moment(timeslot.start_dt)
+          .startOf('day')
+          .toISOString()
+      }
+
       const fullcalendarEvent = {
         id: `${timeslot.type}_${timeslot.id}`,
         title: timeslot.type === 'unavailable' ? 'Indisponibilidade' : timeslot.title,
-        start:
-          timeslot.type === 'unavailable'
-            ? moment(timeslot.start_dt)
-                .startOf('day')
-                .toISOString()
-            : moment(timeslot.start_dt).toISOString(),
-        extendedProps: { id: timeslot.id, type: timeslot.type },
-        // Layout settings
-        classNames: ['event', timeslot.type]
+        start: startDt,
+        end: endDt,
+        allDay: isFullDay,
+        extendedProps: { id: timeslot.id, type: timeslot.type }
       }
 
-      fullcalendarEvent.allDay = timeslot.full_day
-      if (!timeslot.full_day) {
-        fullcalendarEvent.end = moment(timeslot.end_dt).toISOString()
+      if (isBackground) {
+        fullcalendarEvent.rendering = 'background'
+      } else {
+        fullcalendarEvent.classNames = ['event', timeslot.type]
       }
 
       return fullcalendarEvent
     },
+    formatTimeslotFromEvent(event) {
+      return new Timeslot({
+        start_dt: moment(event.start).toISOString(),
+        end_dt: moment(event.end).toISOString(),
+        full_day: event.allDay
+      })
+    },
     loadCalendarEvents() {
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
-        this.calendarEvents.push(this.formatFullcalendarTimeslot(timeslot))
+        const isBusy = timeslot.type === 'busy'
+        this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, isBusy, isBusy))
       })
     },
     refresh() {
       // TODO think about a way of triggering reactivity without having to reload
       this.calendarEvents = []
       this.loadCalendarEvents()
+    },
+    isBusyDay(date) {
+      return this.busyDates.some((busyDate) => moment(date).isSame(moment(busyDate), 'day'))
     }
   }
 }
@@ -203,8 +251,43 @@ export default {
   right: 0% !important;
   &.proposal {
     background: $proposalTimeslot;
+    .fc-title {
+      color: $layer2;
+    }
+
+    &:hover {
+      transition: $transition;
+      background: red;
+      span {
+        color: $brand;
+      }
+
+      &::before {
+        display: block;
+        font-size: $small;
+        content: 'Rejeitar';
+      }
+    }
+  }
+
+  &.proposing {
+    background: $proposalTimeslot;
     span {
       color: $layer2;
+    }
+
+    &:hover {
+      transition: $transition;
+      background: red;
+      span {
+        color: $brand;
+      }
+
+      &::before {
+        display: block;
+        font-size: $small;
+        content: 'Remover';
+      }
     }
   }
 
@@ -249,6 +332,41 @@ export default {
   }
 }
 
+// for "busy" events
+.fc-bgevent {
+  background: $layer1;
+  position: relative;
+  opacity: 0.8;
+  cursor: default;
+  z-index: $moveToTop;
+  &::before {
+    @extend .horizontal, .center, .middle;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    // position: absolute;
+    // left: 45%;
+    // top: 20%;
+    color: $layer5;
+    padding: $space;
+    // padding-top: -10px;
+
+    // font-family: FontAwesome;
+    // font-weight: 900;
+    // font-size: 20px;
+    // content: '\f057'; // circle-times
+    // content: '\f00d'; // times
+    content: 'Indisponível';
+  }
+}
+
+.fc-day-top {
+  position: relative;
+  z-index: $base;
+}
+
 // Overwrite buttons
 .fc-button,
 fc-button-primary {
@@ -291,23 +409,6 @@ td {
   cursor: pointer;
 }
 
-// .fc-event-container:has(.unavailable) {
-//   background: red;
-//   cursor: default;
-// }
-
-// .fc-day.unavailable {
-//   border-top: 2px solid red !important;
-//   border-bottom: 2px solid red !important;
-//   border-left: 2px solid red !important;
-//   border-right: 2px solid red !important;
-//   z-index: $moveToTop;
-//   opacity: 0.2;
-//   span.fc-day-number {
-//     color: $layer2;
-//   }
-// }
-
 .fc-view-container {
   background: $layer3;
   box-shadow: $higherShadow;
@@ -347,15 +448,11 @@ th.fc-axis,
 }
 
 .fc-time-grid .fc-slats .fc-minor td {
-  // border-top: 0.5px solid rgba(100, 100, 100, 0.2);
   border: none;
 }
 
-// fc-axis fc-widget-header
-
 td:not(.fc-minor) {
   border-top: 0.5px solid rgba(100, 100, 100, 0.2);
-  // border: none;
 }
 
 .fc {

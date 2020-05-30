@@ -29,4 +29,5 @@ export default ({ app }, inject) => {
   inject('collection', collection)
   inject('math', math)
   inject('object', { clone })
+  inject('moment', moment)
 }

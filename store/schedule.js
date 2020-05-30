@@ -18,10 +18,10 @@ export const mutations = {
   append_timeslot(state, timeslotData) {
     Vue.set(state.timeslots, state.timeslots.length, new Timeslot(timeslotData))
   },
-  remove_timeslot(state, { type, id }) {
+  remove_timeslot(state, id) {
     Vue.delete(
       state.timeslots,
-      this.$array.findIndex(state.timeslots, (timeslot) => timeslot.id === parseInt(id))
+      this.$array.findIndex(state.timeslots, (timeslot) => timeslot.id === id)
     )
   }
 }
@@ -40,8 +40,8 @@ export const actions = {
   appendTimeslot({ commit }, timeslotData) {
     commit('append_timeslot', timeslotData)
   },
-  removeTimeslot({ commit }, timeslot) {
-    commit('remove_timeslot', timeslot)
+  removeTimeslot({ commit }, id) {
+    commit('remove_timeslot', id)
   }
 }
 

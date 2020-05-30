@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import Proposal from '@/models/proposal'
 import Presentation from '@/models/presentation'
 
@@ -7,8 +8,14 @@ export const state = () => ({
 })
 
 export const mutations = {
+  reset_proposal(state) {
+    state.proposal = new Proposal()
+  },
   set_proposal(state, proposalData) {
     state.proposal = new Proposal(proposalData)
+  },
+  edit_proposal(state, { prop, value }) {
+    Vue.set(state.proposal, prop, value)
   },
   set_presentation(state, presentationData) {
     state.presentation = new Presentation(presentationData)
@@ -31,6 +38,12 @@ export const actions = {
     this.dispatch('app/showMessage', {
       message: 'Proposta recusada com sucesso'
     })
+  },
+  resetProposal({ commit }) {
+    commit('reset_proposal')
+  },
+  editProposal({ commit }, data) {
+    commit('edit_proposal', data)
   },
   async loadPresentation({ commit }, id) {
     const response = await this.$axios.get(`presentations/${id}`)
