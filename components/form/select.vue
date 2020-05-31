@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     icon() {
-      return !this.$utils.isEmpty(this.iconHelper) ? this.iconHelper : 'arrow-down'
+      return !this.$utils.empty(this.iconHelper) ? this.iconHelper : 'arrow-down'
     },
     settings() {
       const self = this
@@ -45,7 +45,7 @@ export default {
         hideSelected: self.hideSelected,
         placeholder: self.placeholder,
         onChange(value) {
-          if (!self.$utils.isEmpty(value)) {
+          if (!self.$utils.empty(value)) {
             self.$emit('selected', value)
           }
         }

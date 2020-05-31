@@ -35,6 +35,7 @@ import FormSelect from '@/components/form/select'
 import FormToggle from '@/components/form/toggle'
 
 import ImageUploader from '@/components/form/imageUploader'
+import FileUploader from '@/components/form/fileUploader'
 import SubmitButton from '@/components/form/submitButton'
 import Attachment from '@/components/form/attachment'
 
@@ -68,6 +69,7 @@ Vue.component('form-toggle', FormToggle)
 Vue.component('form-range', FormRange)
 
 Vue.component('image-uploader', ImageUploader)
+Vue.component('file-uploader', FileUploader)
 Vue.component('submit-button', SubmitButton)
 Vue.component('fade-transition', FadeTransition)
 Vue.component('slide-down-transition', SlideYDownTransition)

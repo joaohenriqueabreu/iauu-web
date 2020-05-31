@@ -5,7 +5,7 @@ const utils = {
   pluralize: (value, count) => pluralize(value, count),
   genCalendarEventId: (timeslot) => `${timeslot.type}_${timeslot.id}`,
 
-  isEmpty: (variable) => {
+  empty: (variable) => {
     if (variable === undefined || variable === null) {
       return true
     }

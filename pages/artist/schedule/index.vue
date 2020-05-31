@@ -20,14 +20,14 @@
         @save="saveUnavailableTimeslot"
       ></unavailable>
       <proposal
-        v-if="!$utils.isEmpty(proposal)"
+        v-if="!$utils.empty(proposal)"
         ref="proposal"
         :proposal="proposal"
         @accept="handleAcceptProposal"
         @reject="handleRejectProposal"
       ></proposal>
       <presentation
-        v-if="!$utils.isEmpty(presentation)"
+        v-if="!$utils.empty(presentation)"
         ref="presentation"
         :read-only="false"
         :presentation="presentation"

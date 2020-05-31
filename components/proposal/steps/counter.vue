@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!$utils.isEmpty(steps)">
+    <div v-if="!$utils.empty(steps)">
       <font-awesome
         v-for="(data, step) in steps"
         :key="step"
@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      icons: ['calendar-alt', 'shopping-cart', 'coffee', 'child', 'guitar']
+      icons: ['calendar-alt', 'shopping-cart', 'coffee', 'guitar']
     }
   },
   methods: {

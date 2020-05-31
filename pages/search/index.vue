@@ -22,7 +22,7 @@
       <hr />
     </div>
     <div class="px-4 py-2">
-      <h4 v-if="!$utils.isEmpty(term)">Resultados para "{{ term }}"</h4>
+      <h4 v-if="!$utils.empty(term)">Resultados para "{{ term }}"</h4>
       <h4 v-else>Artistas encontrados</h4>
     </div>
     <div class="search-results">

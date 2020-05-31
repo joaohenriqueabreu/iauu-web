@@ -9,7 +9,7 @@
         </button>
       </div>
     </div>
-    <div v-if="!$utils.isEmpty(products)" class="row">
+    <div v-if="!$utils.empty(products)" class="row">
       <div v-for="(product, prodIndex) in products" :key="prodIndex" class="col-sm-6 mb-4">
         <product-info
           :product="product"

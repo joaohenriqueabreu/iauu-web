@@ -9,7 +9,7 @@
       <font-awesome icon="music"></font-awesome>
       <h3>{{ artist.category }}</h3>
     </div>
-    <div v-if="!$utils.isEmpty(artist.subcategories)" class="horizontal center middle mb-4">
+    <div v-if="!$utils.empty(artist.subcategories)" class="horizontal center middle mb-4">
       <div v-for="(subcategory, index) in artist.subcategories" :key="index" class="badge">
         <h6 class="mb-0">{{ subcategory }}</h6>
       </div>
@@ -99,13 +99,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   async asyncData({ store, route }) {
     await store.dispatch('contractor/loadArtist', route.params.slug)
+
+    return {
+      artist: store.state.contractor.artist
+    }
   },
   computed: {
-    ...mapState({ artist: (state) => state.contractor.artist }),
     bgImage() {
       return require('@/assets/imgs/concert.png?webp')
     },

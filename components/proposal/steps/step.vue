@@ -1,15 +1,16 @@
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   props: {
     value: { type: Object, default: () => {} },
     steps: { type: Array, default: () => {} },
-    completedSteps: { type: Array, default: () => {} }
+    completedSteps: { type: Array, default: () => {} },
+    proposal: { type: Object, default: () => {} }
   },
   computed: {
-    ...mapState({ proposal: (state) => state.event.proposal }),
+    // ...mapState({ proposal: (state) => state..proposal }),
     proposalDate() {
-      if (!this.$utils.isEmpty(this.proposal)) {
+      if (!this.$utils.empty(this.proposal)) {
         return this.moment(this.proposal.timeslot.start_dt).format(this.$config.dateFormat)
       }
 
@@ -17,7 +18,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('event', ['editProposal'])
+    ...mapActions('contractor', ['editProposal'])
   }
 }
 </script>

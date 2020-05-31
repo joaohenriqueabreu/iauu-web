@@ -32,7 +32,7 @@
         </div>
       </div>
     </fade-transition>
-    <div v-show="!$utils.isEmpty(selectedCategory)" class="subcategory-select">
+    <div v-show="!$utils.empty(selectedCategory)" class="subcategory-select">
       <h6></h6>
       <form-select
         :options="subCategoryOptions"

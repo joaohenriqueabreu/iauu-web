@@ -80,7 +80,7 @@ export default {
   methods: {
     ...mapActions('artist', ['addProduct']),
     openModal(product) {
-      if (!this.$utils.isEmpty(product)) {
+      if (!this.$utils.empty(product)) {
         // Need to copy object as js assignments are passed by reference
         this.$set(this, 'product', this.$object.clone(product))
       } else {
@@ -110,7 +110,7 @@ export default {
       this.$delete(this.product.documents, index)
     },
     uploadMedia() {
-      if (this.$utils.isEmpty(this.newMedia.url)) {
+      if (this.$utils.empty(this.newMedia.url)) {
         return
       }
 

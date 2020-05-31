@@ -53,7 +53,15 @@ h1, h2, h3, h4, h5, h6, a {
 }				
 
 hr {
+	width: 100%; // required to show
 	border-top: 1px solid $layer5;
+	&.light {
+		border-top-color: $brand;
+	}
+
+	&.thick {
+		border-top-width: 5px;
+	}
 }
 
 p, span, a {
@@ -161,5 +169,11 @@ p, span, a {
 	&:hover {
 		transition: $transition;
 		background: $brandLayer;
-	}
+	}	
+}
+
+.top-right {
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }

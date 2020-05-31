@@ -1,8 +1,7 @@
 <template>
-  <div>
+  <div class="form-input">
     <label :for="name">{{ label }}</label>
     <textarea
-      v-if="isTextArea"
       :value="value"
       :rows="rows"
       :name="name"

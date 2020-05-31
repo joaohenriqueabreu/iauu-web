@@ -1,30 +1,47 @@
 <template>
   <div>
-    <div @click.prevent="upload">
-      <overlay :rounded="rounded">
-        <template v-slot:default>
-          <slot></slot>
-        </template>
-        <template v-slot:hover>
-          <div class="vertical middle center">
-            <h3>Enviar imagem</h3>
-          </div>
-        </template>
-      </overlay>
+    <div class="horizontal d-flex justify-content-between mb-2">
+      <h6>Adicionar documentos</h6>
+      <font-awesome icon="plus" class="clickable" @click="upload"></font-awesome>
     </div>
   </div>
 </template>
 
 <script>
 import * as filestack from 'filestack-js'
-
+import Media from '@/models/media'
 export default {
   props: {
-    rounded: { type: Boolean, default: false }
+    local: { type: Boolean, default: true },
+    instagram: { type: Boolean, default: false },
+    webcam: { type: Boolean, default: false },
+    url: { type: Boolean, default: false }
   },
   data() {
     return {
       uploadClient: { type: Object, default: () => {} }
+    }
+  },
+  computed: {
+    sources() {
+      const sources = []
+      if (this.local) {
+        sources.push('local_file_system')
+      }
+
+      if (this.instagram) {
+        sources.push('instagram')
+      }
+
+      if (this.url) {
+        sources.push('url')
+      }
+
+      if (this.webcam) {
+        sources.push('webcam')
+      }
+
+      return sources
     }
   },
   created() {
@@ -34,14 +51,20 @@ export default {
     upload() {
       const options = {
         lang: 'pt',
-        fromSources: ['local_file_system', 'url', 'instagram', 'webcam'],
+        fromSources: this.sources,
         accept: ['image/*'],
         onUploadDone: this.uploaded
       }
       this.client.picker(options).open()
     },
     uploaded({ filesUploaded }) {
-      this.$emit('uploaded', filesUploaded[0])
+      const media = new Media({
+        id: filesUploaded[0].uploadId,
+        type: filesUploaded[0].mimetype,
+        name: filesUploaded[0].filename,
+        url: filesUploaded[0].url
+      })
+      this.$emit('uploaded', media)
     }
   }
 }

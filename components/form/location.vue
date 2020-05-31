@@ -2,7 +2,7 @@
   <div>
     <label :for="name">{{ label }}</label>
     <div class="form-input">
-      <input ref="placesElement" type="text" @input="handleDeparture" />
+      <input ref="placesElement" :placeholder="placeholder" type="text" @input="locationInput" />
       <font-awesome icon="map-marker-alt"></font-awesome>
     </div>
 
@@ -20,9 +20,6 @@ const PLACES_OPTIONS = {
 }
 export default {
   extends: FormInput,
-  // props: {
-  //   placeChangedCallback: { type: Function, default: () => {} }
-  // },
   data() {
     return {
       autocomplete: {},
@@ -43,7 +40,7 @@ export default {
     )
   },
   methods: {
-    handleDeparture(evt) {
+    locationInput(event) {
       if (
         this.$refs.placesElement.value.length > MIN_PLACES_TRIGGER_LENGTH &&
         this.autocompleteStatus
@@ -54,7 +51,7 @@ export default {
     },
     placeChanged() {
       this.selectedPlace = JSON.stringify(this.autocomplete.getPlace())
-      // this.placeChangedCallback(this.selectedPlace)
+      this.$emit('selected', this.selectedPlace)
     },
     resetPlace() {
       this.selectedPlace = null

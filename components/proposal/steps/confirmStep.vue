@@ -1,16 +1,38 @@
 <template>
-  <div>
+  <div class="full-height">
     <div class="confirm">
-      <div class="mb-5">
+      <div>
         <h5>Enviar proposta?</h5>
         <small v-if="areAllStepsCompleted">
-          O artista irá respondê-lo em breve com sua disponibilidade para a data e o valor da
-          apresentação
+          O artista irá respondê-lo em breve. Qualquer problema entre em contato conosco.
         </small>
+      </div>
+      <div class="review">
+        <div class="top-right">
+          <font-awesome icon="check-circle"></font-awesome>
+        </div>
+        <h6 class="mb-4">Confirme sua proposta para {{ proposal.artist.name }}</h6>
+        <div>
+          {{ proposal.title }}
+          {{ proposal.location }}
+        </div>
+        <div v-if="!$utils.empty(proposal.timeslot) && !$utils.empty(proposal.timeslot.start_dt)">
+          {{ proposal.timeslot.start_dt | date }}
+        </div>
+        <div v-if="!$utils.empty(proposal.timeslots)">
+          {{ proposal.timeslot[0].start_dt | date }}
+        </div>
+        <div v-if="!$utils.empty(proposal.product)">
+          {{ proposal.product.name }}
+        </div>
+        <hr v-if="!$utils.empty(proposal.product)" class="light thick" />
+        <div v-if="!$utils.empty(proposal.product)" class="d-flex justify-content-end">
+          <h4>{{ proposal.product.price | currency }}</h4>
+        </div>
       </div>
       <div class="half-width horizontal middle center">
         <div v-if="areAllStepsCompleted">
-          <submit-button>Enviar!</submit-button>
+          <submit-button @submit="saveProposal">Enviar!</submit-button>
         </div>
         <div v-else class="vertical middle center">
           <h6>
@@ -25,21 +47,34 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Step from '@/components/proposal/steps/step'
 export default {
   extends: Step,
   computed: {
     areAllStepsCompleted() {
       return (
-        !this.$utils.isEmpty(this.completedSteps) &&
-        this.completedSteps.length === this.steps.length
+        !this.$utils.empty(this.completedSteps) &&
+        this.completedSteps.length >= this.steps.length - 1 // do not count confirm step
       )
     }
+  },
+  methods: {
+    ...mapActions('event', ['saveProposal'])
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.review {
+  @extend .vertical, .half-width;
+  position: relative;
+  border: solid 4px $brand;
+  border-radius: $edges;
+  margin: 3 * $space;
+  padding: 4 * $space;
+}
+
 .confirm {
   @extend .vertical, .center, .middle, .full-height;
 }

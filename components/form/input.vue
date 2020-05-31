@@ -41,7 +41,7 @@ export default {
       return 'text'
     },
     icon() {
-      return !this.$utils.isEmpty(this.iconHelper) ? this.iconHelper : 'search'
+      return !this.$utils.empty(this.iconHelper) ? this.iconHelper : 'search'
     }
   }
 }
@@ -72,7 +72,7 @@ export default {
     transition: $transition;
     width: 100%;
     border: none;
-    border-radius: 10px;
+    border-radius: $edges;
     outline-color: transparent;
     font-size: $regular;
     resize: none;
@@ -84,11 +84,16 @@ export default {
     padding: 2 * $space 5 * $space 2 * $space 2 * $space;
     cursor: pointer;
 
-    &:focus {
-      outline-color: transparent;
-    }
+    &:focus,
+    &:active {
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+      border-right-color: transparent;
 
-    &:focus {
+      border: none;
+      outline: none;
+
       transition: $transition;
       background: $layer5;
       color: $brand;

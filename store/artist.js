@@ -32,7 +32,7 @@ export const actions = {
     const { data } = await this.$axios.post('products', product)
 
     // Reactivity only watches for push operations and does not recognize assignment
-    if (!this.$utils.isEmpty(product.id)) {
+    if (!this.$utils.empty(product.id)) {
       commit('remove_product', data.id)
     }
 

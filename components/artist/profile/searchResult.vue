@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     bgImage() {
-      // if (this.$utils.isEmpty(this.artist.bg_photo)) {
+      // if (this.$utils.empty(this.artist.bg_photo)) {
       return require('@/assets/imgs/concert.png')
       // }
 

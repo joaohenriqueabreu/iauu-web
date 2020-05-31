@@ -1,18 +1,13 @@
 <template>
   <div>
     <div class="mb-5">Escolha o produto do artista que você deseja contratar</div>
-    <perfect-scrollbar>
-      <div class="products-container">
-        <div
-          v-for="(product, index) in products"
-          :key="index"
-          class="mr-2"
-          @click="selectProduct(product)"
-        >
-          <product-info :product="product" class="product-container"></product-info>
-        </div>
+    <!-- <perfect-scrollbar> -->
+    <div class="products-container">
+      <div v-for="(product, index) in products" :key="index" @click="selectProduct(product)">
+        <product-info :product="product" class="product-container"></product-info>
       </div>
-    </perfect-scrollbar>
+    </div>
+    <!-- </perfect-scrollbar> -->
   </div>
 </template>
 
@@ -29,7 +24,7 @@ export default {
     products: { type: Array, default: () => {} }
   },
   methods: {
-    ...mapActions('event', ['editProposal']),
+    ...mapActions('contractor', ['editProposal']),
     selectProduct(product) {
       this.editProposal({ prop: 'product', value: product })
       this.$emit('complete')

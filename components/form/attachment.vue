@@ -31,7 +31,7 @@ export default {
       return require('@/assets/imgs/music.png')
     },
     fileDisplay() {
-      if (!this.$utils.isEmpty(this.file)) {
+      if (!this.$utils.empty(this.file)) {
         return this.file.subtitle || this.file.name
       }
 

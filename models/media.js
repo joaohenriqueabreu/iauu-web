@@ -1,15 +1,15 @@
-import { Model } from 'vue-mc'
+import Model from './model'
 
 export default class Media extends Model {
-  defaults() {
-    return {
-      id: null,
-      type: '',
-      name: '',
-      subtitle: '',
-      url: '',
-      thumb: '',
-      size: 0
-    }
+  constructor(media) {
+    super()
+    this.type = ''
+    this.name = ''
+    this.subtitle = ''
+    this.url = ''
+    this.thumb = ''
+    this.size = 0
+
+    this.assign(media)
   }
 }

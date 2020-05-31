@@ -47,7 +47,7 @@
 import StepsCounter from '@/components/proposal/steps/counter'
 import DateStep from '@/components/proposal/steps/dateStep'
 import ProductStep from '@/components/proposal/steps/productStep'
-import DocsStep from '@/components/proposal/steps/docsStep'
+// import DocsStep from '@/components/proposal/steps/docsStep'
 import DetailsStep from '@/components/proposal/steps/detailsStep'
 import ConfirmStep from '@/components/proposal/steps/confirmStep'
 export default {
@@ -59,7 +59,7 @@ export default {
   // Variables are passed by reference so it's ok.
   async asyncData({ app, store, query }) {
     // Required for all components
-    store.dispatch('event/resetProposal')
+    store.dispatch('contractor/initProposal')
 
     await Promise.all([
       // Required for dateStep
@@ -69,8 +69,18 @@ export default {
       store.dispatch('artist/loadProducts', query.id)
     ])
 
+    // if page was reloaded we will lose artist data, verify and reload if necessary
+    if (app.$utils.empty(store.state.contractor.artist)) {
+      await store.dispatch('contractor/loadArtist', query.id)
+    }
+
+    store.dispatch('contractor/editProposal', {
+      prop: 'artist',
+      value: store.state.contractor.artist
+    })
+
     return {
-      proposal: store.state.event.proposal,
+      proposal: store.state.contractor.proposal,
       products: store.state.artist.products,
       timeslots: store.state.schedule.timeslots
     }
@@ -79,7 +89,7 @@ export default {
     return {
       currentStep: 0,
       completedSteps: [],
-      stepComponents: [DateStep, ProductStep, DocsStep, DetailsStep, ConfirmStep]
+      stepComponents: [DateStep, ProductStep, DetailsStep, ConfirmStep]
     }
   },
   computed: {
@@ -120,14 +130,11 @@ export default {
 <style lang="scss" scoped>
 main {
   // @extend .vertical, .center, .middle;
-  padding: 4 * $space;
+  padding: $space;
   .step {
     min-height: 75vh;
     width: 100%;
-    background: $layer3 !important; // overwrite main.scss
-    border-radius: $edges;
-    box-shadow: $shadow;
-    padding: 4 * $space;
+    padding: $space;
     margin-bottom: 20vh;
   }
 }

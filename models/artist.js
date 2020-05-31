@@ -1,18 +1,19 @@
-import { Model } from 'vue-mc'
+import Model from './model'
 import User from './user'
 import Media from './media'
 
 export default class Artist extends Model {
-  defaults() {
-    return {
-      id: null,
-      user: new User(),
-      name: '',
-      company_name: '',
-      is_verified: '',
-      photo: new Media(),
-      ratings: [],
-      medias: []
-    }
+  constructor(artist) {
+    super()
+    this.id = null
+    this.user = new User()
+    this.name = ''
+    this.company_name = ''
+    this.is_verified = ''
+    this.photo = new Media()
+    this.ratings = []
+    this.medias = []
+
+    this.assign(artist)
   }
 }

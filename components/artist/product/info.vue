@@ -26,7 +26,7 @@
             {{ product.description }}
           </div>
         </perfect-scrollbar>
-        <div v-if="!$utils.isEmpty(product.documents)">
+        <div v-if="!$utils.empty(product.documents)">
           <h6>Documentos</h6>
           <hr />
           <perfect-scrollbar>
@@ -40,7 +40,7 @@
           </perfect-scrollbar>
         </div>
         <div class="mb-4"></div>
-        <div v-if="!$utils.isEmpty(product.medias)">
+        <div v-if="!$utils.empty(product.medias)">
           <h6>Mídias</h6>
           <hr />
           <perfect-scrollbar>
