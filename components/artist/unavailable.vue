@@ -24,7 +24,7 @@
         </div>
       </template>
       <template v-slot:footer>
-        <submit-button @submit="save">Salvar</submit-button>
+        <action-button @callback="save">Salvar</action-button>
       </template>
     </modal>
   </div>

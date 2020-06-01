@@ -72,7 +72,8 @@ export default {
     // { src: '@/plugins/icons', mode: 'client' },
     // { src: '@/plugins/data', mode: 'client' },
     // { src: '@/plugins/dictionary', mode: 'client' },
-    { src: '@/plugins/full-calendar', mode: 'client' }
+    { src: '@/plugins/full-calendar', mode: 'client' },
+    { src: '@/plugins/html2canvas', mode: 'client' }
     // { src: '@/plugins/full-calendar', ssr: false }
   ],
   /*
@@ -94,7 +95,8 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
     '@nuxtjs/auth',
-    '@nuxtjs/sentry'
+    '@nuxtjs/sentry',
+    '@nuxtjs/toast'
   ],
   optimizedImages: {
     optimizeImages: true,
@@ -113,6 +115,8 @@ export default {
    */
   axios: {
     baseURL: process.env.NUXT_ENV_API_URL
+    // proxyHeaders: false,
+    // credentials: false
   },
 
   auth: {
@@ -134,6 +138,10 @@ export default {
   sentry: {
     dsn: 'https://8ef7b2ffff514abc800bcb8685bc5387@o60001.ingest.sentry.io/5250856',
     config: {}
+  },
+  toast: {
+    position: 'bottom-left',
+    duration: 5000
   },
   /*
    ** Build configuration

@@ -62,7 +62,7 @@
       </main>
       <footer>
         <div class="half-width">
-          <submit-button>Salvar</submit-button>
+          <action-button>Salvar</action-button>
         </div>
       </footer>
     </form>

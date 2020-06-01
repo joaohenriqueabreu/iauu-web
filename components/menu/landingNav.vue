@@ -12,11 +12,9 @@
 </template>
 
 <script>
-import Logo from '@/components/layout/logo'
 import MenuManager from '@/components/menu/menuManager'
 export default {
   components: {
-    logo: Logo,
     'menu-manager': MenuManager
   },
   data() {

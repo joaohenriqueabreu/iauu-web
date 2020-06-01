@@ -56,7 +56,7 @@
     </template>
     <template v-slot:footer>
       <div class="half-width mb-4">
-        <submit-button @submit="save">Salvar</submit-button>
+        <action-button @callback="save">Salvar</action-button>
       </div>
     </template>
   </modal>

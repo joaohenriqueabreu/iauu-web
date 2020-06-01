@@ -58,7 +58,7 @@ export const actions = {
     commit('edit_proposal', data)
   },
   async sendProposal({ state, commit }) {
-    await this.$axios.post('proposal', state.proposal)
+    await this.$axios.post('proposals', state.proposal)
   }
 }
 

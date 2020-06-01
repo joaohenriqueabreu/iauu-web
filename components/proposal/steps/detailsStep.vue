@@ -7,7 +7,12 @@
         icon-helper="child"
         placeholder="Título do seu evento"
       ></form-input>
-      <form-location placeholder="Onde será o evento?" @selected="changeLocation"></form-location>
+      <form-location
+        street
+        :default="proposal.location"
+        placeholder="Onde será o evento?"
+        @selected="changeLocation"
+      ></form-location>
       <form-textarea
         v-model="description"
         class="mb-2"
@@ -27,7 +32,7 @@
         </fade-transition>
       </div>
       <fade-transition>
-        <submit-button v-show="validForm" @submit="$emit('next')">Avançar</submit-button>
+        <action-button v-show="validForm" @callback="$emit('next')">Avançar</action-button>
       </fade-transition>
     </div>
   </div>
@@ -35,6 +40,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Location from '@/models/location'
 import Step from '@/components/proposal/steps/step'
 
 export default {
@@ -42,7 +48,7 @@ export default {
   data() {
     return {
       title: '',
-      location: '',
+      location: new Location(),
       description: '',
       documents: []
     }
@@ -55,6 +61,15 @@ export default {
   watch: {
     title(title) {
       this.editProposal({ prop: 'title', value: title })
+    },
+    location(location) {
+      this.editProposal({ prop: 'location', value: location })
+    },
+    description(description) {
+      this.editProposal({ prop: 'description', value: description })
+    },
+    documents(documents) {
+      this.editProposal({ prop: 'documents', value: documents })
     },
     validForm(valid) {
       if (valid) {

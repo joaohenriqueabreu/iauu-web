@@ -14,6 +14,7 @@ import LinkPrevue from 'link-prevue'
 import moment from 'moment'
 
 // Form components
+import Logo from '@/components/layout/logo'
 import Modal from '@/components/layout/modal'
 import AlertMessage from '@/components/layout/alert'
 import Overlay from '@/components/layout/overlay'
@@ -34,9 +35,9 @@ import FormLocation from '@/components/form/location'
 import FormSelect from '@/components/form/select'
 import FormToggle from '@/components/form/toggle'
 
+import Button from '@/components/form/button'
 import ImageUploader from '@/components/form/imageUploader'
 import FileUploader from '@/components/form/fileUploader'
-import SubmitButton from '@/components/form/submitButton'
 import Attachment from '@/components/form/attachment'
 
 moment.locale('pt-br')
@@ -50,8 +51,8 @@ Vue.use(PerfectScrollbar)
 Vue.use(VueSweetalert2)
 Vue.use(VueModal, { componentName: 'v-modal' })
 
+Vue.component('logo', Logo)
 Vue.component('avatar', Avatar)
-
 Vue.component('toggle-button', ToggleButton)
 Vue.component('overlay', Overlay)
 
@@ -70,7 +71,7 @@ Vue.component('form-range', FormRange)
 
 Vue.component('image-uploader', ImageUploader)
 Vue.component('file-uploader', FileUploader)
-Vue.component('submit-button', SubmitButton)
+Vue.component('action-button', Button)
 Vue.component('fade-transition', FadeTransition)
 Vue.component('slide-down-transition', SlideYDownTransition)
 Vue.component('link-preview', LinkPrevue)

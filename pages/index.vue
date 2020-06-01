@@ -4,13 +4,15 @@
     <div class="section search">
       <h1>Supimpe seu evento</h1>
       <div class="half-width vertical middle center">
-        <form-input
-          v-model="term"
-          class="funny"
-          :placeholder="placeholder"
-          @enter="search"
-        ></form-input>
-        <nuxt-link ref="searchLink" :to="searchUrl">Vamos lá!</nuxt-link>
+        <client-only>
+          <form-input
+            v-model="term"
+            class="funny"
+            :placeholder="placeholder"
+            @enter="search"
+          ></form-input>
+          <nuxt-link ref="searchLink" :to="searchUrl">Vamos lá!</nuxt-link>
+        </client-only>
       </div>
     </div>
     <div class="section even">

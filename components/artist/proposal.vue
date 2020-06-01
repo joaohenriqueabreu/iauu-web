@@ -21,7 +21,7 @@
       <template v-slot:footer>
         <div class="horizontal center middle full-height">
           <div class="mr-5">
-            <submit-button @submit="accept">Aceitar</submit-button>
+            <action-button @callback="accept">Aceitar</action-button>
           </div>
           <div>
             <h5 @click="reject">Recusar</h5>

@@ -8,13 +8,15 @@
         </small>
       </div>
       <div class="review">
-        <div class="top-right">
-          <font-awesome icon="check-circle"></font-awesome>
+        <div class="top-right pt-1 pr-2">
+          <font-awesome icon="check-circle" class="m-0"></font-awesome>
         </div>
         <h6 class="mb-4">Confirme sua proposta para {{ proposal.artist.name }}</h6>
         <div>
           {{ proposal.title }}
-          {{ proposal.location }}
+        </div>
+        <div v-if="!$utils.empty(proposal.location)">
+          {{ proposal.location.toString() }}
         </div>
         <div v-if="!$utils.empty(proposal.timeslot) && !$utils.empty(proposal.timeslot.start_dt)">
           {{ proposal.timeslot.start_dt | date }}
@@ -32,7 +34,7 @@
       </div>
       <div class="half-width horizontal middle center">
         <div v-if="areAllStepsCompleted">
-          <submit-button @submit="saveProposal">Enviar!</submit-button>
+          <action-button @callback="submitProposal">Enviar!</action-button>
         </div>
         <div v-else class="vertical middle center">
           <h6>
@@ -60,7 +62,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('event', ['saveProposal'])
+    ...mapActions('contractor', ['sendProposal']),
+    async submitProposal() {
+      await this.sendProposal()
+      this.$toast.success('Proposta enviada com sucesso!')
+      this.$router.push('/')
+    }
   }
 }
 </script>

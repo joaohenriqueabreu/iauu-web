@@ -2,7 +2,13 @@
   <div>
     <label :for="name">{{ label }}</label>
     <div class="form-input">
-      <input ref="placesElement" :placeholder="placeholder" type="text" @input="locationInput" />
+      <input
+        ref="placesElement"
+        :placeholder="placeholder"
+        type="text"
+        :value="selectedPlace.toString()"
+        @input="locationInput"
+      />
       <font-awesome icon="map-marker-alt"></font-awesome>
     </div>
 
@@ -12,20 +18,32 @@
 
 <script>
 import FormInput from '@/components/form/input'
+import Location from '@/models/location'
+
 const MIN_PLACES_TRIGGER_LENGTH = 3
-const PLACES_OPTIONS = {
-  types: ['(cities)'],
-  fields: ['address_component', 'geometry'],
-  componentRestrictions: { country: 'br' }
-}
+
 export default {
   extends: FormInput,
+  props: {
+    default: { type: Object, default: () => {} },
+    street: { type: Boolean, default: false }
+  },
   data() {
     return {
       autocomplete: {},
       autocompleteStatus: true,
-      selectedPlace: String,
+      selectedPlace: new Location(),
       google: Object
+    }
+  },
+  computed: {
+    placesOptions() {
+      const types = this.street ? ['address'] : ['(cities)']
+      return {
+        types,
+        fields: ['address_component', 'geometry', 'formatted_address'],
+        componentRestrictions: { country: 'br' }
+      }
     }
   },
   watch: {
@@ -36,8 +54,12 @@ export default {
   mounted() {
     this.autocomplete = new window.google.maps.places.Autocomplete(
       this.$refs.placesElement,
-      PLACES_OPTIONS
+      this.placesOptions
     )
+
+    if (!this.$utils.empty(this.default)) {
+      this.selectedPlace = this.default
+    }
   },
   methods: {
     locationInput(event) {
@@ -50,7 +72,7 @@ export default {
       }
     },
     placeChanged() {
-      this.selectedPlace = JSON.stringify(this.autocomplete.getPlace())
+      this.selectedPlace = new Location(this.autocomplete.getPlace())
       this.$emit('selected', this.selectedPlace)
     },
     resetPlace() {

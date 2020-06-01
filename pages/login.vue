@@ -6,7 +6,7 @@
       <form-email v-model="credentials.email"></form-email>
       <form-password v-model="credentials.password"></form-password>
       <div class="mb-5"></div>
-      <submit-button @submit="login">Login</submit-button>
+      <action-button @callback="login">Login</action-button>
     </form>
   </div>
 </template>

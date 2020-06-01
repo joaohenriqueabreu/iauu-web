@@ -19,6 +19,8 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    "vue/require-prop-types": 0,    
-  }
+    "vue/require-prop-types": 0,
+    "no-useless-escape": 0,
+    "no-console": 0    
+  }  
 }

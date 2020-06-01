@@ -3,7 +3,6 @@
     <header>
       <nuxt-link to="/">
         <logo :height="50" :width="50"></logo>
-        <h6>iauu</h6>
       </nuxt-link>
     </header>
     <main>

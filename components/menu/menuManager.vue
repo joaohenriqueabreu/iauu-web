@@ -6,7 +6,10 @@
           <avatar :src="$auth.user.photo.url" :username="$auth.user.name"></avatar>
         </overlay>
       </div>
-      <div v-else class="pr-4">
+      <div v-else class="pr-4 horizontal">
+        <nuxt-link to="/register/whoareyou">
+          <h5 class="mr-5">Cadastre-se</h5>
+        </nuxt-link>
         <nuxt-link to="/login">
           <h5>Login</h5>
         </nuxt-link>
@@ -18,6 +21,9 @@
             <small>{{ $auth.user.type[0] }}</small>
           </div>
           <div class="horizontal middle">
+            <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/incorporate">
+              <h6>Atalho para shows</h6>
+            </nuxt-link>
             <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/products">
               <h6>Produtos</h6>
             </nuxt-link>
