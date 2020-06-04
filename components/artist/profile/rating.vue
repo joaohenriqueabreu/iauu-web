@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="short">
-      <div v-if="rating > 0">
+      <div v-if="score > 0">
         <font-awesome class="icon mr-1" icon="star"></font-awesome>
-        <small class="bold">{{ rating }}</small>
+        <small class="bold">{{ score }}</small>
       </div>
     </div>
     <div v-else class="horizontal center middle">
@@ -29,16 +29,16 @@
 const MAX_RATE = 5
 export default {
   props: {
-    rating: { type: Number, default: 1 },
+    score: { type: Number, default: 1 },
     amount: { type: Number, default: 0 },
     short: { type: Boolean, default: false }
   },
   computed: {
     filledStars() {
-      return Math.floor(this.rating)
+      return Math.floor(this.score)
     },
     halfStar() {
-      return Math.round(this.rating) > this.filledStars
+      return Math.round(this.score) > this.filledStars
     },
     noStar() {
       return MAX_RATE - (this.filledStars + this.halfStar)

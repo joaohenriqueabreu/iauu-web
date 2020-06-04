@@ -24,7 +24,7 @@
       <div class="col-sm-6 d-flex justify-content-end">
         <div class="vertical">
           <div class="mb-3">
-            <rating :rating="artist.rating.rate" :amount="artist.rating.amount"></rating>
+            <rating :score="artist.rating.score" :amount="artist.rating.amount"></rating>
           </div>
           <div class="d-flex full-height">
             <div class="vertical">
@@ -67,10 +67,10 @@ export default {
       // return this.artist.bg_photo
     },
     rateMin() {
-      return Math.round(this.artist.rate * 0.5)
+      return Math.round(this.artist.score * 0.5)
     },
     rateMax() {
-      return Math.round(this.artist.rate * 1.5)
+      return Math.round(this.artist.score * 1.5)
     }
   },
   methods: {

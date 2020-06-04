@@ -69,7 +69,7 @@
             <span v-if="$auth.loggedIn">Valor da apresentação</span>
             <span v-else>Valor aproximado da apresentação</span>
           </small>
-          <h4 v-if="$auth.loggedIn">{{ artist.rate | currency }}</h4>
+          <h4 v-if="$auth.loggedIn">{{ artist.score | currency }}</h4>
           <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4>
           <div class="mb-4 hide-desktop"></div>
         </div>
@@ -115,10 +115,10 @@ export default {
       return this.$array.slice(this.artist.medias, 0, 4)
     },
     rateMin() {
-      return Math.round(this.artist.rate * 0.5)
+      return Math.round(this.artist.score * 0.5)
     },
     rateMax() {
-      return Math.round(this.artist.rate * 1.5)
+      return Math.round(this.artist.score * 1.5)
     },
     avgDuration() {
       return Math.round(this.$math.mean(this.$collection.map(this.artist.products, 'duration')))

@@ -254,20 +254,6 @@ export default {
     .fc-title {
       color: $layer2;
     }
-
-    &:hover {
-      transition: $transition;
-      background: red;
-      span {
-        color: $brand;
-      }
-
-      &::before {
-        display: block;
-        font-size: $small;
-        content: 'Rejeitar';
-      }
-    }
   }
 
   &.proposing {

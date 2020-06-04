@@ -21,6 +21,9 @@
             <small>{{ $auth.user.type[0] }}</small>
           </div>
           <div class="horizontal middle">
+            <nuxt-link :to="`/${$auth.hasScope('artist') ? 'artist' : 'contractor'}/schedule`">
+              <h6>Home</h6>
+            </nuxt-link>
             <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/incorporate">
               <h6>Atalho para shows</h6>
             </nuxt-link>
