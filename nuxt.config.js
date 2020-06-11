@@ -153,9 +153,9 @@ export default {
 
     extend(config, ctx) {}
     // babelrc: true
-  }
+  },
 
-  // server: {
-  //   port: 8000
-  // }
+  server: {
+    port: 3333
+  }
 }

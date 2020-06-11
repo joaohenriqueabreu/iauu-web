@@ -1,13 +1,7 @@
 <template>
   <div>
     <fade-transition :duration="300" mode="out-in">
-      <div
-        v-if="!submitted"
-        key="submitting"
-        class="button"
-        :class="{ disabled }"
-        @click="$refs.submit.click()"
-      >
+      <div v-if="!submitted" key="submitting" class="button" :class="{ disabled }" @click="submit">
         <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
