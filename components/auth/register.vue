@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div class="bg" :class="[userType]"></div>
+    <div class="bg" :class="[role]"></div>
     <form>
       <h5>Cadastre já!</h5>
       <form-input
@@ -18,7 +18,7 @@
         placeholder="Confirme sua senha"
       ></form-password>
       <div class="mb-5"></div>
-      <action-button @callback="login">Cadastrar</action-button>
+      <action-button @callback="signup">Cadastrar</action-button>
     </form>
   </div>
 </template>
@@ -27,7 +27,7 @@
 import { mapActions } from 'vuex'
 export default {
   props: {
-    userType: { type: String, default: '' }
+    role: { type: String, default: '' }
   },
   data() {
     return {
@@ -39,18 +39,17 @@ export default {
     }
   },
   mounted() {
-    this.credentials.type = this.userType
+    this.credentials.role = this.role
   },
   methods: {
-    ...mapActions('auth', ['login']),
-    async login() {
+    ...mapActions('security', ['register']),
+    async signup() {
       try {
-        await this.$auth.loginWith('local', {
-          data: this.credentials
-        })
-        this.$router.push('/artist/schedule')
+        await this.register(this.credentials)
+        this.$router.push('/register/verify')
       } catch (error) {
-        // this.$sentry.captureException(error)
+        // Display errors on fields
+        console.log(error)
       }
     }
   }
@@ -68,7 +67,7 @@ export default {
     padding: 3 * $space;
     z-index: $above;
     min-height: 50vh;
-    min-width: 50vw;
+    min-width: 30vw;
     background: transparent;
     box-shadow: $shadow;
     border-radius: $edges;

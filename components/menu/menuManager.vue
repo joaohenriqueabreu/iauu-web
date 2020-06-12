@@ -18,7 +18,7 @@
         <div v-if="$auth.loggedIn" v-show="displaySubmenu" class="submenu">
           <div class="vertical">
             <h5>{{ $auth.user.name }}</h5>
-            <small>{{ $auth.user.type[0] }}</small>
+            <small>{{ $auth.user.role[0] }}</small>
           </div>
           <div class="horizontal middle">
             <nuxt-link :to="`/${$auth.hasScope('artist') ? 'artist' : 'contractor'}/schedule`">

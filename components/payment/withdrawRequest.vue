@@ -15,7 +15,7 @@
         as regras de saque. Aqui vem as regras de saque. Aqui vem as regras de saque.
       </div>
       <div class="horizontal middle px-5 py-2 mb-4">
-        <h6 class="mr-4 noCap">Seu saldo é de:</h6>
+        <h6 class="mr-4 no-cap">Seu saldo é de:</h6>
         <h4>{{ available | currency }}</h4>
       </div>
       <div class="horizontal middle px-5 py-2 mb-4">

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <register user-type="artist"></register>
+    <register role="artist"></register>
   </div>
 </template>
 

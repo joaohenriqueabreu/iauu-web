@@ -6,19 +6,19 @@
       </nuxt-link>
     </header>
     <main>
-      <nuxt-link :to="`/${userType}/schedule`" :class="{ routed: routed('schedule') }">
+      <nuxt-link :to="`/${role}/schedule`" :class="{ routed: routed('schedule') }">
         <font-awesome icon="calendar-alt"></font-awesome>
         <span>Agenda</span>
       </nuxt-link>
-      <nuxt-link :to="`/${userType}/presentations`" :class="{ routed: routed('presentations') }">
+      <nuxt-link :to="`/${role}/presentations`" :class="{ routed: routed('presentations') }">
         <font-awesome icon="music"></font-awesome>
         <span>Apresentações</span>
       </nuxt-link>
-      <nuxt-link :to="`/${userType}/proposals`" :class="{ routed: routed('proposals') }">
+      <nuxt-link :to="`/${role}/proposals`" :class="{ routed: routed('proposals') }">
         <font-awesome icon="search-dollar"></font-awesome>
         <span>Propostas</span>
       </nuxt-link>
-      <nuxt-link :to="`/${userType}/account`" :class="{ routed: routed('account') }">
+      <nuxt-link :to="`/${role}/account`" :class="{ routed: routed('account') }">
         <font-awesome icon="piggy-bank"></font-awesome>
         <span>Conta</span>
       </nuxt-link>
@@ -36,7 +36,7 @@ export default {
     scheduleLink() {
       return this.$auth.hasScope('artist') ? '/artist' : '/contractor'
     },
-    userType() {
+    role() {
       return this.$auth.hasScope('artist') ? 'artist' : 'contractor'
     }
   },

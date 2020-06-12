@@ -2,7 +2,7 @@
   <div>
     <client-only>
       <div class="mb-4">
-        <h6 class="noCap">Copie as imagens para suas redes sociais ou mostre em suas lives!</h6>
+        <h6 class="no-cap">Copie as imagens para suas redes sociais ou mostre em suas lives!</h6>
       </div>
       <div class="qrcodes">
         <div ref="horizontal" class="qrcode horizontal center middle">
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="mb-4">
-        <h6 class="noCap">Ou incorpore o código abaixo:</h6>
+        <h6 class="no-cap">Ou incorpore o código abaixo:</h6>
       </div>
       <div class="code">
         <code> {{ incorporateScript }} </code>

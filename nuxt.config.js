@@ -114,13 +114,19 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env.NUXT_ENV_API_URL
-    // proxyHeaders: false,
+    baseURL: process.env.NUXT_ENV_API_URL,
+    proxyHeaders: true
+    // headers: {
+    //   common: {
+    //     'Access-Control-Allow-Origin': 'http://localhost:3333',
+    //     origin: 'http://localhost:3333'
+    //   }
+    // }
     // credentials: false
   },
 
   auth: {
-    scopeKey: 'type',
+    scopeKey: 'role',
     strategies: {
       local: {
         endpoints: {

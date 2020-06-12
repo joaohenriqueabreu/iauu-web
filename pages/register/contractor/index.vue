@@ -1,6 +1,6 @@
 <template>
   <div>
-    <register user-type="contractor"></register>
+    <register role="contractor"></register>
   </div>
 </template>
 
