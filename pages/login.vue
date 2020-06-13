@@ -3,10 +3,11 @@
     <div class="bg"></div>
     <form>
       <h5>Entre</h5>
-      <form-email v-model="credentials.email"></form-email>
-      <form-password v-model="credentials.password"></form-password>
+      <form-email v-model="credentials.email" @input="resetError"></form-email>
+      <form-password v-model="credentials.password" @input="resetError"></form-password>
+      <form-validation :active="hasError">Usuário ou senha inválidos</form-validation>
       <div class="mb-5"></div>
-      <action-button @callback="login">Login</action-button>
+      <action-button ref="login" @callback="login">Login</action-button>
     </form>
   </div>
 </template>
@@ -19,7 +20,8 @@ export default {
       credentials: {
         email: '',
         password: ''
-      }
+      },
+      hasError: false
     }
   },
   methods: {
@@ -31,8 +33,13 @@ export default {
         })
         this.$router.push('/artist/schedule')
       } catch (error) {
-        // this.$sentry.captureException(error)
+        console.log(error)
+        this.hasError = true
+        this.$refs.login.reset()
       }
+    },
+    resetError() {
+      this.hasError = false
     }
   }
 }

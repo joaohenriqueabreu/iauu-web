@@ -30,6 +30,10 @@ export default {
       await this.delay()
       this.$emit('callback')
     },
+    reset() {
+      this.submitted = false
+      this.submitting = false
+    },
     delay() {
       return setTimeout(() => {}, 1000)
     }

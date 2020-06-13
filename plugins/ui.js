@@ -34,6 +34,7 @@ import FormTextarea from '@/components/form/textarea'
 import FormLocation from '@/components/form/location'
 import FormSelect from '@/components/form/select'
 import FormToggle from '@/components/form/toggle'
+import FormValidation from '@/components/form/validation'
 
 import Button from '@/components/form/button'
 import ImageUploader from '@/components/form/imageUploader'
@@ -68,6 +69,7 @@ Vue.component('form-location', FormLocation)
 Vue.component('form-select', FormSelect)
 Vue.component('form-toggle', FormToggle)
 Vue.component('form-range', FormRange)
+Vue.component('form-validation', FormValidation)
 
 Vue.component('image-uploader', ImageUploader)
 Vue.component('file-uploader', FileUploader)

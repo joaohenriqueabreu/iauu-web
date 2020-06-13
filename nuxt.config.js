@@ -115,7 +115,8 @@ export default {
    */
   axios: {
     baseURL: process.env.NUXT_ENV_API_URL,
-    proxyHeaders: true
+    proxyHeaders: true,
+    validateStatus: true
     // headers: {
     //   common: {
     //     'Access-Control-Allow-Origin': 'http://localhost:3333',

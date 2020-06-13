@@ -17,11 +17,14 @@ export const actions = {
   },
   async verify({ commit }, verifyToken) {
     try {
-      console.log('Sending request...')
       const { data } = await this.$axios.post('verify', { token: verifyToken })
+      console.log('did we get an error?')
+      console.log(data)
       commit('set_token', data)
     } catch (error) {
+      console.log('We only got error')
       console.log(error)
+      throw error
     }
   },
   release({ commit }) {

@@ -2,8 +2,8 @@
   <div>
     <modal ref="verify" height="tiny">
       <template v-slot:main>
-        <div class="vertical center middle">
-          <h6 class="no-cap">Verifying your accout, please wait...</h6>
+        <div class="vertical center middle full-height">
+          <h6>Verificando sua conta, aguarde por favor...</h6>
         </div>
       </template>
     </modal>
@@ -15,7 +15,8 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      verified: false
+      verified: false,
+      error: null
     }
   },
   computed: {
@@ -25,24 +26,27 @@ export default {
     this.$refs.verify.open()
     try {
       await this.verify(this.$route.params.token)
-      console.log(this.accessToken)
 
       // Need to append bearer for authorization
       this.$auth.setUserToken(this.accessToken)
 
       setTimeout(this.handleVerified, 3000)
     } catch (error) {
-      console.log(error.message)
-      // TODO handle...
+      this.error = error
+      setTimeout(this.handleFailed, 3000)
     }
   },
   methods: {
     ...mapActions('security', ['verify', 'release']),
     handleVerified() {
-      this.$refs.verify.close()
       this.$toast.success('Conta verificada com sucesso! Bem vindo a Iauu')
       const self = this
       setTimeout(() => self.$router.push('/'), 3000)
+    },
+    handleFailed() {
+      this.$toast.error('Tivemos um problema ao verificar sua conta.')
+      // const self = this
+      // setTimeout(() => self.$router.push('/'), 3000)
     }
   }
 }
