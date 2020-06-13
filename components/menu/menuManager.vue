@@ -84,7 +84,7 @@ export default {
   top: 0;
   right: 0;
   align-items: flex-end;
-  background: $layer1;
+  // background: $layer1;
   @include desktop {
     max-height: 10vh;
   }

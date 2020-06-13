@@ -5,11 +5,11 @@
         <side-menu></side-menu>
       </aside>
       <div class="vertical">
+        <header class="d-flex justify-content-end">
+          <menu-manager></menu-manager>
+        </header>
         <main>
           <alert></alert>
-          <header class="d-flex justify-content-end">
-            <menu-manager></menu-manager>
-          </header>
           <nuxt />
         </main>
       </div>
@@ -38,7 +38,6 @@ header {
   position: relative;
   min-height: 10vh;
   padding: 10px 0;
-  z-index: $moveToTop;
   background: transparent;
 }
 

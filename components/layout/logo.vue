@@ -1,5 +1,9 @@
 <template>
-  <img src="@/assets/imgs/logo.png" :style="`height: ${height}px; width: ${width}px`" />
+  <img
+    class="logo"
+    src="@/assets/imgs/logo.png"
+    :style="`height: ${height}px; width: ${width}px`"
+  />
   <!-- <svg
     class="logo"
     :width="width"
@@ -32,8 +36,8 @@ export default {
   }
 }
 </script>
-<style>
-.NuxtLogo {
+<style lang="scss" scoped>
+.logo {
   animation: 1s appear;
   margin: auto;
 }
