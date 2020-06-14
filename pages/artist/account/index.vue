@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-content-between mb-5">
       <h4>Minha conta</h4>
-      <action-button @callback="openWithdrawModal">Solicitar saque</action-button>
+      <form-button @callback="openWithdrawModal">Solicitar saque</form-button>
     </div>
     <h6 class="mb-3">Pagamentos</h6>
     <div class="d-flex align-content-space-between full-width mb-5">

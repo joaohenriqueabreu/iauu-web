@@ -6,26 +6,58 @@
       <form-email v-model="credentials.email" @input="resetError"></form-email>
       <form-password v-model="credentials.password" @input="resetError"></form-password>
       <form-validation :active="hasError">Usuário ou senha inválidos</form-validation>
+      <div class="mb-2"></div>
+      <div class="forgot-password" @click="openForgotPasswordModal">
+        <span>Esqueceu sua senha?</span>
+      </div>
       <div class="mb-5"></div>
-      <action-button ref="login" @callback="login">Login</action-button>
+      <form-button ref="login" @callback="login">Login</form-button>
     </form>
+    <modal ref="forgotPassword" height="tiny">
+      <template v-slot:header>
+        <div class="vertical middle center">
+          <h4>Esqueceu sua senha?</h4>
+        </div>
+      </template>
+      <template v-slot:main>
+        <div class="vertical middle center">
+          <span>Entre com o seu email para solicitar uma nova senha</span>
+          <form-email v-model="forgotPasswordForEmail" class="full-width px-5"></form-email>
+          <form-validation :active="$utils.empty(forgotPasswordForEmail)"
+            >Entre com um email válido</form-validation
+          >
+        </div>
+      </template>
+      <template v-slot:footer>
+        <div class="half-width">
+          <form-button
+            :disabled="$utils.empty(forgotPasswordForEmail)"
+            @callback="sendForgotPassword"
+            >Enviar</form-button
+          >
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 export default {
+  middleware: ['guest'],
   data() {
     return {
       credentials: {
         email: '',
         password: ''
       },
+      forgotPasswordForEmail: '',
       hasError: false
     }
   },
   methods: {
     ...mapActions('auth', ['login']),
+    ...mapActions('protected', ['forgotPassword']),
     async login() {
       try {
         await this.$auth.loginWith('local', {
@@ -40,6 +72,21 @@ export default {
     },
     resetError() {
       this.hasError = false
+    },
+    openForgotPasswordModal() {
+      this.$refs.forgotPassword.open()
+    },
+    sendForgotPassword() {
+      this.$toast.info(
+        'Solicitação enviada! Se o email estiver em nossas bases, enviaremos as instruções para troca de senha. Obrigado'
+      )
+
+      setTimeout(this.handleResetPassword, 5000)
+    },
+    async handleResetPassword() {
+      await this.forgotPassword(this.forgotPasswordForEmail)
+      this.$refs.forgotPassword.close()
+      this.$router.push('/')
     }
   }
 }
@@ -76,6 +123,19 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+  }
+}
+
+.forgot-password {
+  @extend .horizontal, .middle, .center, .clickable;
+
+  span {
+    color: $layer5;
+    transition: $transition;
+    &:hover {
+      transition: $transition;
+      color: $brand;
+    }
   }
 }
 </style>

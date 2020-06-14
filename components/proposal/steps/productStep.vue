@@ -41,7 +41,7 @@
         <product-info :product="selectedProduct"></product-info>
       </template>
       <template v-slot:footer>
-        <action-button class="half-width" @callback="chooseProduct">Escolher produto</action-button>
+        <form-button class="half-width" @callback="chooseProduct">Escolher produto</form-button>
       </template>
     </modal>
     <modal ref="video"></modal>

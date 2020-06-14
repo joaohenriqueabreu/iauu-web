@@ -25,10 +25,17 @@ export default {
   },
   methods: {
     async submit() {
-      await this.delay()
-      this.submitted = true
+      // Prevent submit when disable or while submitting
+      if (this.disabled || this.submitting) {
+        return
+      }
+
+      this.submitting = true
       await this.delay()
       this.$emit('callback')
+      await this.delay()
+      this.submitting = false
+      this.submitted = true
     },
     reset() {
       this.submitted = false

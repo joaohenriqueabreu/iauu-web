@@ -18,7 +18,7 @@
         placeholder="Confirme sua senha"
       ></form-password>
       <div class="mb-5"></div>
-      <action-button @callback="signup">Cadastrar</action-button>
+      <form-button @callback="signup">Cadastrar</form-button>
     </form>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default {
     this.credentials.role = this.role
   },
   methods: {
-    ...mapActions('security', ['register']),
+    ...mapActions('protected', ['register']),
     async signup() {
       try {
         await this.register(this.credentials)

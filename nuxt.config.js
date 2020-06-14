@@ -122,7 +122,7 @@ export default {
     headers: {
       common: {
         //     // 'Access-Control-Allow-Origin': 'http://localhost:3333',
-        Origin: 'http://localhost:3333'
+        Origin: 'web'
       }
     }
     // credentials: false
@@ -152,7 +152,9 @@ export default {
   },
   toast: {
     position: 'bottom-left',
-    duration: 5000
+    duration: 5000,
+    containerClass: 'toast-container',
+    iconPack: 'fontawesome'
   },
   /*
    ** Build configuration

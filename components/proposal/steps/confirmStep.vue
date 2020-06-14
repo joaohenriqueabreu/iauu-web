@@ -34,7 +34,7 @@
       </div>
       <div class="half-width horizontal middle center">
         <div v-if="areAllStepsCompleted">
-          <action-button @callback="submitProposal">Enviar!</action-button>
+          <form-button @callback="submitProposal">Enviar!</form-button>
         </div>
         <div v-else class="vertical middle center">
           <h6>

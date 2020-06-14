@@ -30,5 +30,8 @@ export const actions = {
   release({ commit }) {
     // No need to hold token as $auth handles it
     commit('release_token')
+  },
+  forgotPassword({ commit }, email) {
+    this.$axios.post('reset/forgot', { email })
   }
 }

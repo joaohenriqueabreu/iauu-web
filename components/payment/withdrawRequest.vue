@@ -28,7 +28,7 @@
     </template>
     <template v-slot:footer>
       <div class="half-width">
-        <action-button @callback="request">Solicitar Saque</action-button>
+        <form-button @callback="request">Solicitar Saque</form-button>
       </div>
     </template>
   </modal>

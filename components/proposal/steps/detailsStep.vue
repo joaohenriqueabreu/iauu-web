@@ -32,7 +32,7 @@
         </fade-transition>
       </div>
       <fade-transition>
-        <action-button v-show="validForm" @callback="$emit('next')">Avançar</action-button>
+        <form-button v-show="validForm" @callback="$emit('next')">Avançar</form-button>
       </fade-transition>
     </div>
   </div>

@@ -20,7 +20,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({ accessToken: (state) => state.security.token })
+    ...mapState({ accessToken: (state) => state.protected.token })
   },
   async mounted() {
     this.$refs.verify.open()
@@ -37,7 +37,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('security', ['verify', 'release']),
+    ...mapActions('protected', ['verify', 'release']),
     handleVerified() {
       this.$toast.success('Conta verificada com sucesso! Bem vindo a Iauu')
       const self = this

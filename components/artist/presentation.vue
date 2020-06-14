@@ -43,9 +43,9 @@
       <template v-if="!readOnly" v-slot:footer>
         <div class="horizontal center middle full-height">
           <div class="mr-5">
-            <action-button @callback="confirm">
+            <form-button @callback="confirm">
               Confirmar Realização
-            </action-button>
+            </form-button>
           </div>
           <div>
             <h5 v-if="!isPresentationPast" @click="cancel">Cancelar</h5>
