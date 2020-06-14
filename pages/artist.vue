@@ -7,6 +7,7 @@
 <script>
 export default {
   layout: 'app',
+  // middleware: ['artist']
   middleware: ['auth', 'artist']
 }
 </script>

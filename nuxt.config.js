@@ -59,7 +59,7 @@ export default {
   plugins: [
     { src: '@/plugins/config' },
     { src: '@/plugins/utils' },
-    { src: '@/plugins/http' },
+    // { src: '@/plugins/http' },
     // { src: '@/plugins/auth' },
 
     // { src: '@/plugins/ui' },
@@ -93,8 +93,9 @@ export default {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    '@nuxtjs/style-resources',
+    // '@nuxtjs/proxy',
     '@nuxtjs/auth',
+    '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
     '@nuxtjs/toast'
   ],
@@ -115,17 +116,20 @@ export default {
    */
   axios: {
     baseURL: process.env.NUXT_ENV_API_URL,
-    proxyHeaders: true,
-    validateStatus: true
-    // headers: {
-    //   common: {
-    //     'Access-Control-Allow-Origin': 'http://localhost:3333',
-    //     origin: 'http://localhost:3333'
-    //   }
-    // }
+    // proxy: true
+    // proxyHeaders: true
+    // validateStatus: true
+    headers: {
+      common: {
+        //     // 'Access-Control-Allow-Origin': 'http://localhost:3333',
+        Origin: 'http://localhost:3333'
+      }
+    }
     // credentials: false
   },
-
+  // proxy: {
+  //   '/api/': process.env.NUXT_ENV_API_URL
+  // },
   auth: {
     scopeKey: 'role',
     strategies: {
@@ -136,7 +140,7 @@ export default {
           user: { url: 'validate', method: 'post', propertyName: false }
         }
       },
-      // tokenRequired: false,
+      tokenRequired: false,
       tokenName: 'Authorization',
       tokenType: 'bearer',
       globalToken: true
@@ -164,5 +168,6 @@ export default {
 
   server: {
     port: 3333
+    // host: '0.0.0.0'
   }
 }

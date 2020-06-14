@@ -32,7 +32,7 @@
               <avatar :src="$auth.user.photo.url" :username="$auth.user.name"></avatar>
             </overlay>
           </div>
-          <div v-if="!$auth.loggedIn" key="guest" class="pr-4 horizontal">
+          <div v-if="!$auth.loggedIn" key="guest" class="guest">
             <nuxt-link to="/register/whoareyou">
               <h5 class="mr-5">Cadastre-se</h5>
             </nuxt-link>
@@ -84,7 +84,6 @@ export default {
   top: 0;
   right: 0;
   align-items: flex-end;
-  // background: $layer1;
   @include desktop {
     max-height: 10vh;
   }
@@ -93,6 +92,12 @@ export default {
 h6 {
   font-weight: $bold;
   margin-bottom: 2 * $space;
+}
+
+.guest {
+  @extend .horizontal, .middle;
+  padding-right: 2 * $space;
+  height: 10vh;
 }
 
 .submenu {
