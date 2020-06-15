@@ -16,20 +16,15 @@ export const actions = {
     this.$axios.post('register', credentials)
   },
   async verify({ commit }, verifyToken) {
-    try {
-      const { data } = await this.$axios.post('verify', { token: verifyToken })
-      console.log('did we get an error?')
-      console.log(data)
-      commit('set_token', data)
-    } catch (error) {
-      console.log('We only got error')
-      console.log(error)
-      throw error
-    }
+    const { data } = await this.$axios.post('verify', { token: verifyToken })
+    commit('set_token', data)
   },
   release({ commit }) {
     // No need to hold token as $auth handles it
     commit('release_token')
+  },
+  async resetPassword({ commit }, credentials) {
+    await this.$axios.post('reset/password', credentials)
   },
   forgotPassword({ commit }, email) {
     this.$axios.post('reset/forgot', { email })

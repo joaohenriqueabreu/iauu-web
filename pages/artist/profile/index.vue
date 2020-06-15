@@ -119,7 +119,7 @@ export default {
     this.activeTab = 'stats'
   },
   methods: {
-    ...mapActions('app', ['showMessage']),
+    ...mapActions('app', ['setAlert']),
 
     uploadBG() {
       this.$refs.bgUploader.upload()

@@ -35,6 +35,9 @@ const utils = {
     }
 
     return false
+  },
+  delay: () => {
+    return setTimeout(() => {}, 5000)
   }
 }
 

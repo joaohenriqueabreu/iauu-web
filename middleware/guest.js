@@ -1,7 +1,7 @@
-export default function({ app, redirect }) {
+export default function({ app, store, redirect }) {
   // Only when not logged in
   if (app.$auth.loggedIn) {
-    app.$toast.warning('Você já está logado')
+    store.dispatch('app/setAlert', { type: 'error', message: 'Você já está logado' })
     return redirect('/')
   }
 }

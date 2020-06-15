@@ -6,7 +6,8 @@ export const state = () => ({
   alert: {
     type: null,
     message: null
-  }
+  },
+  newAlert: false
 })
 
 export const mutations = {
@@ -16,13 +17,14 @@ export const mutations = {
   close_menu(state) {
     state.showMenu = false
   },
-  show_message(state, { type, message }) {
+  set_alert(state, { message, type = 'success' }) {
     state.alert.type = type
     state.alert.message = message
+    state.newAlert = true
   },
-  clear_message(state) {
-    state.alert.message = null
-    state.alert.type = null
+  clear_alert(state) {
+    state.alert = null
+    state.newAlert = false
   },
   set_search_filters(state, filters) {
     state.searchFilters = filters
@@ -36,11 +38,21 @@ export const actions = {
   closeMenu({ commit }) {
     commit('close_menu')
   },
-  showMessage({ commit }, { message, type = 'success' }) {
-    commit('show_message', { type, message })
-    setTimeout(() => {
-      commit('clear_message')
-    }, this.$config.alertTimer)
+  setAlert({ commit }, data) {
+    commit('set_alert', data)
+
+    // Set on localStorage for persistency over refreshes
+    if (process.client) {
+      localStorage.setItem('alert', data)
+    }
+  },
+  clearAlert({ commit }) {
+    commit('clear_alert')
+
+    // Clean up localStorage as well
+    if (process.client) {
+      localStorage.removeItem('alert')
+    }
   },
   setSearchFilters({ commit }, searchFilters) {
     commit('set_search_filters', searchFilters)

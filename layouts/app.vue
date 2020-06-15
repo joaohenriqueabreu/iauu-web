@@ -28,7 +28,8 @@ export default {
     'menu-manager': MenuManager
   },
   computed: {
-    ...mapState({ theme: (state) => state.layout.theme })
+    ...mapState({ theme: (state) => state.layout.theme }),
+    ...mapState({ alert: (state) => state.app.alert })
   }
 }
 </script>

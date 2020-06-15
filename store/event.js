@@ -28,7 +28,7 @@ export const actions = {
   async rejectProposal({ commit }, id) {
     await this.$axios.delete(`proposals/${id}`)
     this.dispatch('schedule/removeTimeslot', { type: 'proposal', id })
-    this.dispatch('app/showMessage', {
+    this.dispatch('app/setAlert', {
       message: 'Proposta recusada com sucesso'
     })
   },
@@ -39,7 +39,7 @@ export const actions = {
   async confirmPresentation({ commit }, id) {
     await this.$axios.post(`presentations/${id}`)
     this.dispatch('schedule/removeTimeslot', { type: 'presentation', id })
-    this.dispatch('app/showMessage', {
+    this.dispatch('app/setAlert', {
       message:
         'Obrigado por confirmar a realização da apresentação! Vamos agora finalizar os pagamentos pendentes'
     })

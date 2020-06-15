@@ -3,25 +3,42 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState({ alert: (state) => state.app.alert }),
-    ...mapGetters('app', ['hasMessage'])
+    ...mapState({ newAlert: (state) => state.app.newAlert })
   },
   watch: {
-    alert: {
-      deep: true,
-      handler(state) {
-        if (state.message !== null) {
-          this.$swal({
-            icon: this.alert.type,
-            text: this.alert.message,
-            timer: this.$config.alertTimer,
-            showConfirmButton: false
-          })
-        }
+    newAlert(value) {
+      console.log('triggered something')
+      if (!this.$utils.empty(this.alert.message)) {
+        this.showAlert()
       }
+    }
+  },
+  mounted() {
+    const alert = window.localStorage.getItem('alert')
+    if (!this.$utils.empty(this.alert.message) || !this.$utils.empty(alert)) {
+      this.showAlert()
+    }
+  },
+  methods: {
+    ...mapActions('app', ['setAlert', 'clearAlert']),
+    showAlert() {
+      if (this.alert.type === 'success') {
+        this.$toast.success(this.alert.message)
+      }
+
+      if (this.alert.type === 'error') {
+        this.$toast.error(this.alert.message)
+      }
+
+      if (this.alert.type === 'info') {
+        this.$toast.info(this.alert.message)
+      }
+
+      setTimeout(this.clearAlert, 5000)
     }
   }
 }

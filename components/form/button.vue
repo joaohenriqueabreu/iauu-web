@@ -31,9 +31,9 @@ export default {
       }
 
       this.submitting = true
-      await this.delay()
+      await this.$utils.delay()
       this.$emit('callback')
-      await this.delay()
+      await this.$utils.delay()
       this.submitting = false
       this.submitted = true
     },

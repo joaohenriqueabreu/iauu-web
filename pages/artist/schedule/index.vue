@@ -87,14 +87,14 @@ export default {
       'cancelPresentation'
     ]),
     ...mapActions('schedule', ['loadSchedule', 'saveTimeslot', 'removeTimeslot']),
-    ...mapActions('app', ['showMessage']),
+    ...mapActions('app', ['setAlert']),
     async reloadTimeslotsForYear(year) {
       await this.loadSchedule({ id: this.$auth.user.id, year })
       this.$refs.calendar.loadCalendarEvents()
     },
     openUnavailable({ dateStr }) {
       if (this.haveEventsOnDate(dateStr)) {
-        this.showMessage({
+        this.setAlert({
           message:
             'Existem apresentações ou propostas neste dia, cancele-as antes de marcar como indisponível',
           type: 'error'
