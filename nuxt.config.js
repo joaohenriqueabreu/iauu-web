@@ -122,14 +122,20 @@ export default {
     scopeKey: 'role',
     strategies: {
       facebook: {
+        // response_type: 'code', // Use auth code flow
         client_id: '287912642575620',
-        userinfo_endpoint: { url: 'validate', method: 'post', propertyName: false },
-        // 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
+        // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
+        // access_token_endpoint: 'http://localhost:4444/login/facebook',
+        userinfo_endpoint: 'http://localhost:4444/login/facebook',
         scope: ['public_profile', 'email', 'user_birthday']
-        // redirect_uri: 'http://localhost:3333/oauth/facebook'
       },
       google: {
-        client_id: '...'
+        // response_type: 'code', // Use auth code flow
+        client_id: '347826395880-9mu706am7qkpont74ecq0d9unr6k0q5u.apps.googleusercontent.com',
+        // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
+        // access_token_endpoint: 'http://localhost:4444/login/facebook',
+        userinfo_endpoint: 'http://localhost:4444/login/google'
+        // scope: ['public_profile', 'email', 'user_birthday']
       },
       local: {
         endpoints: {

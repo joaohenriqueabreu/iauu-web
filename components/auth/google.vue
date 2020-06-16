@@ -10,7 +10,7 @@ export default {
   },
   methods: {
     login() {
-      console.log('dude')
+      this.$auth.loginWith('google')
     }
   }
 }
