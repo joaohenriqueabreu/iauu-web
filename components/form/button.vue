@@ -6,7 +6,7 @@
         <slot></slot>
       </div>
       <div v-else key="submitted" class="button">
-        <font-awesome icon="check"></font-awesome>
+        <loading :active="true"></loading>
       </div>
     </fade-transition>
   </div>
@@ -35,6 +35,7 @@ export default {
       this.$emit('callback')
       await this.$utils.delay()
       this.submitting = false
+      await this.$utils.delay()
       this.submitted = true
     },
     reset() {

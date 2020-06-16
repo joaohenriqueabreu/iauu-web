@@ -26,8 +26,6 @@ export default {
     this.$refs.verify.open()
     try {
       await this.verify(this.$route.params.token)
-
-      // Need to append bearer for authorization
       this.$auth.setUserToken(this.accessToken)
 
       setTimeout(this.handleVerified, 3000)

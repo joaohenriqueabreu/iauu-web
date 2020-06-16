@@ -110,40 +110,38 @@ export default {
       quality: 75
     }
   },
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
   axios: {
     baseURL: process.env.NUXT_ENV_API_URL,
-    // proxy: true
-    // proxyHeaders: true
-    // validateStatus: true
     headers: {
       common: {
-        //     // 'Access-Control-Allow-Origin': 'http://localhost:3333',
         Origin: 'web'
       }
     }
-    // credentials: false
   },
-  // proxy: {
-  //   '/api/': process.env.NUXT_ENV_API_URL
-  // },
   auth: {
     scopeKey: 'role',
     strategies: {
+      facebook: {
+        client_id: '287912642575620',
+        userinfo_endpoint: { url: 'validate', method: 'post', propertyName: false },
+        // 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
+        scope: ['public_profile', 'email', 'user_birthday']
+        // redirect_uri: 'http://localhost:3333/oauth/facebook'
+      },
+      google: {
+        client_id: '...'
+      },
       local: {
         endpoints: {
           login: { url: 'login', method: 'post', propertyName: false },
           logout: { url: 'login', method: 'delete' },
           user: { url: 'validate', method: 'post', propertyName: false }
         }
-      },
-      tokenRequired: false,
-      tokenName: 'Authorization',
-      tokenType: 'bearer',
-      globalToken: true
+      }
+      // tokenRequired: false,
+      // tokenName: 'Authorization',
+      // tokenType: 'bearer',
+      // globalToken: true
     }
   },
   sentry: {

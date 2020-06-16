@@ -28,5 +28,9 @@ export const actions = {
   },
   forgotPassword({ commit }, email) {
     this.$axios.post('reset/forgot', { email })
+  },
+  async facebookLogin({ commit }, token) {
+    const { data } = await this.$axios.post('login/facebook', { token })
+    commit('set_token', data)
   }
 }

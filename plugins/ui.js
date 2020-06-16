@@ -18,6 +18,7 @@ import Logo from '@/components/layout/logo'
 import Modal from '@/components/layout/modal'
 import AlertMessage from '@/components/layout/alert'
 import Overlay from '@/components/layout/overlay'
+import Loading from '@/components/layout/loading'
 import StatsDonut from '@/components/layout/statsDonut'
 import MediaThumbnail from '@/components/media/thumbnail'
 import Rating from '@/components/artist/profile/rating'
@@ -56,6 +57,7 @@ Vue.component('logo', Logo)
 Vue.component('avatar', Avatar)
 Vue.component('toggle-button', ToggleButton)
 Vue.component('overlay', Overlay)
+Vue.component('loading', Loading)
 
 Vue.component('form-input', FormInput)
 Vue.component('form-numeric', FormNumeric)

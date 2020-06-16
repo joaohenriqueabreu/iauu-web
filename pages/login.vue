@@ -12,6 +12,9 @@
       </div>
       <div class="mb-5"></div>
       <form-button ref="login" @callback="login">Login</form-button>
+      <div class="mb-5"></div>
+      <facebook-login></facebook-login>
+      <google-login></google-login>
     </form>
     <modal ref="forgotPassword" height="tiny">
       <template v-slot:header>
@@ -43,8 +46,14 @@
 
 <script>
 import { mapActions } from 'vuex'
+import FacebookLogin from '@/components/auth/facebook'
+import GoogleLogin from '@/components/auth/google'
 export default {
   middleware: ['guest'],
+  components: {
+    'facebook-login': FacebookLogin,
+    'google-login': GoogleLogin
+  },
   data() {
     return {
       credentials: {

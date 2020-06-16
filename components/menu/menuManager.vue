@@ -29,7 +29,10 @@
         <div v-else class="mainmenu vertical">
           <div v-if="$auth.loggedIn" class="horizontal mt-2" @click="displaySubmenu = true">
             <overlay :rounded="true" :selected="displaySubmenu">
-              <avatar :src="$auth.user.photo.url" :username="$auth.user.name"></avatar>
+              <avatar
+                :src="$auth.user.photo ? $auth.user.photo.url : null"
+                :username="$auth.user.name"
+              ></avatar>
             </overlay>
           </div>
           <div v-if="!$auth.loggedIn" key="guest" class="guest">
