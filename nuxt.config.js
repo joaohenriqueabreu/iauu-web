@@ -126,7 +126,7 @@ export default {
         client_id: '287912642575620',
         // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
         // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        userinfo_endpoint: 'http://localhost:4444/login/facebook',
+        userinfo_endpoint: `${process.env.NUXT_ENV_API_URL}/login/facebook`,
         scope: ['public_profile', 'email', 'user_birthday']
       },
       google: {
@@ -134,7 +134,7 @@ export default {
         client_id: '347826395880-9mu706am7qkpont74ecq0d9unr6k0q5u.apps.googleusercontent.com',
         // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
         // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        userinfo_endpoint: 'http://localhost:4444/login/google'
+        userinfo_endpoint: `${process.env.NUXT_ENV_API_URL}/login/google`
         // scope: ['public_profile', 'email', 'user_birthday']
       },
       local: {
