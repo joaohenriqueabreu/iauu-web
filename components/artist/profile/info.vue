@@ -38,11 +38,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
       info: { type: Object, default: () => {} }
     }
+  },
+  computed: {
+    ...mapState({ artist: (state) => state.artist.artist })
+  },
+  created() {
+    this.info = this.artist || {}
   }
 }
 </script>

@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import SocialNetworks from '@/components/artist/profile/socialNetworks'
 import ArtistInfo from '@/components/artist/profile/info'
 import ArtistCategories from '@/components/artist/profile/categories'
@@ -82,8 +82,10 @@ export default {
     'artist-categories': ArtistCategories,
     'profile-stats': ProfileStats
   },
-  async asyncData({ $axios }) {
-    const { data } = await $axios.get('categories')
+  async asyncData({ app, store }) {
+    await store.dispatch('artist/loadArtist')
+    const { data } = await app.$axios.get('categories')
+
     return { categories: data }
   },
   data() {
@@ -99,6 +101,7 @@ export default {
     }
   },
   computed: {
+    ...mapState({ artist: (state) => state.artist.artist }),
     statsTab() {
       return this.activeTab === 'stats'
     },
@@ -113,9 +116,23 @@ export default {
     }
   },
   created() {
-    // TODO grab from user store
     this.form.backgroundUrl = this.$config.defaultBGImgUrl
     this.form.avatarUrl = this.$config.defaultAvatarImgUrl
+    if (!this.$utils.empty(this.artist.medias)) {
+      if (!this.$utils.empty(this.artist.medias.bg)) {
+        this.form.backgroundUrl = this.artist.medias.bg.url
+      }
+
+      if (!this.$utils.empty(this.artist.medias.photo)) {
+        this.form.avatarUrl = this.artist.medias.photo.url
+      }
+    }
+
+    if (!this.$utils.empty(this.artist.social)) {
+      this.form.social = this.artist.social
+    }
+
+    this.form.info = this.artist || {}
     this.activeTab = 'stats'
   },
   methods: {

@@ -9,7 +9,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern 'pages/incorporate/*' .",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern 'pages/incorporate/*' . --fix",
     "test": "jest"
   },
   "dependencies": {

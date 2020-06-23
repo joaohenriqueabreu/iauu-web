@@ -2,10 +2,14 @@ import Vue from 'vue'
 import Product from '@/models/product'
 
 export const state = () => ({
-  products: []
+  products: [],
+  artist: {}
 })
 
 export const mutations = {
+  set_artist(state, artistData) {
+    state.artist = { ...artistData }
+  },
   set_products(state, productsData) {
     state.products = []
     productsData.forEach((productData) => {
@@ -24,6 +28,10 @@ export const mutations = {
 }
 
 export const actions = {
+  async loadArtist({ commit }) {
+    const { data } = await this.$axios.get('artists/profile')
+    commit('set_artist', data)
+  },
   async loadProducts({ commit }, id) {
     const { data } = await this.$axios.get(`products/${id}`)
     commit('set_products', data)
