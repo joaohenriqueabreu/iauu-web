@@ -10,6 +10,17 @@ export const mutations = {
   set_artist(state, artistData) {
     state.artist = { ...artistData }
   },
+  update_profile(state, { prop, data }) {
+    const props = prop.split('.')
+    const field = props.pop()
+    let profile = state.artist
+
+    props.forEach((field) => {
+      profile = profile[field]
+    })
+
+    Vue.set(profile, field, data)
+  },
   set_products(state, productsData) {
     state.products = []
     productsData.forEach((productData) => {
@@ -30,6 +41,10 @@ export const mutations = {
 export const actions = {
   async loadArtist({ commit }) {
     const { data } = await this.$axios.get('artists/profile')
+    commit('set_artist', data)
+  },
+  async saveProfile({commit}, payload) {
+    const { data } = await this.$axios.put('artists/profile', payload)
     commit('set_artist', data)
   },
   async loadProducts({ commit }, id) {

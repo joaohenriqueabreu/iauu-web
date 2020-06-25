@@ -24,8 +24,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     script: [
       {
-        src:
-          'https://maps.googleapis.com/maps/api/js?key=AIzaSyDydTcmc4LkB3Yw2Rn6YUYgYbNF5j6ti5k&libraries=places'
+        src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`
       }
     ]
   },
@@ -111,7 +110,7 @@ export default {
     }
   },
   axios: {
-    baseURL: process.env.NUXT_ENV_API_URL,
+    baseURL: process.env.API_URL,
     headers: {
       common: {
         Origin: 'web'
@@ -151,7 +150,7 @@ export default {
     }
   },
   sentry: {
-    dsn: 'https://8ef7b2ffff514abc800bcb8685bc5387@o60001.ingest.sentry.io/5250856',
+    dsn: process.env.SENTRY_DSN,
     config: {}
   },
   toast: {

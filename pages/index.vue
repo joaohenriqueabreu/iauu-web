@@ -2,7 +2,7 @@
   <div>
     <div class="section main"></div>
     <div class="section search">
-      <h1>Supimpe seu evento</h1>
+      <h1>Aperte o play do seu evento</h1>
       <div class="half-width vertical middle center">
         <client-only>
           <form-input

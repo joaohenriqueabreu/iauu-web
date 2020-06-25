@@ -2,15 +2,12 @@
   <div>
     <form>
       <image-uploader ref="bgUploader" @uploaded="setBackground">
-        <header :style="{ 'background-image': `url(${form.backgroundUrl})` }" @click="uploadBG">
-          <input v-model="form.backgroundUrl" type="hidden" />
-        </header>
+        <header :style="{ 'background-image': `url(${backgroundImg})` }" @click="uploadBG"></header>
       </image-uploader>
       <main>
         <div class="logo">
           <image-uploader ref="avatarUploader" :rounded="true" @uploaded="setAvatar">
-            <avatar :src="form.avatarUrl" :size="150" @click="uploadAvatar"></avatar>
-            <input v-model="form.avatarUrl" type="hidden" />
+            <avatar :src="avatarImg" :size="150" @click="uploadAvatar"></avatar>
           </image-uploader>
         </div>
         <div class="pt-5"></div>
@@ -70,7 +67,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import SocialNetworks from '@/components/artist/profile/socialNetworks'
 import ArtistInfo from '@/components/artist/profile/info'
 import ArtistCategories from '@/components/artist/profile/categories'
@@ -82,22 +79,19 @@ export default {
     'artist-categories': ArtistCategories,
     'profile-stats': ProfileStats
   },
-  async asyncData({ app, store }) {
-    await store.dispatch('artist/loadArtist')
-    const { data } = await app.$axios.get('categories')
-
-    return { categories: data }
+  async asyncData({ app, store, error, $sentry }) {
+    try {
+      await store.dispatch('artist/loadArtist')
+      const { data } = await app.$axios.get('categories')
+      return { categories: data }
+    } catch (e) {
+      $sentry.captureException(e)
+      error({ statusCode: 404, message: 'Perfil não encontrado' })
+    }
   },
   data() {
     return {
-      activeTab: { type: String, default: 'stats' },
-      form: {
-        backgroundUrl: { type: String, default: '' },
-        avatarUrl: { type: String, default: '' },
-        social: { type: Object, default: () => {} },
-        category: { type: Object, default: () => {} },
-        info: { type: Object, default: () => {} }
-      }
+      activeTab: { type: String, default: 'stats' }
     }
   },
   computed: {
@@ -113,30 +107,26 @@ export default {
     },
     categoriesTab() {
       return this.activeTab === 'categories'
+    },
+    backgroundImg() {
+      return !this.$utils.empty(this.artist.media.bg)
+        ? this.artist.media.bg
+        : this.$config.defaultBGImgUrl
+    },
+    avatarImg() {
+      return !this.$utils.empty(this.artist.media.photo)
+        ? this.artist.media.photo
+        : this.$config.defaultAvatarImgUrl
     }
   },
   created() {
-    this.form.backgroundUrl = this.$config.defaultBGImgUrl
-    this.form.avatarUrl = this.$config.defaultAvatarImgUrl
-    if (!this.$utils.empty(this.artist.medias)) {
-      if (!this.$utils.empty(this.artist.medias.bg)) {
-        this.form.backgroundUrl = this.artist.medias.bg.url
-      }
-
-      if (!this.$utils.empty(this.artist.medias.photo)) {
-        this.form.avatarUrl = this.artist.medias.photo.url
-      }
-    }
-
-    if (!this.$utils.empty(this.artist.social)) {
-      this.form.social = this.artist.social
-    }
-
-    this.form.info = this.artist || {}
+    this.profile = this.$object.clone(this.artist)
     this.activeTab = 'stats'
   },
   methods: {
     ...mapActions('app', ['setAlert']),
+    ...mapActions('artist', ['saveProfile']),
+    ...mapMutations('artist', { updateProfile: 'update_profile' }),
 
     uploadBG() {
       this.$refs.bgUploader.upload()
@@ -144,14 +134,14 @@ export default {
     uploadAvatar() {
       this.$refs.avatarUploader.upload()
     },
-    setBackground({ url }) {
-      this.form.backgroundUrl = url
-    },
-    setAvatar({ url }) {
-      this.form.avatarUrl = url
-    },
     categorySelect(category) {
       alert(category)
+    },
+    setBackground({ url }) {
+      this.saveProfile({ prop: 'media.bg', data: url })
+    },
+    setAvatar({ url }) {
+      this.saveProfile({ prop: 'media.photo', data: url })
     }
   }
 }
