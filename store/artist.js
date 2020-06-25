@@ -43,9 +43,10 @@ export const actions = {
     const { data } = await this.$axios.get('artists/profile')
     commit('set_artist', data)
   },
-  async saveProfile({commit}, payload) {
-    const { data } = await this.$axios.put('artists/profile', payload)
-    commit('set_artist', data)
+  async saveProfile({ commit, state }, payload) {
+    commit('update_profile', payload)
+    await this.$axios.put('artists/profile', { profile: state.artist })
+    this.$toast.success('Artista atualizado com sucesso')
   },
   async loadProducts({ commit }, id) {
     const { data } = await this.$axios.get(`products/${id}`)
