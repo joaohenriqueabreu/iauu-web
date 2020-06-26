@@ -24,19 +24,16 @@ export default {
     }
   },
   methods: {
-    async submit() {
+    submit() {
       // Prevent submit when disable or while submitting
       if (this.disabled || this.submitting) {
         return
       }
 
       this.submitting = true
-      await this.$utils.delay()
-      this.$emit('callback')
-      await this.$utils.delay()
-      this.submitting = false
-      await this.$utils.delay()
+      this.$emit('action')
       this.submitted = true
+      setTimeout(this.reset, 3000)
     },
     reset() {
       this.submitted = false

@@ -2,7 +2,7 @@ import Model from './model'
 
 const PLACES_MAPPING = {
   street_number: 'number',
-  route: 'address',
+  route: 'street',
   sublocality_level_1: 'neighboorhood',
   administrative_area_level_2: 'city',
   administrative_area_level_1: 'state',
@@ -10,13 +10,14 @@ const PLACES_MAPPING = {
   postal_code: 'zipcode'
 }
 
-const DONT_SHOW_PROPS = ['id', 'zipcode', 'address_complemet', 'coordinates', 'formatted']
+const DONT_SHOW_PROPS = ['id', '_id', 'zipcode', 'address_complemet', 'coordinates', 'formatted']
 
 export default class Location extends Model {
   constructor(locationData) {
     super()
-    this.address = ''
-    this.address_complement = ''
+    delete this.id
+    this.street = ''
+    this.street_complement = ''
     this.number = ''
     this.neighboorhood = ''
     this.city = ''
@@ -67,6 +68,6 @@ export default class Location extends Model {
       }
     }
 
-    return addressDisplay.join()
+    return addressDisplay.join(', ')
   }
 }

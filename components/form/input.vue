@@ -8,10 +8,10 @@
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
-        @input="$emit('input', $event.target.value)"
-        @keyup.enter="$emit('enter', value)"
+        @input="emitInput"
+        @keyup.enter.prevent="emitEnter"
       />
-      <font-awesome v-if="icon" :icon="icon"></font-awesome>
+      <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
     </div>
   </div>
 </template>
@@ -29,19 +29,52 @@ export default {
     }
   },
   props: {
-    value: { type: [String, Number, Boolean], default: null },
+    default: { type: [String, Number, Boolean], default: null },
+    model: { type: Object, default: () => {} },
+    prop: { type: String, default: '' },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
     placeholder: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
-    iconHelper: { type: String, default: null }
+    icon: { type: String, default: null }
+  },
+  data() {
+    return {
+      value: { type: [String, Number, Boolean], default: null }
+    }
   },
   computed: {
     type() {
       return 'text'
     },
-    icon() {
-      return !this.$utils.empty(this.iconHelper) ? this.iconHelper : 'search'
+    iconHelper() {
+      return !this.$utils.empty(this.icon) ? this.icon : 'search'
+    }
+  },
+  mounted() {
+    if (!this.$utils.empty(this.model)) {
+      this.value = this.model[this.prop]
+      return
+    }
+
+    if (!this.$utils.empty(this.default)) {
+      this.value = this.default
+      return
+    }
+
+    this.value = ''
+  },
+  methods: {
+    emitInput(event) {
+      this.$emit('input', this.getData())
+    },
+    emitEnter(event) {
+      this.$emit('enter', this.getData())
+    },
+    getData() {
+      return !this.$utils.empty(this.model)
+        ? { prop: this.prop, data: event.target.value }
+        : event.target.value
     }
   }
 }
@@ -50,6 +83,7 @@ export default {
 <style lang="scss">
 .form-input {
   position: relative;
+  width: 100%;
 
   [data-icon] {
     position: absolute;

@@ -13,7 +13,7 @@
           >{{ option.display }}
         </option>
       </select>
-      <font-awesome :icon="icon"></font-awesome>
+      <font-awesome :icon="iconHelper"></font-awesome>
     </div>
   </div>
 </template>
@@ -35,8 +35,8 @@ export default {
     hideSelected: { type: Boolean, default: false }
   },
   computed: {
-    icon() {
-      return !this.$utils.empty(this.iconHelper) ? this.iconHelper : 'arrow-down'
+    iconHelper() {
+      return !this.$utils.empty(this.icon) ? this.icon : 'arrow-down'
     },
     settings() {
       const self = this

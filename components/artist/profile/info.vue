@@ -1,44 +1,58 @@
 <template>
   <div class="">
     <form-input
-      v-model="info.name"
       class="mb-3"
+      icon="signature"
       label="Nome fantasia"
       placeholder="Seu nome incrível vem aqui"
+      :model="artist"
+      prop="company_name"
+      @input="updateProfile"
     ></form-input>
     <form-textarea
-      v-model="info.description"
       class="mb-3"
       label="História"
       :rows="5"
-      placeholder="Conta um pouquinho da sua história para seus clientes"
+      placeholder="Conte um pouquinho da sua história para seus clientes"
+      :model="artist"
+      prop="story"
+      @input="updateProfile"
     ></form-textarea>
     <hr />
     <div class="row">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">
-        <form-numeric
-          v-model="info.cnpj"
-          label="CNPJ"
-          class="mb-3  horizontal center middle"
-        ></form-numeric>
+        <form-masked
+          icon="id-card"
+          placeholder="CPF/CNPJ"
+          mask="document"
+          :model="artist"
+          prop="document"
+          @input="updateProfile"
+        ></form-masked>
         <form-location
-          v-model="info.location"
-          label="Endereço"
-          class="mb-3 horizontal center middle"
+          :default="artist.address"
+          street
+          placeholder="Endereço"
+          :model="artist"
+          prop="address"
+          @selected="updateProfile"
         ></form-location>
-        <form-numeric
-          v-model="info.phone"
-          label="Telefone"
-          class="mb-3  horizontal center middle"
-        ></form-numeric>
+        <form-masked
+          icon="phone"
+          placeholder="Telefone"
+          mask="phone"
+          :model="artist"
+          prop="phone"
+          @input="updateProfile"
+        ></form-masked>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -50,6 +64,9 @@ export default {
   },
   created() {
     this.info = this.artist || {}
+  },
+  methods: {
+    ...mapMutations('artist', { updateProfile: 'update_profile' })
   }
 }
 </script>

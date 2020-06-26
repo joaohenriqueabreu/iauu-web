@@ -12,7 +12,7 @@
         <form-select
           :allow-input="false"
           class="col-sm-2"
-          icon-helper="sort-alpha-down"
+          icon="sort-alpha-down"
           placeholder="Ordenar por"
           :options="['Relevância', 'Núm de Apresentações', 'Avaliação']"
         ></form-select>

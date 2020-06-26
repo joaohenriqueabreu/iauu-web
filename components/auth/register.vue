@@ -3,11 +3,7 @@
     <div class="bg" :class="[role]"></div>
     <form>
       <h5>Cadastre já!</h5>
-      <form-input
-        v-model="credentials.name"
-        placeholder="Nome completo"
-        icon-helper="user"
-      ></form-input>
+      <form-input v-model="credentials.name" placeholder="Nome completo" icon="user"></form-input>
       <form-email v-model="credentials.email" placeholder="Entre com seu email"></form-email>
       <form-password
         v-model="credentials.password"
@@ -18,7 +14,7 @@
         placeholder="Confirme sua senha"
       ></form-password>
       <div class="mb-5"></div>
-      <form-button @callback="signup">Cadastrar</form-button>
+      <form-button @action="signup">Cadastrar</form-button>
     </form>
   </div>
 </template>

@@ -60,7 +60,11 @@ import {
   faTimesCircle,
   faCalendarTimes,
   faDownload,
-  faBug
+  faBug,
+  faIdCard,
+  faSignature,
+  faMobileAlt,
+  faThumbsUp
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
@@ -160,7 +164,11 @@ library.add(
   faTimesCircle,
   faCalendarTimes,
   faDownload,
-  faBug
+  faBug,
+  faIdCard,
+  faSignature,
+  faMobileAlt,
+  faThumbsUp
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

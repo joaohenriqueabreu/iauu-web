@@ -9,7 +9,7 @@
           cancelar a apresentação e renegociar com seu cliente os novos termos do produto
         </p>
         <div class="horizontal center middle">
-          <form-button class="mr-4" @callback="remove(selectedProductId)"
+          <form-button class="mr-4" @action="remove(selectedProductId)"
             >Ok, remover produto</form-button
           >
           <span class="clickable" @click="$refs.confirm.close()">Não remover</span>

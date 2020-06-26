@@ -43,7 +43,7 @@
       <template v-if="!readOnly" v-slot:footer>
         <div class="horizontal center middle full-height">
           <div class="mr-5">
-            <form-button @callback="confirm">
+            <form-button @action="confirm">
               Confirmar Realização
             </form-button>
           </div>

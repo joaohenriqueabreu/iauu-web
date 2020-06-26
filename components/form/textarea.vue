@@ -7,7 +7,7 @@
       :name="name"
       :placeholder="placeholder"
       :disabled="disabled"
-      @input="$emit('input', $event.target.value)"
+      @input="emitInput"
       @keyup.enter="$emit('enter', value)"
     ></textarea>
   </div>
@@ -22,5 +22,3 @@ export default {
   }
 }
 </script>
-
-<style></style>

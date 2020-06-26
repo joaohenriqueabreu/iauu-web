@@ -1,3 +1,4 @@
+import Model from './model'
 import User from './user'
 import Artist from './artist'
 import Product from './product'
@@ -9,6 +10,7 @@ import Schedule from './schedule'
 import Timeslot from './timeslot'
 
 export default {
+  Model,
   User,
   Artist,
   Product,

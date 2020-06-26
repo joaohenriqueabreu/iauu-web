@@ -1,7 +1,16 @@
 <template>
   <div>
     <div v-if="avatar && !simple">
-      <avatar :size="50" :src="networkIcon" class="mr-4"></avatar>
+      <overlay :rounded="true">
+        <template v-slot:default>
+          <avatar :size="50" :src="networkIcon"></avatar>
+        </template>
+        <template v-if="removable" v-slot:hover>
+          <div class="vertical middle center pl-3" @click="$emit('remove')">
+            <font-awesome icon="times"></font-awesome>
+          </div>
+        </template>
+      </overlay>
     </div>
     <div v-if="simple && !avatar" class="simple-container d-flex justify-content-between">
       <div class="horizontal middle">
@@ -71,6 +80,10 @@ export default {
 
       if (this.media.url.includes(this.$config.vimeoSubstringMatch)) {
         return require('@/assets/imgs/social/vimeo.png')
+      }
+
+      if (this.media.url.includes(this.$config.facebookSubstringMatch)) {
+        return require('@/assets/imgs/social/facebook.png')
       }
 
       return require('@/assets/imgs/music.png')

@@ -4,7 +4,7 @@
       <form-input
         v-model="title"
         class="mb-2"
-        icon-helper="child"
+        icon="child"
         placeholder="Título do seu evento"
       ></form-input>
       <form-location
@@ -32,7 +32,7 @@
         </fade-transition>
       </div>
       <fade-transition>
-        <form-button v-show="validForm" @callback="$emit('next')">Avançar</form-button>
+        <form-button v-show="validForm" @action="$emit('next')">Avançar</form-button>
       </fade-transition>
     </div>
   </div>

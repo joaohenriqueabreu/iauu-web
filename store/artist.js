@@ -11,6 +11,10 @@ export const mutations = {
     state.artist = { ...artistData }
   },
   update_profile(state, { prop, data }) {
+    if (prop === undefined) {
+      return
+    }
+
     const props = prop.split('.')
     const field = props.pop()
     let profile = state.artist
@@ -44,7 +48,10 @@ export const actions = {
     commit('set_artist', data)
   },
   async saveProfile({ commit, state }, payload) {
-    commit('update_profile', payload)
+    if (payload !== undefined) {
+      commit('update_profile', payload)
+    }
+
     await this.$axios.put('artists/profile', { profile: state.artist })
     this.$toast.success('Artista atualizado com sucesso')
   },

@@ -13,7 +13,7 @@
         class="half-width"
       ></form-password>
       <div class="mb-4"></div>
-      <form-button @callback="reset">Alterar senha</form-button>
+      <form-button @action="reset">Alterar senha</form-button>
     </main>
   </client-only>
 </template>

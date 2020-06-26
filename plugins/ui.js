@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Carousel from 'vue-carousel'
 import Avatar from 'vue-avatar'
 import Vuelidate from 'vuelidate'
-import VueMask from 'v-mask'
+import VueTheMask from 'vue-the-mask'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import { FadeTransition, SlideYDownTransition } from 'vue2-transitions'
@@ -27,6 +27,7 @@ import FormInput from '@/components/form/input'
 import FormNumeric from '@/components/form/numeric'
 import FormPassword from '@/components/form/password'
 import FormEmail from '@/components/form/email'
+import FormMasked from '@/components/form/masked'
 import FormMoney from '@/components/form/money'
 import FormTime from '@/components/form/time'
 import FormRange from '@/components/form/range'
@@ -47,11 +48,11 @@ moment.locale('pt-br')
 Vue.use(Carousel)
 Vue.use(Modal)
 Vue.use(Vuelidate)
-Vue.use(VueMask)
 Vue.use(VueSmoothScroll)
 Vue.use(PerfectScrollbar)
 Vue.use(VueSweetalert2)
 Vue.use(VueModal, { componentName: 'v-modal' })
+Vue.use(VueTheMask)
 
 Vue.component('logo', Logo)
 Vue.component('avatar', Avatar)
@@ -64,6 +65,7 @@ Vue.component('form-numeric', FormNumeric)
 Vue.component('form-password', FormPassword)
 Vue.component('form-textarea', FormTextarea)
 Vue.component('form-email', FormEmail)
+Vue.component('form-masked', FormMasked)
 Vue.component('form-time', FormTime)
 Vue.component('form-date', FormDate)
 Vue.component('form-money', FormMoney)

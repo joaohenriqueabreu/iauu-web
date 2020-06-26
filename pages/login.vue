@@ -11,7 +11,7 @@
         <span>Esqueceu sua senha?</span>
       </div>
       <div class="mb-5"></div>
-      <form-button ref="login" @callback="login">Login</form-button>
+      <form-button ref="login" @action="login">Login</form-button>
       <div class="mb-5"></div>
       <facebook-login></facebook-login>
       <google-login></google-login>
@@ -33,9 +33,7 @@
       </template>
       <template v-slot:footer>
         <div class="half-width">
-          <form-button
-            :disabled="$utils.empty(forgotPasswordForEmail)"
-            @callback="sendForgotPassword"
+          <form-button :disabled="$utils.empty(forgotPasswordForEmail)" @action="sendForgotPassword"
             >Enviar</form-button
           >
         </div>

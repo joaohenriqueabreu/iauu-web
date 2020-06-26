@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form>
+    <form @submit.prevent="saveProfile">
       <image-uploader ref="bgUploader" @uploaded="setBackground">
         <header :style="{ 'background-image': `url(${backgroundImg})` }" @click="uploadBG"></header>
       </image-uploader>
@@ -14,27 +14,28 @@
         <div class="boxed">
           <ul class="nav nav-tabs mt-4">
             <li class="nav-link first">
-              <a class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'"
-                >Stats</a
-              >
+              <a class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'">
+                Stats
+              </a>
             </li>
             <li class="nav-link">
-              <a class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'"
-                >Informações</a
-              >
+              <a class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'">
+                Informações
+              </a>
             </li>
             <li class="nav-link">
-              <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'"
-                >Redes Sociais</a
-              >
+              <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'">
+                Redes Sociais
+              </a>
             </li>
             <li class="nav-link">
               <a
                 class="nav-link"
                 :class="{ active: categoriesTab }"
                 @click="activeTab = 'categories'"
-                >Categorias</a
               >
+                Categorias
+              </a>
             </li>
           </ul>
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
@@ -59,7 +60,7 @@
       </main>
       <footer>
         <div class="half-width">
-          <form-button>Salvar</form-button>
+          <form-button @action="saveProfile">Salvar</form-button>
         </div>
       </footer>
     </form>
@@ -68,7 +69,7 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
-import SocialNetworks from '@/components/artist/profile/socialNetworks'
+import SocialNetworks from '@/components/artist/profile/social'
 import ArtistInfo from '@/components/artist/profile/info'
 import ArtistCategories from '@/components/artist/profile/categories'
 import ProfileStats from '@/components/artist/profile/stats'

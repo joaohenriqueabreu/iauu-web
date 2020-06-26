@@ -58,7 +58,7 @@ export default {
     )
 
     if (!this.$utils.empty(this.default)) {
-      this.selectedPlace = this.default
+      this.selectedPlace = new Location(this.default)
     }
   },
   methods: {
