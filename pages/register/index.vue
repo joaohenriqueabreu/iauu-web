@@ -1,29 +1,39 @@
 <template>
-  <div class="login">
-    <div class="bg" :class="[role]"></div>
-    <form>
-      <h5>Cadastre já!</h5>
-      <form-input v-model="credentials.name" placeholder="Nome completo" icon="user"></form-input>
-      <form-email v-model="credentials.email" placeholder="Entre com seu email"></form-email>
-      <form-password
-        v-model="credentials.password"
-        placeholder="Crie uma senha para acessar a plataforma"
-      ></form-password>
-      <form-password
-        v-model="credentials.passwordConfirmation"
-        placeholder="Confirme sua senha"
-      ></form-password>
-      <div class="mb-5"></div>
-      <form-button @action="signup">Cadastrar</form-button>
-    </form>
+  <div>
+    <div class="login">
+      <div class="bg"></div>
+      <form>
+        <h5>Cadastre já!</h5>
+        <form-input v-model="credentials.name" placeholder="Nome completo" icon="user"></form-input>
+        <form-email v-model="credentials.email" placeholder="Entre com seu email"></form-email>
+        <form-password
+          v-model="credentials.password"
+          placeholder="Crie uma senha para acessar a plataforma"
+        ></form-password>
+        <form-password
+          v-model="credentials.passwordConfirmation"
+          placeholder="Confirme sua senha"
+        ></form-password>
+        <div v-if="error" class="mt-2 error">
+          Problemas ao registrar sua conta
+        </div>
+        <div class="mb-4"></div>
+        <form-button class="mb-4" @action="signup">Cadastrar</form-button>
+        <facebook-login></facebook-login>
+        <google-login></google-login>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import FacebookLogin from '@/components/auth/facebook'
+import GoogleLogin from '@/components/auth/google'
 export default {
-  props: {
-    role: { type: String, default: '' }
+  components: {
+    'facebook-login': FacebookLogin,
+    'google-login': GoogleLogin
   },
   data() {
     return {
@@ -31,21 +41,20 @@ export default {
         email: '',
         password: '',
         name: ''
-      }
+      },
+      error: null
     }
-  },
-  mounted() {
-    this.credentials.role = this.role
   },
   methods: {
     ...mapActions('protected', ['register']),
     async signup() {
+      this.$auth.setToken('local', null)
       try {
         await this.register(this.credentials)
         this.$router.push('/register/verify')
       } catch (error) {
-        // Display errors on fields
-        console.log(error)
+        this.$sentry.captureException(error)
+        this.error = error
       }
     }
   }

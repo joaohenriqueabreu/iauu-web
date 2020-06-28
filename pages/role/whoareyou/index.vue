@@ -1,9 +1,9 @@
 <template>
   <div class="signup">
-    <div class="user artist" @click="$router.push('/register/artist')">
+    <div class="user artist" @click="$router.push('/role/artist')">
       <h3>Sou um artista e quero receber contatos para shows</h3>
     </div>
-    <div class="user contractor" @click="$router.push('/register/contractor')">
+    <div class="user contractor" @click="$router.push('/role/contractor')">
       <h3>Sou um produtor ou estou organizando um evento e quero contratar artistas</h3>
     </div>
   </div>

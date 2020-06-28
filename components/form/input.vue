@@ -9,6 +9,7 @@
         :placeholder="placeholder"
         :disabled="disabled"
         @input="emitInput"
+        @blur="emitBlur"
         @keyup.enter.prevent="emitEnter"
       />
       <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
@@ -66,12 +67,15 @@ export default {
   },
   methods: {
     emitInput(event) {
-      this.$emit('input', this.getData())
+      this.$emit('input', this.getData(event))
     },
     emitEnter(event) {
-      this.$emit('enter', this.getData())
+      this.$emit('enter', this.getData(event))
     },
-    getData() {
+    emitBlur(event) {
+      this.$emit('blur', this.getData(event))
+    },
+    getData(event) {
       return !this.$utils.empty(this.model)
         ? { prop: this.prop, data: event.target.value }
         : event.target.value

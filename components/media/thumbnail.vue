@@ -62,31 +62,40 @@ export default {
   },
   computed: {
     networkIcon() {
-      if (this.media.url.includes(this.$config.youtubeSubstringMatch)) {
+      if (this.isSocialMatch(this.media.url, this.$config.youtubeSubstringMatch)) {
         return require('@/assets/imgs/social/youtube.png')
       }
 
-      if (this.media.url.includes(this.$config.tiktokSubstringMatch)) {
+      if (this.isSocialMatch(this.media.url, this.$config.tiktokSubstringMatch)) {
         return require('@/assets/imgs/social/tiktok.png')
       }
 
-      if (this.media.url.includes(this.$config.spotifySubstringMatch)) {
+      if (this.isSocialMatch(this.media.url, this.$config.spotifySubstringMatch)) {
         return require('@/assets/imgs/social/spotify.png')
       }
 
-      if (this.media.url.includes(this.$config.instagramSubstringMatch)) {
+      if (this.isSocialMatch(this.media.url, this.$config.instagramSubstringMatch)) {
         return require('@/assets/imgs/social/instagram.png')
       }
 
-      if (this.media.url.includes(this.$config.vimeoSubstringMatch)) {
+      if (this.isSocialMatch(this.media.url, this.$config.vimeoSubstringMatch)) {
         return require('@/assets/imgs/social/vimeo.png')
       }
 
-      if (this.media.url.includes(this.$config.facebookSubstringMatch)) {
+      if (this.isSocialMatch(this.media.url, this.$config.facebookSubstringMatch)) {
         return require('@/assets/imgs/social/facebook.png')
       }
 
       return require('@/assets/imgs/music.png')
+    }
+  },
+  methods: {
+    isSocialMatch(url, matches) {
+      const hasMatch = matches.filter((match) => {
+        return url.includes(match)
+      })
+
+      return hasMatch.length > 0
     }
   }
 }

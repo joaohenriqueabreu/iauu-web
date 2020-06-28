@@ -5,13 +5,8 @@
       <h1>Aperte o play do seu evento</h1>
       <div class="half-width vertical middle center">
         <client-only>
-          <form-input
-            v-model="term"
-            class="funny"
-            :placeholder="placeholder"
-            @enter="search"
-          ></form-input>
-          <nuxt-link ref="searchLink" :to="searchUrl">Vamos lá!</nuxt-link>
+          <search-artist @seach="search"></search-artist>
+          <nuxt-link ref="searchLink" to="/search">Vamos lá!</nuxt-link>
         </client-only>
       </div>
     </div>
@@ -36,63 +31,26 @@
 
 <script>
 import { mapActions } from 'vuex'
+import SearchArtist from '@/components/artist/searchInput'
 export default {
-  data() {
-    return {
-      placeholderInterval: null,
-      content: [
-        'Qual o nome daquela banda que começa com J?',
-        'Quero uma banda de forro porreta',
-        'Rock das antigas',
-        'Um standup bem engraçado'
-      ],
-      placeholder: '',
-      term: ''
-    }
-  },
-  computed: {
-    searchUrl() {
-      // return `/search?q=${encodeURI(this.term)}`
-      return 'search'
-    }
-  },
-  watch: {
-    term() {
-      clearInterval(this.placeholderInterval)
-      this.placeholder = 'Encontre os melhores artistas para seu evento'
-    }
+  components: {
+    'search-artist': SearchArtist
   },
   mounted() {
-    let length = 5
-    let index = 0
-    let hold = 10
-    const self = this
-    self.placeholderInterval = setInterval(() => {
-      length++
-      // reached end of phrase
-      if (length >= self.content[index].length) {
-        // hold a bit so user can read phrase
-        if (hold === 0) {
-          // reset length
-          hold = 10
-          length = 5
-          if (index === 3) {
-            index = 0
-          } else {
-            index++
-          }
-        } else {
-          hold--
-        }
-      }
-      self.placeholder = self.content[index].substring(0, length)
-    }, 100)
+    if (
+      this.$auth.loggedIn &&
+      !this.$auth.hasScope('artist') &&
+      !this.$auth.hasScope('contractor') &&
+      !this.$auth.hasScope('admin')
+    ) {
+      this.$router.push('/role/whoareyou')
+    }
   },
   methods: {
     ...mapActions('app', ['setSearchFilters']),
-    search() {
-      this.setSearchFilters({ term: this.term })
-      this.$router.push(this.searchUrl)
+    search(term) {
+      this.setSearchFilters({ term })
+      this.$router.push('/search')
     }
   }
 }
@@ -131,12 +89,6 @@ export default {
   &.odd {
     @extend .vertical, .middle, .center;
     background: linear-gradient(180deg, $layer1 33%, $layer2 66%, $layer3 100%);
-  }
-
-  .funny {
-    min-width: 35vw;
-    margin-right: 2 * $space;
-    margin-bottom: 4 * $space;
   }
 
   a {

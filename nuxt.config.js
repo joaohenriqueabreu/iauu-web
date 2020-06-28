@@ -4,7 +4,7 @@ export default {
   mode: 'universal',
   // mode: 'spa',
   env: {
-    baseURL: process.env.BASE_URL,
+    // baseURL: process.env.BASE_URL,
     fileStackApiKey: process.env.FILESTACK_API_KEY
   },
   /*
@@ -75,6 +75,8 @@ export default {
     { src: '@/plugins/html2canvas', mode: 'client' }
     // { src: '@/plugins/full-calendar', ssr: false }
   ],
+  // serverMiddleware: [{ path: 'api/v1', handler: '@/plugins/proxy.js' }],
+
   /*
    ** Nuxt.js dev-modules
    */
@@ -92,7 +94,7 @@ export default {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    // '@nuxtjs/proxy',
+    '@nuxtjs/proxy',
     '@nuxtjs/auth',
     '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
@@ -110,12 +112,11 @@ export default {
     }
   },
   axios: {
-    baseURL: process.env.API_URL,
-    headers: {
-      common: {
-        Origin: 'web'
-      }
-    }
+    // baseURL: process.env.API_URL,
+    baseURL: '/api/v1/',    
+  },
+  proxy: {
+    '/api/v1': process.env.API_URL
   },
   auth: {
     scopeKey: 'role',
@@ -125,7 +126,8 @@ export default {
         client_id: '287912642575620',
         // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
         // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        userinfo_endpoint: `${process.env.API_URL}/login/facebook`,
+        // userinfo_endpoint: `${process.env.API_URL}/login/facebook`,
+        userinfo_endpoint: '/login/facebook',
         scope: ['public_profile', 'email', 'user_birthday']
       },
       google: {
@@ -133,7 +135,8 @@ export default {
         client_id: '347826395880-9mu706am7qkpont74ecq0d9unr6k0q5u.apps.googleusercontent.com',
         // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
         // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        userinfo_endpoint: `${process.env.API_URL}/login/google`
+        // userinfo_endpoint: `${process.env.API_URL}/login/google`,
+        userinfo_endpoint: '/login/google'
         // scope: ['public_profile', 'email', 'user_birthday']
       },
       local: {

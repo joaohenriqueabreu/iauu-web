@@ -2,7 +2,7 @@
   <div class="error">
     <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
     <div class="content">
-      <h1 class="mb-5">Que meR$#%@!</h1>
+      <h1 class="mb-5">Vish...</h1>
       <h5 class="mb-3 horizontal middle center">
         Parece que a corda da guitarra estourou
         <font-awesome icon="frown" class="ml-2 mb-0"></font-awesome>

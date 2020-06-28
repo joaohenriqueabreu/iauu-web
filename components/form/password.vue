@@ -6,7 +6,7 @@ export default {
     type() {
       return 'password'
     },
-    icon() {
+    iconHelper() {
       return 'lock'
     }
   }

@@ -4,7 +4,7 @@
       <h6 class="mb-4">Qual tipo de apresentação sua empresa realiza?</h6>
     </div>
     <fade-transition mode="out-in">
-      <div v-show="!selectedCategory" class="horizontal center middle">
+      <div v-show="$utils.empty(artist.category.name)" class="horizontal center middle">
         <div
           v-for="(category, index) in categories"
           :key="index"
@@ -14,25 +14,25 @@
           <h6>
             {{ category.name }}
           </h6>
-          <overlay :selected="isCategorySelected(category.id)">
+          <overlay :selected="isCategorySelected(category.name)">
             <avatar :src="categoryImg(category.name)" :size="70" />
           </overlay>
         </div>
       </div>
     </fade-transition>
     <fade-transition mode="out-in">
-      <div v-show="selectedCategory" class="vertical center middle mb-4">
+      <div v-show="!$utils.empty(artist.category.name)" class="vertical center middle mb-4">
         <overlay :rounded="true">
-          <avatar :src="categoryImg(selectedCategory)" :size="70" />
+          <avatar :src="categoryImg(artist.category.name)" :size="70" />
         </overlay>
         <div class="mb-2"></div>
         <div class="horizontal center middle">
-          <h6 class="mr-2">{{ selectedCategory }}</h6>
+          <h6 class="mr-2">{{ artist.category.name }}</h6>
           <small @click="changeCategory">Trocar</small>
         </div>
       </div>
     </fade-transition>
-    <div v-show="!$utils.empty(selectedCategory)" class="subcategory-select">
+    <div v-show="!$utils.empty(artist.category.name)" class="subcategory-select">
       <h6></h6>
       <form-select
         :options="subCategoryOptions"
@@ -45,7 +45,7 @@
     <div class="mb-4"></div>
     <div class="subcategory-tags">
       <span
-        v-for="(subcategory, index) in selectedSubcategories"
+        v-for="(subcategory, index) in artist.category.subcategories"
         :key="index"
         @click="removeSubcategory(subcategory)"
       >
@@ -57,27 +57,28 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
     categories: { type: Array, default: () => {} }
   },
   data() {
     return {
-      selectedCategory: 0,
-      selectedSubcategories: [],
       subCategories: { type: Object, default: () => {} }
     }
   },
   computed: {
+    ...mapState({ artist: (state) => state.artist.artist }),
     subCategoryOptions() {
       return this.$collection.map(this.subCategories, (subcategory) => subcategory.name)
     }
   },
   methods: {
+    ...mapMutations('artist', { updateProfile: 'update_profile' }),
     async getSubcategories(category) {
-      this.selectedCategory = category.name
+      this.updateProfile({ prop: 'category.name', data: category.name })
       const { data } = await this.$axios.get(
-        `categories/${encodeURI(this.selectedCategory)}/subcategories`
+        `categories/${encodeURI(this.artist.category.name)}/subcategories`
       )
 
       this.subCategories = data
@@ -89,21 +90,26 @@ export default {
         return require('@/assets/imgs/concert.png')
       }
     },
-    isCategorySelected(selectedCategory) {
-      return selectedCategory === this.selectedCategory
-    },
-    addSubcategory(subcategory) {
-      if (!this.$collection.includes(this.selectedSubcategories, subcategory)) {
-        this.selectedSubcategories.push(subcategory)
-      }
+    isCategorySelected(name) {
+      return name === this.artist.category.name
     },
     changeCategory() {
-      this.selectedCategory = null
-      this.selectedSubcategories = []
+      this.updateProfile({ prop: 'category.name', data: null })
+      this.updateProfile({ prop: 'category.subcategories', data: [] })
+    },
+    addSubcategory(subcategory) {
+      const subcategories = this.$object.clone(this.artist.category.subcategories)
+
+      if (!this.$collection.includes(subcategories, subcategory)) {
+        subcategories.push(subcategory)
+        this.updateProfile({ prop: 'category.subcategories', data: subcategories })
+      }
     },
     removeSubcategory(subcategory) {
-      const index = this.$array.indexOf(this.selectedSubcategories, subcategory)
-      this.$delete(this.selectedSubcategories, index)
+      const subcategories = this.$object.clone(this.artist.category.subcategories)
+      const index = this.$array.indexOf(subcategories, subcategory)
+      this.$delete(subcategories, index)
+      this.updateProfile({ prop: 'category.subcategories', data: subcategories })
     }
   }
 }
@@ -169,5 +175,9 @@ small {
       opacity: 0.6;
     }
   }
+}
+
+h6 {
+  text-transform: capitalize;
 }
 </style>

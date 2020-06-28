@@ -36,7 +36,7 @@
             </overlay>
           </div>
           <div v-if="!$auth.loggedIn" key="guest" class="guest">
-            <nuxt-link to="/register/whoareyou">
+            <nuxt-link to="/register">
               <h5 class="mr-5">Cadastre-se</h5>
             </nuxt-link>
             <nuxt-link to="/login">

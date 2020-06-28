@@ -29,12 +29,13 @@
               </a>
             </li>
             <li class="nav-link">
-              <a
-                class="nav-link"
-                :class="{ active: categoriesTab }"
-                @click="activeTab = 'categories'"
-              >
+              <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
                 Categorias
+              </a>
+            </li>
+            <li class="nav-link">
+              <a class="nav-link" :class="{ active: tagsTab }" @click="activeTab = 'tags'">
+                Pesquisa
               </a>
             </li>
           </ul>
@@ -49,11 +50,11 @@
               <social-networks v-show="socialTab" ref="social" key="social"></social-networks>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-categories
-                v-show="categoriesTab"
-                key="categories"
-                :categories="categories"
-              ></artist-categories>
+              <artist-categories v-show="catTab" key="categories" :categories="categories">
+              </artist-categories>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <search-tags v-show="tagsTab" key="tags"></search-tags>
             </fade-transition>
           </div>
         </div>
@@ -69,16 +70,18 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
-import SocialNetworks from '@/components/artist/profile/social'
-import ArtistInfo from '@/components/artist/profile/info'
-import ArtistCategories from '@/components/artist/profile/categories'
 import ProfileStats from '@/components/artist/profile/stats'
+import ArtistInfo from '@/components/artist/profile/info'
+import SocialNetworks from '@/components/artist/profile/social'
+import ArtistCategories from '@/components/artist/profile/categories'
+import SearchTags from '@/components/artist/profile/tags'
 export default {
   components: {
-    'social-networks': SocialNetworks,
+    'profile-stats': ProfileStats,
     'artist-info': ArtistInfo,
+    'social-networks': SocialNetworks,
     'artist-categories': ArtistCategories,
-    'profile-stats': ProfileStats
+    'search-tags': SearchTags
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
@@ -106,8 +109,11 @@ export default {
     socialTab() {
       return this.activeTab === 'social'
     },
-    categoriesTab() {
+    catTab() {
       return this.activeTab === 'categories'
+    },
+    tagsTab() {
+      return this.activeTab === 'tags'
     },
     backgroundImg() {
       return !this.$utils.empty(this.artist.media.bg)

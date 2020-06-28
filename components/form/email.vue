@@ -6,7 +6,7 @@ export default {
     type() {
       return 'email'
     },
-    icon() {
+    iconHelper() {
       return 'envelope'
     }
   }
