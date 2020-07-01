@@ -51,6 +51,7 @@ a {
   &:hover {
     transition: $transition;
     text-decoration: none;
+    color: $brandLayer !important;
   }
 }
 
@@ -205,4 +206,11 @@ a {
   text-overflow: ellipsis;
   word-wrap: break-word;
   white-space: no-wrap;
+}
+
+.error {
+  color: red;
+  font-size: $small;
+  font-weight: $bold;
+  letter-spacing: 0.1em;
 }

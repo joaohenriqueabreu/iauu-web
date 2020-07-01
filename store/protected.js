@@ -13,7 +13,7 @@ export const mutations = {
 
 export const actions = {
   register({ commit }, credentials) {
-    this.$axios.post('register', credentials)
+    return this.$axios.post('register', credentials)
   },
   async verify({ commit }, verifyToken) {
     const { data } = await this.$axios.post('verify', { token: verifyToken })

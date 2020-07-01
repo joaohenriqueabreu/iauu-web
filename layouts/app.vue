@@ -8,7 +8,7 @@
         <header class="d-flex justify-content-end">
           <top-menu></top-menu>
         </header>
-        <main :class="minimized ? 'full' : 'shorter'">
+        <main :class="minimized ? 'shorter' : 'full'">
           <alert></alert>
           <nuxt />
         </main>
@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      minimized: false
+      minimized: true
     }
   },
   computed: {

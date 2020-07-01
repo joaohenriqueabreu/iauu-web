@@ -4,7 +4,7 @@
       <nuxt-link v-show="!minimized" to="/">
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
-      <div>
+      <div class="hide-mobile ">
         <font-awesome
           class="minimize"
           :icon="minimized ? 'angle-double-right' : 'angle-double-left'"
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      minimized: false
+      minimized: true
     }
   },
   computed: {
@@ -55,8 +55,8 @@ export default {
   },
   methods: {
     minimize() {
-      this.$emit('minimize', this.minimized)
       this.minimized = !this.minimized
+      this.$emit('minimize', this.minimized)
     },
     routed(option) {
       return this.$route.path.split('/').includes(option)

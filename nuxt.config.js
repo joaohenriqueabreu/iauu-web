@@ -137,22 +137,29 @@ export default {
     scopeKey: 'role',
     strategies: {
       facebook: {
-        // response_type: 'code', // Use auth code flow
-        client_id: '287912642575620',
+        // response_type: 'token', // Use auth code flow        
         // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
         // access_token_endpoint: 'http://localhost:4444/login/facebook',
+        // authorization_endpoint: '/login/facebook',
+        // access_token_endpoint: '/login/facebook',        
         // userinfo_endpoint: `${process.env.API_URL}/login/facebook`,
-        userinfo_endpoint: '/login/facebook',
-        scope: ['public_profile', 'email', 'user_birthday']
+        // userinfo_endpoint: '/login/facebook',
+        client_id: process.env.FACEBOOK_CLIENT_ID,
+        access_token_endpoint: false,
+        userinfo_endpoint: false,
+        scope: ['public_profile', 'email', 'user_birthday'],
+        redirect_uri: `${process.env.WEB_URL}/login/facebook/`
       },
       google: {
         // response_type: 'code', // Use auth code flow
-        client_id: '347826395880-9mu706am7qkpont74ecq0d9unr6k0q5u.apps.googleusercontent.com',
         // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
         // access_token_endpoint: 'http://localhost:4444/login/facebook',
         // userinfo_endpoint: `${process.env.API_URL}/login/google`,
-        userinfo_endpoint: '/login/google'
+        // userinfo_endpoint: 'validate',
         // scope: ['public_profile', 'email', 'user_birthday']
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        userinfo_endpoint: false,
+        redirect_uri: `${process.env.WEB_URL}/login/google/`
       },
       local: {
         endpoints: {
@@ -185,7 +192,8 @@ export default {
      ** You can extend webpack config here
      */
 
-    extend(config, ctx) {}
+    extend(config, ctx) {},
+    transpile: ['@nuxtjs/auth']
     // babelrc: true
   }
 

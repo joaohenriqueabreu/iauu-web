@@ -4,9 +4,16 @@
       <h5 class="mr-2">Formatos</h5>
     </div>
     <div>
-      <product-item-table></product-item-table>
+      <div class="clickable horizontal middle mb-3" @click="openProductForm">
+        <span class="mr-2">Adicione Produtos</span>
+        <font-awesome icon="plus"></font-awesome>
+      </div>
+      <product-item-table
+        :products="products"
+        @edit-product="openProductForm(product)"
+      ></product-item-table>
       <div class="clickable horizontal middle" @click="openItemForm">
-        <span class="mr-2">Adicione itens aos seus formatos</span>
+        <span class="mr-2">Adicione itens</span>
         <font-awesome icon="plus"></font-awesome>
       </div>
     </div>
@@ -57,7 +64,7 @@ export default {
       this.$refs.productForm.openModal(product)
     },
     openItemForm(item) {
-      this.$refs.item.openModal()
+      this.$refs.productItem.openModal()
     },
     openConfirmRemove(productId) {
       this.$refs.removeProductDialog.openModal(productId)

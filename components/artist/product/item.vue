@@ -29,8 +29,8 @@ export default {
     }
   },
   methods: {
-    openItemModal(item) {
-      if (this.$utils.empty(item)) {
+    openModal(item) {
+      if (!this.$utils.empty(item)) {
         this.item = item
       }
 

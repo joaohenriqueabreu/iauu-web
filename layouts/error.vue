@@ -1,5 +1,5 @@
 <template>
-  <div class="error">
+  <div class="error-content">
     <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
     <div class="content">
       <h1 class="mb-5">Vish...</h1>
@@ -36,7 +36,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.error {
+.error-content {
   height: 90vh;
 
   [data-icon] {

@@ -62,6 +62,18 @@ export default {
       hasError: false
     }
   },
+  created() {
+    const { name } = this.$auth.strategy
+    if (
+      this.$utils.empty(this.$route.query.code) ||
+      this.$utils.empty(name) ||
+      !['facebook', 'google'].includes(name)
+    ) {
+      return
+    }
+
+    this.$router.push(`/login/social?code=${this.$route.query.code}`)
+  },
   methods: {
     ...mapActions('auth', ['login']),
     ...mapActions('protected', ['forgotPassword']),
