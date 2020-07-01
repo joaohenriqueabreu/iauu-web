@@ -1,51 +1,35 @@
 <template>
   <div class="">
     <form-input
+      v-model="companyName"
       class="mb-3"
       icon="signature"
       label="Nome fantasia"
       placeholder="Seu nome incrível vem aqui"
-      :model="artist"
-      prop="company_name"
-      @input="updateProfile"
     ></form-input>
     <form-textarea
+      v-model="story"
       class="mb-3"
       label="História"
       :rows="5"
       placeholder="Conte um pouquinho da sua história para seus clientes"
-      :model="artist"
-      prop="story"
-      @input="updateProfile"
     ></form-textarea>
     <hr />
     <div class="row">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">
-        <form-masked
-          icon="id-card"
-          placeholder="CPF/CNPJ"
-          mask="document"
-          :model="artist"
-          prop="document"
-          @input="updateProfile"
-        ></form-masked>
+        <form-masked v-model="document" icon="id-card" placeholder="CPF/CNPJ" mask="document">
+        </form-masked>
         <form-location
           :default="artist.address"
           street
           placeholder="Endereço"
           :model="artist"
           prop="address"
-          @selected="updateProfile"
+          @selected="updateLocation"
         ></form-location>
-        <form-masked
-          icon="phone"
-          placeholder="Telefone"
-          mask="phone"
-          :model="artist"
-          prop="phone"
-          @input="updateProfile"
-        ></form-masked>
+        <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone">
+        </form-masked>
       </div>
     </div>
   </div>
@@ -53,6 +37,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
+
 export default {
   data() {
     return {
@@ -60,13 +46,22 @@ export default {
     }
   },
   computed: {
-    ...mapState({ artist: (state) => state.artist.artist })
+    ...mapState({ artist: (state) => state.artist.artist }),
+    ...mapFields('artist', {
+      companyName: 'artist.company_name',
+      story: 'artist.story',
+      document: 'artist.document',
+      phone: 'artist.phone'
+    })
   },
   created() {
     this.info = this.artist || {}
   },
   methods: {
-    ...mapMutations('artist', { updateProfile: 'update_profile' })
+    ...mapMutations('artist', { updateProfile: 'update_profile' }),
+    async updateLocation(value) {
+      await this.updateProfile({ prop: 'address', data: value })
+    }
   }
 }
 </script>

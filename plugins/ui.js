@@ -20,6 +20,7 @@ import AlertMessage from '@/components/layout/alert'
 import Overlay from '@/components/layout/overlay'
 import Loading from '@/components/layout/loading'
 import StatsDonut from '@/components/layout/statsDonut'
+import Notification from '@/components/layout/notification'
 import MediaThumbnail from '@/components/media/thumbnail'
 import Rating from '@/components/artist/profile/rating'
 
@@ -59,6 +60,7 @@ Vue.component('avatar', Avatar)
 Vue.component('toggle-button', ToggleButton)
 Vue.component('overlay', Overlay)
 Vue.component('loading', Loading)
+Vue.component('notification', Notification)
 
 Vue.component('form-input', FormInput)
 Vue.component('form-numeric', FormNumeric)

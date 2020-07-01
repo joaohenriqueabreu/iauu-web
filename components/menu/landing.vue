@@ -6,16 +6,16 @@
       </nuxt-link>
     </div>
     <div>
-      <menu-manager></menu-manager>
+      <top-menu></top-menu>
     </div>
   </nav>
 </template>
 
 <script>
-import MenuManager from '@/components/menu/menuManager'
+import TopMenu from '@/components/menu/top'
 export default {
   components: {
-    'menu-manager': MenuManager
+    'top-menu': TopMenu
   },
   data() {
     return {

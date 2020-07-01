@@ -46,7 +46,7 @@ export default {
       const val = event.target.value
       // vue-the-mask triggers a first event on init cleaning up entry
       if (!this.$utils.empty(val) && val !== '(') {
-        this.emitInput(event)
+        this.$emit('input', val)
       }
     }
   }

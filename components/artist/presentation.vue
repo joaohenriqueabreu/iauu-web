@@ -6,7 +6,7 @@
           <div class="horizontal middle">
             <avatar
               class="mr-4"
-              :src="presentation.contractor.photo.url"
+              :src="presentation.contractor.photo"
               :username="presentation.contractor.name"
             ></avatar>
             <h5>{{ presentation.contractor.name }}</h5>

@@ -1,26 +1,34 @@
 <template>
   <div>
-    <header>
-      <nuxt-link to="/">
+    <header class="horizontal center middle">
+      <nuxt-link v-show="!minimized" to="/">
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
+      <div>
+        <font-awesome
+          class="minimize"
+          :icon="minimized ? 'angle-double-right' : 'angle-double-left'"
+          @click="minimize"
+        >
+        </font-awesome>
+      </div>
     </header>
     <main>
       <nuxt-link :to="`/${role}/schedule`" :class="{ routed: routed('schedule') }">
         <font-awesome icon="calendar-alt"></font-awesome>
-        <span>Agenda</span>
+        <span v-show="!minimized">Agenda</span>
       </nuxt-link>
       <nuxt-link :to="`/${role}/presentations`" :class="{ routed: routed('presentations') }">
         <font-awesome icon="music"></font-awesome>
-        <span>Apresentações</span>
+        <span v-show="!minimized">Apresentações</span>
       </nuxt-link>
       <nuxt-link :to="`/${role}/proposals`" :class="{ routed: routed('proposals') }">
         <font-awesome icon="search-dollar"></font-awesome>
-        <span>Propostas</span>
+        <span v-show="!minimized">Propostas</span>
       </nuxt-link>
       <nuxt-link :to="`/${role}/account`" :class="{ routed: routed('account') }">
         <font-awesome icon="piggy-bank"></font-awesome>
-        <span>Conta</span>
+        <span v-show="!minimized">Conta</span>
       </nuxt-link>
     </main>
   </div>
@@ -32,6 +40,11 @@ export default {
   components: {
     logo: Logo
   },
+  data() {
+    return {
+      minimized: false
+    }
+  },
   computed: {
     scheduleLink() {
       return this.$auth.hasScope('artist') ? '/artist' : '/contractor'
@@ -41,6 +54,10 @@ export default {
     }
   },
   methods: {
+    minimize() {
+      this.$emit('minimize', this.minimized)
+      this.minimized = !this.minimized
+    },
     routed(option) {
       return this.$route.path.split('/').includes(option)
     }
@@ -52,6 +69,11 @@ export default {
 .logo {
   margin-left: 0;
   margin-right: 2 * $space;
+}
+
+.minimize {
+  color: $layer5;
+  cursor: pointer;
 }
 
 [data-icon] {

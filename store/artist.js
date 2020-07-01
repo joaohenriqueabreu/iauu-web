@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { getField, updateField } from 'vuex-map-fields'
 import Product from '@/models/product'
 
 export const state = () => ({
@@ -7,6 +8,7 @@ export const state = () => ({
 })
 
 export const mutations = {
+  updateField,
   set_artist(state, artistData) {
     state.artist = { ...artistData }
   },
@@ -32,13 +34,17 @@ export const mutations = {
     })
   },
   set_product(state, productData) {
-    state.products.unshift(new Product(productData))
+    state.products.push(new Product(productData))
   },
   remove_product(state, id) {
     Vue.delete(
       state.products,
       this.$array.findIndex(state.products, (product) => product.id === id)
     )
+  },
+  add_item_to_product(state, { item, product }) {
+    state.products[product.id].item.push(item)
+    Vue.set(state.products, product.id, item)
   }
 }
 
@@ -47,33 +53,35 @@ export const actions = {
     const { data } = await this.$axios.get('artists/profile')
     commit('set_artist', data)
   },
-  async saveProfile({ commit, state }, payload) {
-    if (payload !== undefined) {
-      commit('update_profile', payload)
-    }
-
+  async saveProfile({ commit, state }) {
     await this.$axios.put('artists/profile', { profile: state.artist })
     this.$toast.success('Artista atualizado com sucesso')
   },
-  async loadProducts({ commit }, id) {
-    const { data } = await this.$axios.get(`products/${id}`)
+  async loadProducts({ commit }) {
+    const { data } = await this.$axios.get('artist/products')
     commit('set_products', data)
   },
   async saveProduct({ commit }, product) {
-    const { data } = await this.$axios.post('products', product)
+    const { data } = await this.$axios.post('artist/products', { product })
+    commit('set_products', data)
 
     // Reactivity only watches for push operations and does not recognize assignment
-    if (!this.$utils.empty(product.id)) {
-      commit('remove_product', data.id)
-    }
+    // if (!this.$utils.empty(product.id)) {
+    //   commit('remove_product', data.id)
+    // }
 
     // This will also allows for new products / edits to move to the top of the array
-    commit('set_product', data)
+    // commit('set_product', data)
   },
   async removeProduct({ commit }, id) {
     await this.$axios.delete(`products/${id}`)
     commit('remove_product', id)
+  },
+  addItemToProduct({ commit }, data) {
+    commit('add_item_to_product', data)
   }
 }
 
-export const getters = {}
+export const getters = {
+  getField
+}

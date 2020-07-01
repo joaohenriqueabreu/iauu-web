@@ -8,9 +8,9 @@
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
-        @input="emitInput"
-        @blur="emitBlur"
-        @keyup.enter.prevent="emitEnter"
+        @input="$emit('input', $event.target.value)"
+        @blur="$emit('blur', value)"
+        @keyup.enter.prevent="$emit('enter', value)"
       />
       <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
     </div>
@@ -37,12 +37,8 @@ export default {
     label: { type: String, default: '' },
     placeholder: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
-    icon: { type: String, default: null }
-  },
-  data() {
-    return {
-      value: { type: [String, Number, Boolean], default: null }
-    }
+    icon: { type: String, default: null },
+    value: { type: [String, Number, Boolean], default: null }
   },
   computed: {
     type() {
@@ -50,35 +46,6 @@ export default {
     },
     iconHelper() {
       return !this.$utils.empty(this.icon) ? this.icon : 'search'
-    }
-  },
-  mounted() {
-    if (!this.$utils.empty(this.model)) {
-      this.value = this.model[this.prop]
-      return
-    }
-
-    if (!this.$utils.empty(this.default)) {
-      this.value = this.default
-      return
-    }
-
-    this.value = ''
-  },
-  methods: {
-    emitInput(event) {
-      this.$emit('input', this.getData(event))
-    },
-    emitEnter(event) {
-      this.$emit('enter', this.getData(event))
-    },
-    emitBlur(event) {
-      this.$emit('blur', this.getData(event))
-    },
-    getData(event) {
-      return !this.$utils.empty(this.model)
-        ? { prop: this.prop, data: event.target.value }
-        : event.target.value
     }
   }
 }
@@ -133,11 +100,13 @@ export default {
       outline: none;
 
       transition: $transition;
-      background: $layer5;
+      // background: $layer5;
+      background: $brandLayer;
       color: $brand;
     }
     &:hover {
-      background-color: $layer5;
+      // background-color: $layer5;
+      background-color: $brandLayer;
     }
   }
 

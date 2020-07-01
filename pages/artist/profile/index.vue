@@ -116,13 +116,13 @@ export default {
       return this.activeTab === 'tags'
     },
     backgroundImg() {
-      return !this.$utils.empty(this.artist.media.bg)
-        ? this.artist.media.bg
+      return !this.$utils.empty(this.artist.user.media.bg)
+        ? this.artist.user.media.bg
         : this.$config.defaultBGImgUrl
     },
     avatarImg() {
-      return !this.$utils.empty(this.artist.media.photo)
-        ? this.artist.media.photo
+      return !this.$utils.empty(this.artist.user.media.photo)
+        ? this.artist.user.media.photo
         : this.$config.defaultAvatarImgUrl
     }
   },
@@ -144,11 +144,13 @@ export default {
     categorySelect(category) {
       alert(category)
     },
-    setBackground({ url }) {
-      this.saveProfile({ prop: 'media.bg', data: url })
+    async setBackground({ url }) {
+      this.updateProfile({ prop: 'user.media.bg', data: url })
+      await this.saveProfile()
     },
-    setAvatar({ url }) {
-      this.saveProfile({ prop: 'media.photo', data: url })
+    async setAvatar({ url }) {
+      this.updateProfile({ prop: 'user.media.photo', data: url })
+      await this.saveProfile()
     }
   }
 }

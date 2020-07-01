@@ -10,7 +10,7 @@
           </div>
           <div class="pr-4 mr-5 menu-items">
             <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/incorporate">
-              <h6>Atalho para shows</h6>
+              <h6>Venda mais shows</h6>
             </nuxt-link>
             <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/products">
               <h6>Produtos</h6>
@@ -27,13 +27,13 @@
           </div>
         </div>
         <div v-else class="mainmenu vertical">
-          <div v-if="$auth.loggedIn" class="horizontal mt-2" @click="displaySubmenu = true">
-            <overlay :rounded="true" :selected="displaySubmenu">
-              <avatar
-                :src="$auth.user.photo ? $auth.user.photo.url : null"
-                :username="$auth.user.name"
-              ></avatar>
-            </overlay>
+          <div v-if="$auth.loggedIn" class="horizontal mt-2">
+            <product-setup v-if="$auth.hasScope('artist')" class="mr-3"></product-setup>
+            <div @click="displaySubmenu = true">
+              <overlay :rounded="true" :selected="displaySubmenu">
+                <avatar :src="$auth.user.photo" :username="$auth.user.name"></avatar>
+              </overlay>
+            </div>
           </div>
           <div v-if="!$auth.loggedIn" key="guest" class="guest">
             <nuxt-link to="/register">
@@ -44,32 +44,20 @@
             </nuxt-link>
           </div>
         </div>
-        <!-- </fade-transition> -->
-        <!-- <fade-transition> -->
       </transition>
-      <initial-setup-manager
-        v-if="isAppRoute && $auth.loggedIn && $auth.user.requires_initial_setup"
-        class="full-width my-3"
-      ></initial-setup-manager>
     </client-only>
   </div>
 </template>
 
 <script>
-import InitialSetupManager from '@/components/menu/initialSetupManager'
+import ProductSetup from '@/components/artist/productSetup'
 export default {
   components: {
-    'initial-setup-manager': InitialSetupManager
+    'product-setup': ProductSetup
   },
   data() {
     return {
       displaySubmenu: false
-    }
-  },
-  computed: {
-    isAppRoute() {
-      const route = this.$route.path.split('/')
-      return route.includes('artist') || route.includes('contractor') || route.includes('admin')
     }
   },
   watch: {

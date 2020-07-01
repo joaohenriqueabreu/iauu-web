@@ -4,10 +4,7 @@
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
           <div class="horizontal middle">
-            <avatar
-              :src="proposal.contractor.photo.url"
-              :username="proposal.contractor.name"
-            ></avatar>
+            <avatar :src="proposal.contractor.photo" :username="proposal.contractor.name"></avatar>
             <h5>{{ proposal.contractor.name }}</h5>
           </div>
           <div class="d-flex align-items-end">

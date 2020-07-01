@@ -36,6 +36,10 @@
           copie e cole na caixa da texto e adicione a sua lista de redes sociais para que os
           clientes possam visualizar suas produções quando forem contratá-los.
         </p>
+        <p>
+          Caso o icone que apareça não corresponda a rede social associada, verifique o formato da
+          informação fornecida e tente novamente.
+        </p>
       </template>
     </modal>
   </div>

@@ -1,14 +1,14 @@
 <template>
   <div class="content">
     <client-only>
-      <aside>
-        <side-menu></side-menu>
+      <aside :class="minimized ? 'mini' : 'full'">
+        <side-menu @minimize="minimize"></side-menu>
       </aside>
       <div class="vertical">
         <header class="d-flex justify-content-end">
-          <menu-manager></menu-manager>
+          <top-menu></top-menu>
         </header>
-        <main>
+        <main :class="minimized ? 'full' : 'shorter'">
           <alert></alert>
           <nuxt />
         </main>
@@ -19,17 +19,27 @@
 
 <script>
 import { mapState } from 'vuex'
-import MenuManager from '@/components/menu/menuManager'
-import SideMenu from '@/components/menu/sideMenu'
+import TopMenu from '@/components/menu/top'
+import SideMenu from '@/components/menu/side'
 
 export default {
   components: {
     'side-menu': SideMenu,
-    'menu-manager': MenuManager
+    'top-menu': TopMenu
+  },
+  data() {
+    return {
+      minimized: false
+    }
   },
   computed: {
     ...mapState({ theme: (state) => state.layout.theme }),
     ...mapState({ alert: (state) => state.app.alert })
+  },
+  methods: {
+    minimize(value) {
+      this.minimized = value
+    }
   }
 }
 </script>
@@ -49,7 +59,13 @@ main {
   padding-bottom: 8 * $space;
 
   @include desktop {
-    margin-left: 15vw;
+    &.full {
+      margin-left: 15vw;
+    }
+
+    &.shorter {
+      margin-left: 7vw;
+    }
   }
 }
 
@@ -59,10 +75,17 @@ aside {
   left: 0;
   z-index: $moveToTop;
   @include desktop {
+    .mini {
+      width: 7vw;
+    }
+
+    .full {
+      width: 15vw;
+    }
+
     display: flex;
     flex-direction: column;
     stop: 0;
-    width: 15vw;
     height: 100vh;
   }
 

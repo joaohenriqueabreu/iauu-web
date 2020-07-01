@@ -1,7 +1,8 @@
 <template>
   <modal ref="form">
     <template v-slot:header>
-      <h4>Cadastre um novo produto</h4>
+      <h4 v-if="!editMode">Cadastre um novo formato</h4>
+      <h4 v-else>Atualizar formato {{ product.name }}</h4>
     </template>
     <template v-slot:main>
       <div class="new-product-form vertical p-4">
@@ -71,7 +72,8 @@ export default {
   data() {
     return {
       product: new Product(),
-      newMedia: new Media()
+      newMedia: new Media(),
+      editMode: false
     }
   },
   created() {
@@ -83,6 +85,7 @@ export default {
       if (!this.$utils.empty(product)) {
         // Need to copy object as js assignments are passed by reference
         this.$set(this, 'product', this.$object.clone(product))
+        this.editMode = true
       } else {
         this.product = new Product()
       }

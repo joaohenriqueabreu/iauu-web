@@ -14,7 +14,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import LandingNav from '@/components/menu/landingNav'
+import LandingNav from '@/components/menu/landing'
 export default {
   components: {
     'landing-nav': LandingNav
