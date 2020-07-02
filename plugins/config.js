@@ -14,7 +14,9 @@ const config = {
   instagramSubstringMatch: ['instagram'],
   tiktokSubstringMatch: ['vm.tiktok'],
   spotifySubstringMatch: ['open.spotify'],
-  pdfSubstringMatch: ['pdf']
+  pdfSubstringMatch: ['pdf'],
+
+  sampleProductItems: [{ name: 'Apresentação' }, { name: 'Iluminação' }]
 }
 
 export default ({ app }, inject) => {

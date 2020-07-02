@@ -137,11 +137,11 @@ export default {
     scopeKey: 'role',
     strategies: {
       facebook: {
-        // response_type: 'token', // Use auth code flow        
+        // response_type: 'token', // Use auth code flow
         // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
         // access_token_endpoint: 'http://localhost:4444/login/facebook',
         // authorization_endpoint: '/login/facebook',
-        // access_token_endpoint: '/login/facebook',        
+        // access_token_endpoint: '/login/facebook',
         // userinfo_endpoint: `${process.env.API_URL}/login/facebook`,
         // userinfo_endpoint: '/login/facebook',
         client_id: process.env.FACEBOOK_CLIENT_ID,

@@ -4,9 +4,14 @@
       <h5 class="mr-2">Formatos</h5>
     </div>
     <div>
-      <div class="clickable horizontal middle mb-3" @click="openProductForm">
-        <span class="mr-2">Adicione Produtos</span>
-        <font-awesome icon="plus"></font-awesome>
+      <div class="horizontal center middle justify-content-between mb-3">
+        <div class="clickable horizontal middle full-height middle" @click="openProductForm">
+          <span class="mr-2">Adicione Produtos</span>
+          <font-awesome icon="plus"></font-awesome>
+        </div>
+        <div>
+          <form-button>Salvar</form-button>
+        </div>
       </div>
       <product-item-table
         :products="products"
@@ -44,15 +49,6 @@ export default {
       products: store.state.artist.products
     }
   },
-  data() {
-    return {
-      productItems: [],
-      newItem: {
-        name: '',
-        description: ''
-      }
-    }
-  },
   mounted() {
     const items = []
     this.products.forEach((product) => items.push(product.items))
@@ -74,17 +70,6 @@ export default {
       this.$nextTick(function() {
         this.$refs.confirm.close()
       })
-    },
-    hasItem(product, item) {
-      return product.items.includes(item)
-    },
-    saveItem() {
-      this.productItems.push(this.newItem)
-      this.$refs.item.close()
-      this.newItem = {}
-    },
-    pushItem(item, product) {
-      this.addItemToProduct({ item, product })
     }
   }
 }
@@ -138,24 +123,5 @@ button {
 
 .new-product-form {
   max-height: 50vh;
-}
-
-[data-icon] {
-  &.select {
-    box-shadow: $shadow;
-    border-radius: $rounded;
-    font-size: $small;
-    height: 20px;
-    width: 20px;
-    padding: 3px;
-  }
-
-  &.active {
-    color: $brandLayer;
-  }
-
-  &.inactive {
-    color: $layer5;
-  }
 }
 </style>
