@@ -2,7 +2,7 @@
   <div class="result" @click="$emit('select', artist)">
     <div class="logo">
       <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
-      <avatar :src="artist.photo" :username="artist.name" :size="100"></avatar>
+      <avatar :src="artist.user.photo" :username="artist.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
       <div class="col-sm-6">
@@ -10,31 +10,31 @@
           <h2>{{ artist.company_name || artist.name }}</h2>
         </div>
         <div>
-          <h6 class="cat-badge">{{ artist.category }}</h6>
+          <h6 class="cat-badge">{{ artist.category.name }}</h6>
         </div>
-        <div class="mb-4">
-          <small>{{ artist.location }}</small>
+        <div class="mb-4" v-if="!$utils.empty(artist.address)">
+          <small>{{ artist.address.street }}</small>
         </div>
         <div class="horizontal middle">
-          <span v-for="(subcategory, index) in artist.subcategories" :key="index" class="sub-badge">
+          <span v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="sub-badge">
             {{ subcategory }}
           </span>
         </div>
       </div>
       <div class="col-sm-6 d-flex justify-content-end">
         <div class="vertical">
-          <div class="mb-3">
+          <div class="mb-3" v-if="!$utils.empty(artist.rating)">
             <rating :score="artist.rating.score" :amount="artist.rating.amount"></rating>
           </div>
           <div class="d-flex full-height">
             <div class="vertical">
-              <div class="horizontal justify-content-end ">
+              <div class="horizontal justify-content-end" v-if="!$utils.empty(artist.stats)">
                 <h5 :title="`${artist.stats.presentations} Apresentações realizadas`">
                   <font-awesome icon="music" class="mr-2"></font-awesome>
                   {{ artist.stats.presentations }}
                 </h5>
               </div>
-              <div class="d-flex align-items-end full-height">
+              <div class="d-flex align-items-end full-height" v-if="false">
                 <div v-if="artist.display_rate" class="horizontal middle">
                   <client-only>
                     <h4>R$ {{ rateMin | number('0,0') }} - R$ {{ rateMax | number('0,0') }}</h4>

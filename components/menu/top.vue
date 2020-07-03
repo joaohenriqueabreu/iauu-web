@@ -9,11 +9,14 @@
             </nuxt-link>
           </div>
           <div class="pr-4 mr-5 menu-items">
+            <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/schedule">
+              <h6>Agenda</h6>
+            </nuxt-link>
             <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/incorporate">
               <h6>Venda mais shows</h6>
             </nuxt-link>
             <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/products">
-              <h6>Produtos</h6>
+              <h6>Formatos de apresentação</h6>
             </nuxt-link>
             <nuxt-link :to="`/${$auth.hasScope('artist') ? 'artist' : 'contractor'}/profile`">
               <h6>Perfil</h6>

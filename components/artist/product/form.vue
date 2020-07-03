@@ -3,14 +3,13 @@
 <div>
   <modal ref="form">
     <template v-slot:header>
-      <h4 v-if="$utils.empty(product)">Cadastre um novo formato de apresentação</h4>
-      <h4 v-else>Atualizar formato {{ product.name }}</h4>
+      <h4>Salvar formato de apresentação</h4>
     </template>
     <template v-slot:main>
-      <div class="new-product-form vertical p-4">        
+      <div class="new-product-form vertical p-4">
         <form-input v-model="product.name" label="Título" class="mb-4"></form-input>
-        <form-textarea v-model="product.description" label="Descrição"></form-textarea>
-        <div class="row mb-4">
+        <form-textarea v-model="product.description" label="Descrição" class="mb-4"></form-textarea>
+        <div class="row mb-5">
           <div class="vertical middle center col-sm-6">
             <h6 class="mr-3">Preço para Contratar</h6>
             <form-money v-model="product.price" class="mr-2" placeholder="100,00"></form-money>
@@ -24,13 +23,13 @@
             ></form-numeric>
           </div>
         </div>
-        <div class="vertical middle mb-4">
+        <div class="vertical middle mb-5">
           <h6 class="mb-2">Adicionar items</h6>
           <small>Liste aqui os itens deste formato</small>
           <div class="horizontal middle justify-content-between mb-2">
             <form-input
               v-model="newItem"
-              class="full-width"
+              class="full-width mb-5"
               icon="list-ol"
               placeholder="Iluminação, Apresentação, Fogos de Artifício, etc..."
             ></form-input>
@@ -51,7 +50,7 @@
           <div class="vertical d-flex justify-content-between mb-2">
             <h6>Adicionar Fotos e Vídeos de suas apresetações</h6>
           </div>
-          <div class="horizontal middle full-width mb-4">
+          <div class="horizontal middle full-width mb-2">
             <form-input
               v-model="newMedia.url"
               class="full-width"
@@ -59,7 +58,7 @@
             ></form-input>
             <font-awesome icon="plus" class="clickable ml-5" @click="uploadMedia"></font-awesome>
           </div>
-          <fade-transition group>
+          <fade-transition group class="mb-5">
             <div v-for="(media, mediaIndex) in product.medias" :key="mediaIndex">
               <media-thumbnail
                 class="mb-2"
@@ -131,13 +130,12 @@ export default {
     this.client = filestack.init(process.env.fileStackApiKey)
   },
   methods: {
-    openModal(product) {
-      if (!this.$utils.empty(product)) {
-        this.$set(this, 'product', this.$object.clone(product))
-      } else {
-        this.product = new Product()
-      }
-
+    newProduct() {
+      this.product = new Product()
+      this.$refs.form.open()
+    },
+    editProduct(product) {
+      this.$set(this, 'product', this.$object.clone(product))
       this.$refs.form.open()
     },
     openConfirmModal() {

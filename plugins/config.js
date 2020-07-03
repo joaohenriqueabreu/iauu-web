@@ -9,7 +9,7 @@ const config = {
 
   // Substrings to match url pattern and identify social media
   facebookSubstringMatch: ['facebook'],
-  youtubeSubstringMatch: ['youtu.be'],
+  youtubeSubstringMatch: ['youtu.be', 'youtube'],
   vimeoSubstringMatch: ['vimeo'],
   instagramSubstringMatch: ['instagram'],
   tiktokSubstringMatch: ['vm.tiktok'],

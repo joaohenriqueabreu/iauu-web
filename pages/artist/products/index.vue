@@ -1,7 +1,7 @@
 /* eslint-disable */
 <template>
   <div>
-    <div class="horizontal middle d-flex clickable mb-5" @click="openProductForm">
+    <div class="horizontal middle d-flex clickable mb-5" @click="newProduct">
       <h5 class="mr-2">
         <span class="mr-2">Adicione Formatos</span>
         <font-awesome icon="plus"></font-awesome>
@@ -9,7 +9,7 @@
     </div>
     <div class="row align-items-stretch full-height">
       <div v-for="(product, index) in products" :key="index" class="col-sm-4 mb-4">
-        <product-info :product="product" @edit="openProductForm" class="full-height"></product-info>
+        <product-info :product="product" @edit="editProduct" class="full-height"></product-info>
       </div>
     </div>
     <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
@@ -39,8 +39,11 @@ export default {
   },
   methods: {
     ...mapActions('artist', ['loadProducts', 'saveProduct', 'removeProduct']),
-    openProductForm(product) {
-      this.$refs.productForm.openModal(product)
+    newProduct() {
+      this.$refs.productForm.newProduct()
+    },
+    editProduct(product) {
+      this.$refs.productForm.editProduct(product)
     },
     openItemForm(item) {
       this.$refs.productItem.openModal()

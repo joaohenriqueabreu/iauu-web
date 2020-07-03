@@ -9,7 +9,8 @@ export default class Product extends Model {
     this.duration = 0
     this.documents = []
     this.medias = []
-    this.main_media = {}
+    this.items = []
+    this.photo = ''
 
     this.assign(product)
   }

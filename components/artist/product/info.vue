@@ -8,13 +8,12 @@
     <div class="product">
       <main>
         <div class="title" @click="editProduct">
-          <h4 class="cap mb-0">{{ product.name }}</h4>
+          <h2 class="cap mb-0">{{ product.name }}</h2>
           <font-awesome icon="edit" class="ml-4"></font-awesome>
         </div>
         <div class="horizontal middle mb-3">
           <span class="mr-4">
-            <font-awesome icon="dollar-sign" class="mr-1"></font-awesome>
-            {{ product.price }}
+            <b>{{ product.price | currency }}</b>
           </span>
           <span>
             <font-awesome icon="clock" class="mr-1"></font-awesome>
@@ -24,24 +23,14 @@
         <div class="description one-line">
           {{ product.description }}
         </div>
-        <div class="items">
+        <div class="items mb-5">
           <div v-for="(item, index) in product.items" :key="index">
             <hr />
             <span>{{ item }}</span>
           </div>
         </div>
-        <div v-if="!$utils.empty(product.medias)">
-          <h6>Mídias</h6>
-          <hr />
-          <perfect-scrollbar>
-            <div class="vertical">
-              <media-thumbnail
-                v-for="(media, mediaIndex) in product.medias"
-                :key="mediaIndex"
-                :media="media"
-              ></media-thumbnail>
-            </div>
-          </perfect-scrollbar>
+        <div class="horizontal center middle clickable" @click="editProduct">
+          <form-button>Modificar</form-button>
         </div>
       </main>
     </div>

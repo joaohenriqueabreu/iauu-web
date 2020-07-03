@@ -44,7 +44,7 @@ export const mutations = {
 
 export const actions = {
   async searchArtists({ commit }, filters) {
-    const { data } = await this.$axios.get('artists', { params: JSON.stringify(filters) })
+    const { data } = await this.$axios.get('contractors/artists/search', { params: filters })
     commit('set_artists', data)
   },
   async loadArtist({ commit }, slug) {
