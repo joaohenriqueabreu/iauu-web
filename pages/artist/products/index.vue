@@ -1,61 +1,44 @@
+/* eslint-disable */
 <template>
   <div>
-    <div class="horizontal middle d-flex justify-content-between mb-5">
-      <h5 class="mr-2">Formatos</h5>
-    </div>
-    <div>
-      <div class="horizontal center middle justify-content-between mb-3">
-        <div class="clickable horizontal middle full-height middle" @click="openProductForm">
-          <span class="mr-2">Adicione Produtos</span>
-          <font-awesome icon="plus"></font-awesome>
-        </div>
-        <div>
-          <form-button>Salvar</form-button>
-        </div>
-      </div>
-      <product-item-table
-        :products="products"
-        @edit-product="openProductForm(product)"
-      ></product-item-table>
-      <div class="clickable horizontal middle" @click="openItemForm">
-        <span class="mr-2">Adicione itens</span>
+    <div class="horizontal middle d-flex clickable mb-5" @click="openProductForm">
+      <h5 class="mr-2">
+        <span class="mr-2">Adicione Formatos</span>
         <font-awesome icon="plus"></font-awesome>
+      </h5>
+    </div>
+    <div class="row align-items-stretch full-height">
+      <div v-for="(product, index) in products" :key="index" class="col-sm-4 mb-4">
+        <product-info :product="product" @edit="openProductForm" class="full-height"></product-info>
       </div>
     </div>
-    <remove-product ref="removeProductDialog"></remove-product>
-    <product-form ref="productForm" @save="saveProduct"></product-form>
-    <item-form ref="productItem" @save="saveItem"></item-form>
+    <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import ProductForm from '@/components/artist/product/form'
-import ItemForm from '@/components/artist/product/item'
-import ProductItemTable from '@/components/artist/product/table'
-import RemoveProduct from '@/components/artist/product/remove'
+import ProductInfo from '@/components/artist/product/info'
 export default {
   components: {
     'product-form': ProductForm,
-    'item-form': ItemForm,
-    'product-item-table': ProductItemTable,
-    'remove-product': RemoveProduct
+    'product-info': ProductInfo,
   },
   async asyncData({ store, app }) {
     await store.dispatch('artist/loadProducts')
-
-    return {
-      products: store.state.artist.products
-    }
   },
   mounted() {
     const items = []
     this.products.forEach((product) => items.push(product.items))
     this.productItems = this.$array.uniq(this.$array.flatten(items))
   },
+  computed: {
+    ...mapState({ products: (state) => state.artist.products })
+  },
   methods: {
-    ...mapActions('artist', ['loadProducts', 'saveProduct', 'addItemToProduct']),
+    ...mapActions('artist', ['loadProducts', 'saveProduct', 'removeProduct']),
     openProductForm(product) {
       this.$refs.productForm.openModal(product)
     },
@@ -64,6 +47,10 @@ export default {
     },
     openConfirmRemove(productId) {
       this.$refs.removeProductDialog.openModal(productId)
+    },
+    async save(product) {
+      await this.saveProduct(product)
+      this.$toasted.success('Produto salvo')
     },
     async remove(productId) {
       await this.removeProduct(productId)
@@ -125,3 +112,4 @@ button {
   max-height: 50vh;
 }
 </style>
+/* eslint-enable */

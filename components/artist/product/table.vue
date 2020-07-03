@@ -47,7 +47,7 @@ export default {
     ...mapState({ selection: (state) => state.artist.selection })
   },
   methods: {
-    ...mapMutations('artist', { toggleSelection: 'toggle_product_item_selection' })
+    ...mapMutations('product', { toggleSelection: 'toggle_product_item_selection' })
   }
 }
 </script>

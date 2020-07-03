@@ -1,21 +1,78 @@
+/* eslint-disable */
 <template>
+<div>
   <modal ref="form">
     <template v-slot:header>
-      <h4 v-if="!editMode">Cadastre um novo formato</h4>
+      <h4 v-if="$utils.empty(product)">Cadastre um novo formato de apresentação</h4>
       <h4 v-else>Atualizar formato {{ product.name }}</h4>
     </template>
     <template v-slot:main>
-      <div class="new-product-form vertical p-4">
-        <form>
-          <form-input v-model="product.name" label="Título"></form-input>
-          <form-textarea v-model="product.description" label="Descrição"></form-textarea>
-          <div class="horizontal middle center mb-4">
-            <form-money v-model="product.price" class="mr-2" label="Valor (R$)"></form-money>
-            <form-numeric v-model="product.duration" label="Duração da apresentação"></form-numeric>
+      <div class="new-product-form vertical p-4">        
+        <form-input v-model="product.name" label="Título" class="mb-4"></form-input>
+        <form-textarea v-model="product.description" label="Descrição"></form-textarea>
+        <div class="row mb-4">
+          <div class="vertical middle center col-sm-6">
+            <h6 class="mr-3">Preço para Contratar</h6>
+            <form-money v-model="product.price" class="mr-2" placeholder="100,00"></form-money>
           </div>
+          <div class="vertical middle center col-sm-6">
+            <h6 class="mr-3">Duração da Apresentação</h6>
+            <form-numeric
+              v-model="product.duration"
+              icon="clock"
+              placeholder="4 horas"
+            ></form-numeric>
+          </div>
+        </div>
+        <div class="vertical middle mb-4">
+          <h6 class="mb-2">Adicionar items</h6>
+          <small>Liste aqui os itens deste formato</small>
+          <div class="horizontal middle justify-content-between mb-2">
+            <form-input
+              v-model="newItem"
+              class="full-width"
+              icon="list-ol"
+              placeholder="Iluminação, Apresentação, Fogos de Artifício, etc..."
+            ></form-input>
+            <font-awesome icon="plus" class="ml-5 clickable" @click="addItem"></font-awesome>
+          </div>
+          <div
+            v-for="(item, itemIndex) in product.items"
+            :key="itemIndex"
+            class="items d-flex justify-content-between"
+          >
+            <span>{{ item }}</span>
+            <font-awesome
+              icon="times"
+              class="clickable"
+              @click="removeItem(itemIndex)"
+            ></font-awesome>
+          </div>
+          <div class="vertical d-flex justify-content-between mb-2">
+            <h6>Adicionar Fotos e Vídeos de suas apresetações</h6>
+          </div>
+          <div class="horizontal middle full-width mb-4">
+            <form-input
+              v-model="newMedia.url"
+              class="full-width"
+              placeholder="Cole o link de suas midias sociais aqui"
+            ></form-input>
+            <font-awesome icon="plus" class="clickable ml-5" @click="uploadMedia"></font-awesome>
+          </div>
+          <fade-transition group>
+            <div v-for="(media, mediaIndex) in product.medias" :key="mediaIndex">
+              <media-thumbnail
+                class="mb-2"
+                simple
+                removable
+                :media="media"
+                @remove="removeMedia(mediaIndex)"
+              ></media-thumbnail>
+            </div>
+          </fade-transition>
           <div class="horizontal d-flex justify-content-between mb-2">
             <h6>Adicionar documentos</h6>
-            <font-awesome icon="plus" class="clickable" @click="uploadDocument"></font-awesome>
+            <font-awesome icon="plus" class="ml-2 clickable" @click="uploadDocument"></font-awesome>
           </div>
           <div class="vertical mb-5">
             <fade-transition group>
@@ -28,43 +85,36 @@
               ></attachment>
             </fade-transition>
           </div>
-          <div class="horizontal d-flex justify-content-between mb-2">
-            <h6>Adicionar Fotos e Vídeos de suas apresetações</h6>
-          </div>
-          <div class="vertical mb-4">
-            <fade-transition group>
-              <div v-for="(media, mediaIndex) in product.medias" :key="mediaIndex">
-                <media-thumbnail
-                  class="mb-2"
-                  simple
-                  removable
-                  :media="media"
-                  @remove="removeMedia(mediaIndex)"
-                ></media-thumbnail>
-              </div>
-            </fade-transition>
-            <div class="horizontal middle full-width">
-              <form-input
-                v-model="newMedia.url"
-                class="full-width"
-                placeholder="Cole o link de suas midias sociais aqui"
-              ></form-input>
-              <font-awesome icon="plus" class="clickable ml-5" @click="uploadMedia"></font-awesome>
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
     </template>
     <template v-slot:footer>
-      <div class="half-width mb-4">
+      <div class="horizontal center middle my-4">
         <form-button @action="save">Salvar</form-button>
+        <div class="clickable ml-4" @click="openConfirmModal">
+          Remover formato
+        </div>
       </div>
     </template>
   </modal>
+  <modal ref="confirm" height="tiny">
+    <template v-slot:main class="vertical middle center">
+      <h1 class="vertical middle center">
+        <font-awesome icon="exclamation-circle" class="mb-4"></font-awesome>
+      </h1>
+      Remover o formato não irá cancelar propostas ou apresentações associadas a ele. Você deve manualmente rejeitá-las ou redefini-las com seus clientes.
+    </template>
+    <template v-slot:footer>
+      <div class="horizontal center middle">
+        <form-button @action="remove" class="my-4">Excluir mesmo assim</form-button>
+        <div class="clickable ml-4" @click="closeConfirmModal"><h6>Cancelar</h6></div>
+      </div>
+    </template>
+  </modal>
+</div>  
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import * as filestack from 'filestack-js'
 import Product from '@/models/product'
 import Media from '@/models/media'
@@ -72,6 +122,7 @@ export default {
   data() {
     return {
       product: new Product(),
+      newItem: '',
       newMedia: new Media(),
       editMode: false
     }
@@ -80,18 +131,27 @@ export default {
     this.client = filestack.init(process.env.fileStackApiKey)
   },
   methods: {
-    ...mapActions('artist', ['addProduct']),
     openModal(product) {
       if (!this.$utils.empty(product)) {
-        // Need to copy object as js assignments are passed by reference
         this.$set(this, 'product', this.$object.clone(product))
-        this.editMode = true
       } else {
         this.product = new Product()
       }
 
       this.$refs.form.open()
     },
+    openConfirmModal() {
+      this.$refs.confirm.open()
+    },
+    closeConfirmModal() {
+      this.$refs.confirm.close()
+    },
+    addItem() {
+      this.product.items.push(this.newItem)
+    },
+    removeItem(index) {
+      this.$delete(this.product.items, index)
+    },    
     uploadDocument() {
       const options = {
         lang: 'pt',
@@ -102,12 +162,14 @@ export default {
       this.client.picker(options).open()
     },
     documentUploaded({ filesUploaded }) {
+      this.product.documents.push(this.getMediaFromUpload(filesUploaded[0]))
+    },  
+    getMediaFromUpload(file) {
       const media = new Media()
-      media.id = filesUploaded[0].uploadId
-      media.type = filesUploaded[0].mimetype
-      media.name = filesUploaded[0].filename
-      media.url = filesUploaded[0].url
-      this.product.documents.push(media)
+      media.type = file.mimetype
+      media.name = file.filename
+      media.url = file.url
+      return media
     },
     removeDocument(index) {
       this.$delete(this.product.documents, index)
@@ -126,6 +188,11 @@ export default {
     save() {
       this.$emit('save', this.product)
       this.$refs.form.close()
+    },
+    remove() {
+      this.$emit('remove', this.product)
+      this.$refs.confirm.close()
+      this.$refs.form.close()
     }
   }
 }
@@ -143,4 +210,12 @@ export default {
   margin-bottom: 2 * $space;
   padding: $space;
 }
+
+.items {
+  border-bottom: 2px solid $layer5;
+  padding-bottom: 2 * $space;
+  margin-bottom: 2 * $space;
+}
 </style>
+
+/* eslint-disable */

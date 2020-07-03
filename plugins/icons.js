@@ -67,7 +67,8 @@ import {
   faThumbsUp,
   faExclamationCircle,
   faAngleDoubleLeft,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faListOl
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
@@ -174,7 +175,8 @@ library.add(
   faThumbsUp,
   faExclamationCircle,
   faAngleDoubleLeft,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faListOl
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

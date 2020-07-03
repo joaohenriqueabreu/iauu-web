@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="horizontal d-flex justify-content-between mb-2">
-      <h6>Adicionar documentos</h6>
+      <slot></slot>
       <font-awesome icon="plus" class="clickable" @click="upload"></font-awesome>
     </div>
   </div>

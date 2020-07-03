@@ -21,6 +21,7 @@ import Overlay from '@/components/layout/overlay'
 import Loading from '@/components/layout/loading'
 import StatsDonut from '@/components/layout/statsDonut'
 import Notification from '@/components/layout/notification'
+import MediaViewer from '@/components/media/viewer'
 import MediaThumbnail from '@/components/media/thumbnail'
 import Rating from '@/components/artist/profile/rating'
 
@@ -86,6 +87,7 @@ Vue.component('link-preview', LinkPrevue)
 Vue.component('modal', Modal)
 Vue.component('alert', AlertMessage)
 Vue.component('stats-donut', StatsDonut)
+Vue.component('media-viewer', MediaViewer)
 Vue.component('media-thumbnail', MediaThumbnail)
 Vue.component('attachment', Attachment)
 Vue.component('rating', Rating)

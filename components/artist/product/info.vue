@@ -1,16 +1,17 @@
+/* eslint-disable */
 <template>
-  <div>
+<div>
+  <div class="info full-height">
+    <image-uploader ref="photoUploader" @uploaded="setPhoto">
+      <div class="media clickable" :style="{ 'background-image': `url(${productPhoto})` }" @click="uploadPhoto"></div>      
+    </image-uploader>    
     <div class="product">
-      <header v-if="!readOnly" @click="removeProduct">
-        <font-awesome icon="times"></font-awesome>
-      </header>
       <main>
         <div class="title" @click="editProduct">
-          <h6 class="mb-0">{{ product.name }}</h6>
-          <font-awesome v-if="!readOnly" icon="edit" class="ml-4"></font-awesome>
+          <h4 class="cap mb-0">{{ product.name }}</h4>
+          <font-awesome icon="edit" class="ml-4"></font-awesome>
         </div>
-
-        <div class="horizontal middle">
+        <div class="horizontal middle mb-3">
           <span class="mr-4">
             <font-awesome icon="dollar-sign" class="mr-1"></font-awesome>
             {{ product.price }}
@@ -20,26 +21,15 @@
             {{ product.duration }} horas
           </span>
         </div>
-        <hr />
-        <perfect-scrollbar class="mb-4">
-          <div class="description">
-            {{ product.description }}
-          </div>
-        </perfect-scrollbar>
-        <div v-if="!$utils.empty(product.documents)">
-          <h6>Documentos</h6>
-          <hr />
-          <perfect-scrollbar>
-            <div class="documents">
-              <attachment
-                v-for="(document, docIndex) in product.documents"
-                :key="docIndex"
-                :file="document"
-              ></attachment>
-            </div>
-          </perfect-scrollbar>
+        <div class="description one-line">
+          {{ product.description }}
         </div>
-        <div class="mb-4"></div>
+        <div class="items">
+          <div v-for="(item, index) in product.items" :key="index">
+            <hr />
+            <span>{{ item }}</span>
+          </div>
+        </div>
         <div v-if="!$utils.empty(product.medias)">
           <h6>Mídias</h6>
           <hr />
@@ -56,39 +46,71 @@
       </main>
     </div>
   </div>
+</div>  
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Attachment from '@/components/form/attachment'
 export default {
-  components: {
-    attachment: Attachment
-  },
   props: {
-    product: { type: Object, default: () => {} },
-    readOnly: { type: Boolean, default: true }
+    product: { type: Object, default: () => {} }
+  },
+  computed: {
+     productPhoto() {
+      return !this.$utils.empty(this.product.photo)
+        ? this.product.photo
+        : this.$config.defaultBGImgUrl
+    },
   },
   methods: {
+    ...mapActions('artist', ['saveProduct']),
     editProduct() {
-      if (!this.readOnly) {
-        this.$emit('edit', this.product)
-      }
+      this.$emit('edit', this.product)
     },
     removeProduct() {
       this.$emit('remove', this.product.id)
-    }
+    },
+    uploadPhoto() {
+      this.$refs.photoUploader.upload()
+    },
+    async setPhoto({ url }) {
+      let product = this.$object.clone(this.product)
+      product.photo = url
+      await this.saveProduct(product)
+    },
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.info {
+  background: $layer3;
+  box-shadow: $shadow;
+}
+
+.media {
+  min-height: 200px;
+  // border-top-left-radius: $edges;
+  // border-top-right-radius: $edges;
+  background-size: cover;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .product {
   width: 100%;
-  background: $layer3;
-  border-radius: $edges;
-  box-shadow: $shadow;
+  // height: 100%;
+  // background: $layer3;
+  // border-bottom-left-radius: $edges;
+  // border-bottom-right-radius: $edges;
+  // box-shadow: $shadow;
   padding: 4 * $space;
-  height: 100%;
   position: relative;
 
   main {
@@ -127,3 +149,4 @@ export default {
   }
 }
 </style>
+/* eslint-enable */
