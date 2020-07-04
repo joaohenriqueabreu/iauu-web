@@ -60,8 +60,9 @@ export default {
     this.price = this.searchFilters.price
   },
   methods: {
-    ...mapActions('contractor', ['selectArtist']),
+    ...mapActions('contractor', ['loadArtist']),
     selectedArtist(artist) {
+      // await this.loadArtist(artist.slug)
       this.$router.push(`/search/artists/${artist.slug}`)
     }
   }

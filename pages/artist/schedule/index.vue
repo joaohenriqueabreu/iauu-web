@@ -2,23 +2,21 @@
   <div>
     <div class="d-flex justify-content-between">
       <div class="vertical mb-4">
-        <span>Veja e interaja com seus próximos eventos e responda a propostas de clientes</span>
+        <span>Interaja com seus próximos eventos e responda a propostas de clientes</span>
       </div>
     </div>
     <div v-if="timeslots">
       <calendar
         ref="calendar"
         class="content"
+        week-mode
+        owner-mode
         :timeslots="timeslots"
         @reload-events="reloadTimeslotsForYear"
         @event-click="handleEvent"
-        @date-click="openUnavailable"
+        @selected="openBusyModal"
       ></calendar>
-      <unavailable
-        ref="unavailable"
-        :default="selectedTimeslot"
-        @save="saveUnavailableTimeslot"
-      ></unavailable>
+      <busy ref="busy" @save="saveBusyTimeslot"></busy>
       <proposal
         v-if="!$utils.empty(proposal)"
         ref="proposal"
@@ -50,18 +48,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import UnavailableSlot from '@/components/artist/unavailable'
+import BusySlot from '@/components/artist/schedule/busy'
 import Proposal from '@/components/artist/proposal'
 import Presentation from '@/components/artist/presentation'
 export default {
   components: {
-    unavailable: UnavailableSlot,
+    busy: BusySlot,
     proposal: Proposal,
     presentation: Presentation
   },
   async asyncData({ app, store }) {
     await store.dispatch('schedule/loadSchedule', {
-      id: app.$auth.user.id,
+      id: app.$auth.user.role_id,
       year: new Date().getFullYear()
     })
   },
@@ -92,24 +90,22 @@ export default {
       await this.loadSchedule({ id: this.$auth.user.id, year })
       this.$refs.calendar.loadCalendarEvents()
     },
-    openUnavailable({ dateStr }) {
-      if (this.haveEventsOnDate(dateStr)) {
-        this.setAlert({
-          message:
-            'Existem apresentações ou propostas neste dia, cancele-as antes de marcar como indisponível',
-          type: 'error'
-        })
-
+    openBusyModal(timeslot) {
+      if (this.haveEventsOnDate(timeslot)) {
+        this.$toasted.error(
+          'Existem apresentações ou propostas neste dia, cancele-as antes de marcar como indisponível'
+        )
         return
       }
 
-      this.selectedTimeslot = dateStr
-      this.$refs.unavailable.openModal()
+      this.selectedTimeslot = timeslot
+      this.$refs.busy.openModal(timeslot)
     },
     async handleEvent({ eventId, timeslotId, type }) {
-      if (type === 'unavailable') {
+      if (type === 'busy') {
         await this.removeTimeslot(timeslotId)
-        this.$refs.calendar.removeEvent(eventId)
+        this.$toasted.success('Evento removido!')
+        // this.$refs.calendar.removeEvent(eventId)
       }
 
       if (type === 'proposal') {
@@ -122,10 +118,10 @@ export default {
         this.$refs.presentation.openModal()
       }
     },
-    async saveUnavailableTimeslot(timeslot) {
+    async saveBusyTimeslot(timeslot) {
       await this.saveTimeslot(timeslot)
-      this.$refs.calendar.addEvent(timeslot)
-      this.$refs.unavailable.closeModal()
+      // this.$refs.calendar.addEvent(timeslot)
+      this.$refs.busy.closeModal()
     },
     async handleAcceptProposal(id) {
       await this.acceptProposal(id)

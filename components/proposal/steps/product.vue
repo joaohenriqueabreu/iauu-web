@@ -1,21 +1,18 @@
 <template>
   <div>
     <div class="mb-5">Escolha o produto do artista que você deseja contratar</div>
-    <div
-      v-for="(product, index) in products"
-      :key="index"
-      class="row"
-      @click="viewProduct(product)"
-    >
-      <div class="col-sm-3"></div>
-      <div class="col-sm-6">
-        <div class="product-container">
-          <img
-            v-if="!$utils.empty(product.main_media) && product.main_media.type === 'image'"
-            :src="product.main_media.url"
-          />
+    <div class="row">
+      <div v-for="(product, index) in products" :key="index" class="col-sm-4">
+        <product-info :product="product" proposal-view></product-info>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- <div class="product-container">
+          <img v-if="!$utils.empty(product.photo)" :src="product.photo"/>
           <div
-            v-if="!$utils.empty(product.main_media) && product.main_media.type === 'video'"
+            v-if="!$utils.empty(product.photo) && product.main_media.type === 'video'"
             class="video"
           >
             <iframe
@@ -26,27 +23,26 @@
             ></iframe>
           </div>
           <div class="vertical">
-            <div class="vertical d-flex justify-content-start">
+            <div class="vertical d-flex justify-content-start" v-if="!$utils.empty(product.rating)">
               <h4 class="mb-2">{{ product.name }}</h4>
               <rating :score="product.rating.score"></rating>
             </div>
-
             <h5>{{ product.price | currency }}</h5>
           </div>
-        </div>
-      </div>
-    </div>
-    <modal ref="modal">
+        </div> -->
+<!-- </div> -->
+<!-- </div> -->
+<!-- <modal ref="modal">
       <template v-slot:main>
-        <product-info :product="selectedProduct"></product-info>
+        
       </template>
       <template v-slot:footer>
         <form-button class="half-width" @action="chooseProduct">Escolher produto</form-button>
       </template>
-    </modal>
-    <modal ref="video"></modal>
-  </div>
-</template>
+    </modal> -->
+<!-- <modal ref="video"></modal> -->
+<!-- </div> -->
+<!-- </template> -->
 
 <script>
 import { mapActions } from 'vuex'
@@ -67,7 +63,7 @@ export default {
   },
   methods: {
     ...mapActions('contractor', ['editProposal']),
-    viewProduct(product) {
+    view(product) {
       this.selectedProduct = product
       this.$refs.modal.open()
     },
@@ -137,10 +133,10 @@ export default {
   }
 }
 
-/deep/ .product {
-  // Change child component
-  background: none;
-  box-shadow: none;
-  border-radius: none;
-}
+// /deep/ .product {
+// Change child component
+//   background: none;
+//   box-shadow: none;
+//   border-radius: none;
+// }
 </style>

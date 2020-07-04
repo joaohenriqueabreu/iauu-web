@@ -8,22 +8,9 @@
               <h5>{{ $auth.user.name }}</h5>
             </nuxt-link>
           </div>
-          <div class="pr-4 mr-5 menu-items">
-            <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/schedule">
-              <h6>Agenda</h6>
-            </nuxt-link>
-            <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/incorporate">
-              <h6>Venda mais shows</h6>
-            </nuxt-link>
-            <nuxt-link v-if="$auth.hasScope('artist')" to="/artist/products">
-              <h6>Formatos de apresentação</h6>
-            </nuxt-link>
-            <nuxt-link :to="`/${$auth.hasScope('artist') ? 'artist' : 'contractor'}/profile`">
-              <h6>Perfil</h6>
-            </nuxt-link>
-            <nuxt-link to="/logout">
-              <h6>Sair</h6>
-            </nuxt-link>
+          <div class="pr-4 mr-5">
+            <artist-menu v-if="$auth.hasScope('artist')"></artist-menu>
+            <contractor-menu v-if="$auth.hasScope('contractor')"></contractor-menu>
             <div class="clickable position-absolute top-right pr-4">
               <font-awesome icon="times" @click="displaySubmenu = false"></font-awesome>
             </div>
@@ -54,9 +41,13 @@
 
 <script>
 import ProductSetup from '@/components/artist/productSetup'
+import ArtistMenu from '@/components/menu/artist'
+import ContractorMenu from '@/components/menu/contractor'
 export default {
   components: {
-    'product-setup': ProductSetup
+    'product-setup': ProductSetup,
+    'artist-menu': ArtistMenu,
+    'contractor-menu': ContractorMenu
   },
   data() {
     return {
@@ -107,24 +98,6 @@ h6 {
   justify-content: space-between;
 
   transition: $transition;
-
-  h6 {
-    margin-left: 5 * $space;
-  }
-
-  .menu-items {
-    justify-content: flex-end;
-    align-items: flex-end;
-    @include desktop {
-      display: flex;
-      flex-direction: row;
-    }
-
-    @include mobile {
-      display: flex;
-      flex-direction: column;
-    }
-  }
 }
 
 .mainmenu {

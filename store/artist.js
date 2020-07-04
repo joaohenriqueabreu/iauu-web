@@ -58,8 +58,8 @@ export const actions = {
     const { data } = await this.$axios.post('artists/products', { product })
     commit('set_products', data)    
   },
-  async removeProduct({ commit }, { _id }) {
-    const { data } = await this.$axios.delete(`artists/products/${_id}`)
+  async removeProduct({ commit }, { id }) {
+    const { data } = await this.$axios.delete(`artists/products/${id}`)
     commit('set_products', data)
   }
 }

@@ -52,7 +52,8 @@ export default {
   props: {
     readOnly: { type: Boolean, default: true },
     weekMode: { type: Boolean, default: false },
-    timeslots: { type: Array, default: () => {} }
+    timeslots: { type: Array, default: () => {} },
+    ownerMode: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -75,7 +76,7 @@ export default {
       return this.$collection.map(busyTimeslots, 'start_dt')
     },
     unavailableTimeslots() {
-      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'unavailable')
+      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'busy')
     },
     headerButtons: () => {
       return {
@@ -155,6 +156,9 @@ export default {
 
       event.remove()
     },
+    eventResize({ event, endDelta, startDelta }) {
+      // this.$emit('selected', this.formatTimeslotFromEvent(newTimeslot))
+    },
     datesDestroy() {
       // This method is called right after every view switch on calendar,
       // when we switch years, append new events data
@@ -164,7 +168,7 @@ export default {
       }
     },
     selected(selection) {
-      if (this.isBusyDay(selection.start)) {
+      if (this.isBusyDay(selection.start) && !this.ownerMode) {
         // do nothing if it's a busy day - don't allow actions here
         return
       }
@@ -183,7 +187,7 @@ export default {
       let startDt = moment(timeslot.start_dt).toISOString()
       const endDt = moment(timeslot.end_dt).toISOString()
 
-      if (timeslot.type === 'unavailable') {
+      if (timeslot.type === 'busy' && !this.ownerMode) {
         startDt = moment(timeslot.start_dt)
           .startOf('day')
           .toISOString()
@@ -191,7 +195,7 @@ export default {
 
       const fullcalendarEvent = {
         id: `${timeslot.type}_${timeslot.id}`,
-        title: timeslot.type === 'unavailable' ? 'Indisponibilidade' : timeslot.title,
+        title: timeslot.type === 'busy' ? 'Indisponível' : timeslot.title,
         start: startDt,
         end: endDt,
         allDay: isFullDay,
@@ -216,7 +220,7 @@ export default {
     loadCalendarEvents() {
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
-        const isBusy = timeslot.type === 'busy'
+        const isBusy = timeslot.type === 'busy' && !this.ownerMode
         this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, isBusy, isBusy))
       })
     },
@@ -272,6 +276,7 @@ export default {
       &::before {
         display: block;
         font-size: $small;
+        color: $brand;
         content: 'Remover';
       }
     }
@@ -286,7 +291,7 @@ export default {
     color: $layer3;
   }
 
-  &.unavailable {
+  &.busy {
     transition: $transition;
     background: transparent;
     span {
@@ -312,6 +317,7 @@ export default {
       &::before {
         display: block;
         font-size: $small;
+        color: $white;
         content: 'Remover';
       }
     }

@@ -1,38 +1,37 @@
 <template>
   <div>
-    <div v-if="!$utils.empty(media)">
-      <link-preview :url="media.url">
-        <template slot="loading">
-          <div class="loading"></div>
-        </template>
-        <template slot-scope="props">
-          <a :href="props.url" class="btn btn-primary" target="_blank">
-            <div class="preview">
-              <div class="preview-img">
-                <div class="network-icon">
-                  <avatar :src="networkIcon" :size="30" class="social"> </avatar>
-                </div>
-                <img :src="props.img" />
-              </div>
-              <div class="preview-text">{{ props.title }}</div>
-            </div>
-          </a>
-        </template>
-      </link-preview>
+    <div v-if="!$utils.empty(link.images)">
+      <div class="preview">
+        <div class="preview-img">
+          <div class="network-icon">
+            <avatar :src="networkIcon" :size="30" class="social"> </avatar>
+          </div>
+          <img :src="link.images[0]" />
+        </div>
+        <div class="preview-text">
+          <h6>{{ link.title }}</h6>
+        </div>
+      </div>
     </div>
     <div v-else>
-      <img class="default" :src="$config.defaultBGImgUrl" />
+      <loading :active="$utils.empty(link.images)"></loading>
     </div>
   </div>
 </template>
 
 <script>
+import { getLinkPreview } from 'link-preview-js'
 export default {
   props: {
     media: { type: Object, default: () => {} },
     simple: { type: Boolean, default: false },
     avatar: { type: Boolean, default: false },
     removable: { type: Boolean, default: false }
+  },
+  data() {
+    return {
+      link: { type: Object, default: () => {} }
+    }
   },
   computed: {
     networkIcon() {
@@ -63,6 +62,10 @@ export default {
       return require('@/assets/imgs/music.png')
     }
   },
+  async mounted() {
+    // Use proxy server to bypass CORS restriction
+    this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.media.url}`)
+  },
   methods: {
     isSocialMatch(url, matches) {
       const hasMatch = matches.filter((match) => {
@@ -74,6 +77,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.VueCarousel-pagination {
+  height: 5vh;
+  position: relative;
+}
+</style>
 
 <style lang="scss" scoped>
 .default {
@@ -116,8 +126,10 @@ a {
 }
 
 .preview {
-  @extend .horizontal;
+  @extend .vertical;
   width: 100%;
+  height: 100%;
+
   margin-bottom: 4 * $space;
   box-shadow: $shadow;
   position: relative;
@@ -125,7 +137,8 @@ a {
 
   .preview-img {
     position: relative;
-    max-height: 100px;
+    height: 100%;
+    // max-height: 100px;
     .network-icon {
       position: absolute;
       bottom: 5px;
@@ -133,7 +146,7 @@ a {
       height: 30px;
       width: 30px;
     }
-    width: 50%;
+    // width: 50%;
     img {
       width: 100%;
       max-height: 100px;
@@ -141,17 +154,16 @@ a {
   }
 
   .preview-text {
-    width: 50%;
-    padding: 0 2 * $space;
-    max-height: 100px;
-
+    display: block;
+    max-width: 100%;
+    padding: 2 * $space;
     text-align: left;
     font-size: $small;
     margin-bottom: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: break-word;
-    white-space: no-wrap;
+    white-space: nowrap;
   }
 }
 </style>

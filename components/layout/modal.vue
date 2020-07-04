@@ -9,7 +9,7 @@
       @before-close="enableBodyScroll"
     >
       <div class="modal-content" :class="height">
-        <header>
+        <header v-show="!hideHeader" :class="height">
           <div class="close" @click="close">
             <font-awesome icon="times"></font-awesome>
           </div>
@@ -20,7 +20,7 @@
             <slot name="main"></slot>
           </main>
         </perfect-scrollbar>
-        <footer>
+        <footer :class="height">
           <slot name="footer"></slot>
         </footer>
       </div>
@@ -32,7 +32,8 @@
 import { v4 } from 'uuid'
 export default {
   props: {
-    height: { type: String, default: 'regular' }
+    height: { type: String, default: 'regular' },
+    hideHeader: { type: Boolean, default: false }
   },
   computed: {
     name: () => v4()
@@ -73,20 +74,29 @@ export default {
   background: $layer2;
   padding: 2 * $space;
 
-  &.tiny {
-    height: 50vh;
-  }
-  &.small {
-    height: 70vh;
-  }
-  &.regular {
-    height: 95vh;
-  }
+  // &.tiny {
+  //   height: 50vh;
+  // }
+  // &.small {
+  //   height: 70vh;
+  // }
+  // &.regular {
+  //   height: 95vh;
+  // }
 
   header {
     // @extend .vertical, .middle, .center;
     width: 100%;
-    height: 10vh;
+    &.tiny {
+      height: 5vh;
+    }
+    &.small {
+      height: 7vh;
+    }
+    &.regular {
+      height: 10vh;
+    }
+
     position: relative;
     .close {
       text-align: center;
@@ -122,9 +132,15 @@ export default {
 
   footer {
     position: relative;
-    // width: 100%;
-    // bottom: 10px;
-    height: 10vh;
+    &.tiny {
+      height: 5vh;
+    }
+    &.small {
+      height: 7vh;
+    }
+    &.regular {
+      height: 10vh;
+    }
     padding: 0 4 * $space;
   }
 

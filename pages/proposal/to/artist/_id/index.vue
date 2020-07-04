@@ -45,11 +45,11 @@
 <script>
 // import Proposal from '@/models/proposal'
 import StepsCounter from '@/components/proposal/steps/counter'
-import DateStep from '@/components/proposal/steps/dateStep'
-import ProductStep from '@/components/proposal/steps/productStep'
+import DateStep from '@/components/proposal/steps/date'
+import ProductStep from '@/components/proposal/steps/product'
 // import DocsStep from '@/components/proposal/steps/docsStep'
-import DetailsStep from '@/components/proposal/steps/detailsStep'
-import ConfirmStep from '@/components/proposal/steps/confirmStep'
+import DetailsStep from '@/components/proposal/steps/details'
+import ConfirmStep from '@/components/proposal/steps/confirm'
 export default {
   layout: 'guest',
   components: {
@@ -57,21 +57,18 @@ export default {
   },
   // Load all required data for components (they get re-rendered everytime we switch components)
   // Variables are passed by reference so it's ok.
-  async asyncData({ app, store, query }) {
+  async asyncData({ app, store, route }) {
     // Required for all components
     store.dispatch('contractor/initProposal')
 
-    await Promise.all([
-      // Required for dateStep
-      store.dispatch('schedule/loadSchedule', { id: query.id, year: app.$moment().year }),
+    // await store.dispatch('contractor/loadArtistPrivate', route.params.id)
 
-      // Required for productsStep
-      store.dispatch('artist/loadProducts', query.id)
-    ])
+    // Required for dateStep
+    await store.dispatch('schedule/loadSchedule', { id: route.params.id, year: 2020 })
 
     // if page was reloaded we will lose artist data, verify and reload if necessary
     if (app.$utils.empty(store.state.contractor.artist)) {
-      await store.dispatch('contractor/loadArtist', query.id)
+      await store.dispatch('contractor/loadArtistPrivate', route.params.id)
     }
 
     store.dispatch('contractor/editProposal', {
@@ -81,7 +78,7 @@ export default {
 
     return {
       proposal: store.state.contractor.proposal,
-      products: store.state.artist.products,
+      products: store.state.contractor.artist.products,
       timeslots: store.state.schedule.timeslots
     }
   },

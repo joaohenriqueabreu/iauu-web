@@ -12,7 +12,7 @@ const config = {
   youtubeSubstringMatch: ['youtu.be', 'youtube'],
   vimeoSubstringMatch: ['vimeo'],
   instagramSubstringMatch: ['instagram'],
-  tiktokSubstringMatch: ['vm.tiktok'],
+  tiktokSubstringMatch: ['vm.tiktok', 'tiktok'],
   spotifySubstringMatch: ['open.spotify'],
   pdfSubstringMatch: ['pdf'],
 

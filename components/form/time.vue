@@ -4,7 +4,10 @@ export default {
   extends: Input,
   computed: {
     type() {
-      return 'date'
+      return 'time'
+    },
+    iconHelper() {
+      return 'clock'
     }
   }
 }

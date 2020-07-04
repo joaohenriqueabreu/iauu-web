@@ -9,7 +9,7 @@
     </div>
     <div class="row align-items-stretch full-height">
       <div v-for="(product, index) in products" :key="index" class="col-sm-4 mb-4">
-        <product-info :product="product" @edit="editProduct" class="full-height"></product-info>
+        <product-info :product="product" class="full-height" @edit="editProduct"></product-info>
       </div>
     </div>
     <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
@@ -24,18 +24,18 @@ import ProductInfo from '@/components/artist/product/info'
 export default {
   components: {
     'product-form': ProductForm,
-    'product-info': ProductInfo,
+    'product-info': ProductInfo
   },
   async asyncData({ store, app }) {
     await store.dispatch('artist/loadProducts')
+  },
+  computed: {
+    ...mapState({ products: (state) => state.artist.products })
   },
   mounted() {
     const items = []
     this.products.forEach((product) => items.push(product.items))
     this.productItems = this.$array.uniq(this.$array.flatten(items))
-  },
-  computed: {
-    ...mapState({ products: (state) => state.artist.products })
   },
   methods: {
     ...mapActions('artist', ['loadProducts', 'saveProduct', 'removeProduct']),

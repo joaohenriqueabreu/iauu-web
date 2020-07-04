@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Artist from '@/models/artist'
-import Media from '@/models/media'
 import Proposal from '@/models/proposal'
 
 export const state = () => ({
@@ -16,17 +15,8 @@ export const mutations = {
       state.artists.push(new Artist(artistData))
     })
   },
-  select_artist(state, id) {
-    state.selectedArtistId = id
-  },
   set_artist(state, artistData) {
     state.artist = new Artist(artistData)
-
-    // TODO Should move this to the model
-    state.artist.medias = []
-    artistData.medias.forEach((mediaURL) => {
-      state.artist.medias.push(new Media({ url: mediaURL }))
-    })
   },
   remove_artist(state, id) {
     Vue.delete(
@@ -48,7 +38,11 @@ export const actions = {
     commit('set_artists', data)
   },
   async loadArtist({ commit }, slug) {
-    const { data } = await this.$axios.get(`artists/${slug}`)
+    const { data } = await this.$axios.get(`artists/${slug}/public`)
+    commit('set_artist', data)
+  },
+  async loadArtistPrivate({ commit }, id) {
+    const { data } = await this.$axios.get(`artists/${id}/private`)
     commit('set_artist', data)
   },
   initProposal({ commit }) {

@@ -38,11 +38,12 @@ export default {
   data() {
     return {
       date: '',
-      proposingTimeslotId: 1
+      proposingTimeslotId: 1,
+      proposedTimeslotCount: 0
     }
   },
   methods: {
-    ...mapActions('schedule', ['loadSchedule', 'appendTimeslot', 'removeTimeslot']),
+    ...mapActions('schedule', ['loadSchedule', 'appendTimeslot', 'deselectTimeslot']),
     addTimeslot(selectedTimeslot) {
       // Assign timeslot as proposal
       selectedTimeslot.title = 'Proposta de data para o evento'
@@ -51,16 +52,23 @@ export default {
       // assign some temp id
       selectedTimeslot.id = `proposing_${this.proposingTimeslotId}`
       this.proposingTimeslotId++
+      this.proposedTimeslotCount++
 
       this.editProposal({ prop: 'timeslot', value: selectedTimeslot })
       this.appendTimeslot(selectedTimeslot)
 
+      if (this.proposedTimeslotCount === 1) {
+        this.$toasted.success(
+          'OK! Selecione mais uma proposta de data para o evento ou clique na seta para a próxima etapa da proposta.'
+        )
+      }
+
       // Complete step
       this.$emit('complete')
     },
-    async removeProposingTimeslot({ eventId, timeslotId, type }) {
+    removeProposingTimeslot({ eventId, timeslotId, type }) {
       if (type === 'proposing') {
-        await this.removeTimeslot(timeslotId)
+        this.deselectTimeslot(timeslotId)
         // Fullcalendar will update itself due to watcher
 
         if (this.timeslots.length) {

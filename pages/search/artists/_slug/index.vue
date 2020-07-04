@@ -2,20 +2,20 @@
   <div>
     <div :style="{ 'background-image': `url(${bgImage})` }" class="bg"></div>
     <div class="title">
-      <avatar :src="artist.photo" :username="artist.company_name" :size="200"></avatar>
+      <avatar :src="artist.user.photo" :username="artist.company_name" :size="200"></avatar>
       <h1>{{ artist.company_name || artist.name }}</h1>
     </div>
     <div class="horizontal center middle mb-4">
       <font-awesome icon="music"></font-awesome>
-      <h3>{{ artist.category }}</h3>
+      <h3>{{ artist.category.name }}</h3>
     </div>
-    <div v-if="!$utils.empty(artist.subcategories)" class="horizontal center middle mb-4">
-      <div v-for="(subcategory, index) in artist.subcategories" :key="index" class="badge">
+    <div v-if="!$utils.empty(artist.category.subcategories)" class="horizontal center middle mb-4">
+      <div v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="badge">
         <h6 class="mb-0">{{ subcategory }}</h6>
       </div>
     </div>
     <div class="horizontal center middle half-width mb-5">
-      <div v-for="(media, mediaIndex) in socialMedias" :key="mediaIndex" class="mx-2">
+      <div v-for="(media, mediaIndex) in socialMedias" :key="mediaIndex" class="mx-4">
         <a :href="media.url" target="_blank">
           <media-thumbnail :media="media" avatar></media-thumbnail>
         </a>
@@ -52,7 +52,7 @@
       <h4 class="mb-5">Nossa história</h4>
       {{ artist.story }}
     </div>
-    <div class="mb-5 mx-5">
+    <div v-if="!$utils.empty(artist.testemonials)" class="mb-5 mx-5">
       <h4 class="mb-5">O que falam sobre nosso show?</h4>
       <div v-for="(testemonial, index) in artist.testemonials" :key="index" class="horizontal">
         <avatar :src="testemonial.photo" :size="50" class="mr-1"></avatar>
@@ -87,7 +87,7 @@
           >
             Enviar proposta
           </nuxt-link>
-          <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/login">
+          <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">
             <h6 class="hide-mobile">Cadastre-se para contratar este artista</h6>
             <h6 class="hide-desktop">Cadastre-se</h6>
           </nuxt-link>
@@ -99,20 +99,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   async asyncData({ store, route }) {
     await store.dispatch('contractor/loadArtist', route.params.slug)
-
-    return {
-      artist: store.state.contractor.artist
-    }
   },
   computed: {
+    ...mapState({ artist: (state) => state.contractor.artist }),
     bgImage() {
       return require('@/assets/imgs/concert.png?webp')
     },
     socialMedias() {
-      return this.$array.slice(this.artist.medias, 0, 4)
+      return this.$array.slice(this.artist.social, 0, 4)
     },
     rateMin() {
       return Math.round(this.artist.score * 0.5)

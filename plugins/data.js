@@ -20,9 +20,14 @@ const datetimeFilter = (value) => {
   return moment(value).format('DD/MM/YYYY HH:mm')
 }
 
+const timeFilter = (value) => {
+  return moment(value).format('HH:mm')
+}
+
 // Registering custom filters
 Vue.filter('date', dateFilter)
 Vue.filter('datetime', datetimeFilter)
+Vue.filter('time', timeFilter)
 
 export default ({ app }, inject) => {
   inject('array', array)

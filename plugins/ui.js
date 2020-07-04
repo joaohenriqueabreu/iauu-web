@@ -1,6 +1,6 @@
 // UI componentes
 import Vue from 'vue'
-import Carousel from 'vue-carousel'
+import { Carousel, Slide } from 'vue-carousel'
 import Avatar from 'vue-avatar'
 import Vuelidate from 'vuelidate'
 import VueTheMask from 'vue-the-mask'
@@ -47,7 +47,6 @@ import Attachment from '@/components/form/attachment'
 
 moment.locale('pt-br')
 
-Vue.use(Carousel)
 Vue.use(Modal)
 Vue.use(Vuelidate)
 Vue.use(VueSmoothScroll)
@@ -62,6 +61,8 @@ Vue.component('toggle-button', ToggleButton)
 Vue.component('overlay', Overlay)
 Vue.component('loading', Loading)
 Vue.component('notification', Notification)
+Vue.component('carousel', Carousel)
+Vue.component('slide', Slide)
 
 Vue.component('form-input', FormInput)
 Vue.component('form-numeric', FormNumeric)

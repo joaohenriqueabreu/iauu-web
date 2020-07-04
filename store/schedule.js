@@ -10,10 +10,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-  set_schedule(state, { id, type, timeslots }) {
-    // state.schedule = new Schedule({ id, type })
-    state.timeslots = []
-    timeslots.forEach((timeslotData) => state.timeslots.push(new Timeslot(timeslotData)))
+  set_schedule(state, schedule) {
+    state.timeslots = schedule
   },
   append_timeslot(state, timeslotData) {
     Vue.set(state.timeslots, state.timeslots.length, new Timeslot(timeslotData))
@@ -31,8 +29,9 @@ export const actions = {
     const { data } = await this.$axios.get(`schedules/${id}/${year}`)
     commit('set_schedule', data)
   },
-  async saveTimeslot({ commit }, { attributes: timeslotData }) {
-    const { data } = await this.$axios.post('schedules', timeslotData)
+  async saveTimeslot({ commit }, timeslot) {
+    const { data } = await this.$axios.post('schedules', { timeslot })
+    // commit('set_schedule', data)
 
     // commits timeslot in the correct format
     commit('append_timeslot', data)
@@ -40,7 +39,11 @@ export const actions = {
   appendTimeslot({ commit }, timeslotData) {
     commit('append_timeslot', timeslotData)
   },
-  removeTimeslot({ commit }, id) {
+  deselectTimeslot({ commit }, id) {
+    commit('remove_timeslot', id)
+  },
+  async removeTimeslot({ commit }, id) {
+    await this.$axios.delete(`schedules/${id}`)
     commit('remove_timeslot', id)
   }
 }
