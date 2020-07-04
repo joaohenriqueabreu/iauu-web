@@ -11,9 +11,12 @@
       </image-uploader>
       <div v-else class="media" :style="{ 'background-image': `url(${productPhoto})` }"></div>
       <div class="product">
-        <div class="title" @click="editProduct">
-          <h2 class="cap mb-0">{{ product.name }}</h2>
+        <div class="title" @click="editProduct" v-if="!proposalView">
+          <h2 class="cap mb-2">{{ product.name }}</h2>
           <font-awesome icon="edit" class="ml-4"></font-awesome>
+        </div>
+        <div v-else>
+          <h2 class="cap mb-2">{{ product.name }}</h2>
         </div>
         <div class="horizontal middle mb-3">
           <span class="mr-4">
@@ -28,7 +31,14 @@
           {{ product.description }}
         </div>
         <div class="items mb-5">
-          <div v-for="(item, index) in product.items" :key="index">
+          <div v-for="(item, index) in product.items" :key="`item_${index}`">
+            <hr />
+            <span class="one-line">
+              <font-awesome icon="check" class="mr-2"></font-awesome>
+              {{ item }}
+            </span>
+          </div>
+          <div v-for="(item, index) in notItems" :key="`not_${index}`" class="not-items">
             <hr />
             <span class="one-line">
               <font-awesome icon="check" class="mr-2"></font-awesome>
@@ -46,7 +56,7 @@
         </div>
       </div>
     </div>
-    <product-preview :product="product" ref="preview"></product-preview>
+    <product-preview :product="product" :not-items="notItems" ref="preview"></product-preview>
   </div>
 </template>
 
@@ -59,7 +69,8 @@ export default {
   },
   props: {
     product: { type: Object, default: () => {} },
-    proposalView: { type: Boolean, default: false }
+    proposalView: { type: Boolean, default: false },
+    notItems: { type: Array, default: () => {}}
   },
   computed: {
     productPhoto() {
@@ -164,6 +175,12 @@ h6 {
   //   }
   // }
 }
+
+.not-items {
+  color: $layer5;
+}
+
+// Required for img bg
 /deep/ .modal-content {
   padding: 0;
 }

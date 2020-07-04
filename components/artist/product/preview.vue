@@ -16,9 +16,20 @@
         <h2 class="mb-4">{{ product.name }}</h2>
         <p class="px-4">{{ product.description }}</p>
       </div>
-      <div class="px-5">
+      <div class="px-5 mb-4" v-if="!$utils.empty(product.items)">
         <h5>O que está incluido neste formato?</h5>
         <div v-for="(item, index) in product.items" :key="index">
+          <hr />
+          <span>
+            <font-awesome icon="check" class="mr-2"></font-awesome>
+            {{ item }}
+          </span>
+        </div>
+      </div>
+      <div class="px-5" v-if="!$utils.empty(notItems)">
+        <h5 class="mb-2">O que não está incluido neste formato?</h5>
+        <small>Oferecemos estes itens em outros produtos. Selecione um formato mais completo se desejar contratar.</small>
+        <div v-for="(item, index) in notItems" :key="index" class="not-items">
           <hr />
           <span>
             <font-awesome icon="check" class="mr-2"></font-awesome>
@@ -34,6 +45,12 @@
           <h4>{{ product.price | currency }}</h4>
         </div>
         <div>
+          <h4 class="horizontal">
+            <font-awesome icon="clock" class="mr-"></font-awesome>
+            {{ product.duration }} horas
+          </h4>
+        </div>
+        <div>
           <form-button @action="selectProduct">Selecionar</form-button>
         </div>
       </div>
@@ -44,7 +61,8 @@
 <script>
 export default {
   props: {
-    product: { type: Object, default: () => {} }
+    product: { type: Object, default: () => {} },
+    notItems: { type: Array, default: () => {} }
   },
   computed: {
     productPhoto() {
@@ -86,5 +104,13 @@ export default {
   max-width: 25vw;
   margin-right: 2 * $space;
   margin-left: 2 * $space;
+}
+
+.not-items {
+  color: $layer5;
+}
+
+/deep/ footer {
+  background: $layer1;
 }
 </style>

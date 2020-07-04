@@ -9,7 +9,7 @@
     </div>
     <div class="row align-items-stretch full-height">
       <div v-for="(product, index) in products" :key="index" class="col-sm-4 mb-4">
-        <product-info :product="product" class="full-height" @edit="editProduct"></product-info>
+        <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct"></product-info>
       </div>
     </div>
     <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
@@ -60,6 +60,15 @@ export default {
       this.$nextTick(function() {
         this.$refs.confirm.close()
       })
+    },
+    notItems(items) {
+      // this.$array.uniq(this.$array.flatten(arrs))
+      const allItems = []
+      this.products.forEach((product) => {
+        allItems.push(product.items)
+      })
+
+      return this.$array.difference(this.$array.uniq(this.$array.flatten(allItems)), items)
     }
   }
 }
