@@ -186,6 +186,7 @@ h6 {
 
   [data-icon] {
     color: $brandLayer;
+    font-weight: $bold;
     box-shadow: $shadow;
     border-radius: $rounded;
     background: $layer5;

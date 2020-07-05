@@ -19,7 +19,7 @@
         week-mode
         :timeslots="timeslots"
         class="content"
-        @event-click="removeProposingTimeslot"
+        @event-click="removeProposalTimeslot"
         @selected="addTimeslot"
       ></calendar>
     </div>
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       date: '',
-      proposingTimeslotId: 1,
+      proposalTimeslotId: 1,
       proposedTimeslotCount: 0
     }
   },
@@ -47,11 +47,11 @@ export default {
     addTimeslot(selectedTimeslot) {
       // Assign timeslot as proposal
       selectedTimeslot.title = 'Proposta de data para o evento'
-      selectedTimeslot.type = 'proposing'
+      selectedTimeslot.type = 'proposal'
 
       // assign some temp id
-      selectedTimeslot.id = `proposing_${this.proposingTimeslotId}`
-      this.proposingTimeslotId++
+      selectedTimeslot.id = `proposal_${this.proposalTimeslotId}`
+      this.proposalTimeslotId++
       this.proposedTimeslotCount++
 
       this.editProposal({ prop: 'timeslot', value: selectedTimeslot })
@@ -66,8 +66,8 @@ export default {
       // Complete step
       this.$emit('complete')
     },
-    removeProposingTimeslot({ eventId, timeslotId, type }) {
-      if (type === 'proposing') {
+    removeProposalTimeslot({ eventId, timeslotId, type }) {
+      if (type === 'proposal') {
         this.deselectTimeslot(timeslotId)
         // Fullcalendar will update itself due to watcher
 

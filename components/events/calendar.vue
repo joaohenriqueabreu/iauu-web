@@ -260,7 +260,7 @@ export default {
     }
   }
 
-  &.proposing {
+  &.proposal {
     background: $proposalTimeslot;
     span {
       color: $layer2;
