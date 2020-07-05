@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!$utils.empty(link.images)">
+    <div v-if="loaded">
       <div class="preview">
         <div class="preview-img">
           <div class="network-icon">
@@ -30,7 +30,8 @@ export default {
   },
   data() {
     return {
-      link: { type: Object, default: () => {} }
+      link: { type: Object, default: () => {} },
+      loaded: { type: Boolean, default: false }
     }
   },
   computed: {
@@ -64,7 +65,13 @@ export default {
   },
   async mounted() {
     // Use proxy server to bypass CORS restriction
-    this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.media.url}`)
+    try {
+      this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.media.url}`)
+    } catch (error) {
+      this.$toast.error('Endereço fornecido é inválido')
+    }
+
+    this.loaded = true
   },
   methods: {
     isSocialMatch(url, matches) {

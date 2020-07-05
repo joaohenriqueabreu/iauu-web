@@ -21,7 +21,7 @@ export default {
     this.$refs.loading.open()
     const { access_token: accessToken } = QueryString.parse(window.location.hash)
     const { data } = await this.$axios.post(`login/${this.network}`, { token: accessToken })
-    this.$toasted.success('Login verificado com sucesso!')
+    this.$toast.success('Login verificado com sucesso!')
 
     this.$auth.setToken('local', `Bearer ${data}`)
     await this.$auth.setStrategy('local')

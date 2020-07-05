@@ -1,5 +1,5 @@
 <template>
-  <div class="full-height">
+  <div class="full-height vertical middle">
     <div class="confirm">
       <div>
         <h5>Enviar proposta?</h5>
@@ -24,12 +24,14 @@
         <div v-if="!$utils.empty(proposal.timeslots)">
           {{ proposal.timeslot[0].start_dt | date }}
         </div>
-        <div v-if="!$utils.empty(proposal.product)">
-          {{ proposal.product.name }}
-        </div>
-        <hr v-if="!$utils.empty(proposal.product)" class="light thick" />
-        <div v-if="!$utils.empty(proposal.product)" class="d-flex justify-content-end">
-          <h4>{{ proposal.product.price | currency }}</h4>
+        <div v-if="!$utils.empty(proposal.product) && proposal.product.name !== 'custom'">
+          <div>
+            {{ proposal.product.name }}
+          </div>
+          <hr class="light thick" />
+          <div class="d-flex justify-content-end">
+            <h4>{{ proposal.product.price | currency }}</h4>
+          </div>
         </div>
       </div>
       <div class="half-width horizontal middle center">

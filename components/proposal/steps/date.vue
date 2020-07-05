@@ -58,7 +58,7 @@ export default {
       this.appendTimeslot(selectedTimeslot)
 
       if (this.proposedTimeslotCount === 1) {
-        this.$toasted.success(
+        this.$toast.success(
           'OK! Selecione mais uma proposta de data para o evento ou clique na seta para a próxima etapa da proposta.'
         )
       }

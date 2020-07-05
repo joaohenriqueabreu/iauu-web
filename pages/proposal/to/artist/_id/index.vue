@@ -71,6 +71,8 @@ export default {
       await store.dispatch('contractor/loadArtistPrivate', route.params.id)
     }
 
+    // Initialize proposal
+    // No need to setup the contractor, as we'll grab the user from the backend
     store.dispatch('contractor/editProposal', {
       prop: 'artist',
       value: store.state.contractor.artist

@@ -38,7 +38,7 @@
               {{ item }}
             </span>
           </div>
-          <div v-for="(item, index) in notItems" :key="`not_${index}`" class="not-items">
+          <div v-for="(item, index) in notItems" :key="`not_${index}`" class="items not-items">
             <hr />
             <span class="one-line">
               <font-awesome icon="check" class="mr-2"></font-awesome>
@@ -174,6 +174,25 @@ h6 {
   //     }
   //   }
   // }
+}
+
+.items {
+  &.not-items {
+    [data-icon] {
+      color: $layer1;
+      background: $layer3;
+    }
+  }
+
+  [data-icon] {
+    color: $brandLayer;
+    box-shadow: $shadow;
+    border-radius: $rounded;
+    background: $layer5;
+    height: 20px;
+    width: 20px;
+    padding: 5px;
+  }
 }
 
 .not-items {

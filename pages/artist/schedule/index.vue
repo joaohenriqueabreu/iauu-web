@@ -76,7 +76,7 @@ export default {
     ...mapState({ proposal: (state) => state.event.proposal })
   },
   methods: {
-    ...mapActions('event', [
+    ...mapActions('presentation', [
       'loadProposal',
       'loadPresentation',
       'acceptProposal',
@@ -92,7 +92,7 @@ export default {
     },
     openBusyModal(timeslot) {
       if (this.haveEventsOnDate(timeslot)) {
-        this.$toasted.error(
+        this.$toast.error(
           'Existem apresentações ou propostas neste dia, cancele-as antes de marcar como indisponível'
         )
         return
@@ -104,7 +104,7 @@ export default {
     async handleEvent({ eventId, timeslotId, type }) {
       if (type === 'busy') {
         await this.removeTimeslot(timeslotId)
-        this.$toasted.success('Evento removido!')
+        this.$toast.success('Evento removido!')
         // this.$refs.calendar.removeEvent(eventId)
       }
 

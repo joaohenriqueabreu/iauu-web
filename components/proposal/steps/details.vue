@@ -1,6 +1,7 @@
 <template>
-  <div class="vertical center">
+  <div class="vertical middle center">
     <div class="half-width">
+      <h4 class="mb-4 text-center">Conta pra gente os detalhes do seu evento para finalizar a proposta ao artista</h4>
       <form-input
         v-model="title"
         class="mb-2"
@@ -19,7 +20,7 @@
         :rows="3"
         placeholder="Conte mais sobre o seu evento"
       ></form-textarea>
-      <file-uploader ref="fileUploader" @uploaded="documentUploaded"></file-uploader>
+      <!-- <file-uploader ref="fileUploader" @uploaded="documentUploaded"></file-uploader> -->
       <div class="vertical mb-5">
         <fade-transition group>
           <attachment

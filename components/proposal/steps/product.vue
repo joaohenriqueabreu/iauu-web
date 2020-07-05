@@ -6,33 +6,10 @@
     </div>
     <carousel class="full-height" :per-page="3">
       <slide v-for="(product, index) in products" :key="index" class="col-sm-4">
-        <product-info :product="product" :not-items="notItems(product.items)" proposal-view></product-info>
+        <product-info :product="product" :not-items="notItems(product.items)" @selected="chooseProduct(product)" proposal-view></product-info>
       </slide>
     </carousel>
-    <modal ref="custom" height="small">
-      <template v-slot:header>
-        <h4>Customize sua apresentação</h4>
-      </template>
-      <template v-slot:main>
-        <h6 class="mb-2">Escolha os itens que deseja incluir em sua apresentação</h6>
-        <p class="mb-5">O artista irá retornar brevemente com o valor final da apresentação</p>
-        <div class="vertical">
-          <div v-for="(item, index) in allItems" :key="index" class="mb-3">
-            <div class="horizontal ">
-              <font-awesome icon="check" class="mr-5"></font-awesome>
-              <h6 class="mb-2">{{ item }}</h6>
-            </div>
-            <hr/>
-          </div>
-        </div>
-      </template>
-      <template v-slot:footer>
-        <div class="vertical center middle">
-          <form-button class="mb-2 half-width">Selecionar</form-button>
-          <span class="clickable text-center">Escolher outro formato</span>
-        </div>
-      </template>
-    </modal>
+    <custom-product :allItems="allItems" @selected="chooseProduct" ref="custom"></custom-product>
   </div>
 </template>
 
@@ -40,10 +17,12 @@
 import { mapActions } from 'vuex'
 import Step from '@/components/proposal/steps/step'
 import ProductInfo from '@/components/artist/product/info'
+import CustomProduct from '@/components/proposal/steps/customProduct'
 import Product from '@/models/product'
 export default {
   components: {
-    'product-info': ProductInfo
+    'product-info': ProductInfo,
+    'custom-product': CustomProduct
   },
   extends: Step,
   props: {
@@ -51,7 +30,8 @@ export default {
   },
   data() {
     return {
-      selectedProduct: null
+      selectedProduct: null,
+      customItems: []
     }
   },
   computed: {
@@ -70,8 +50,8 @@ export default {
       this.selectedProduct = product
       this.$refs.modal.open()
     },
-    chooseProduct() {
-      this.editProposal({ prop: 'product', value: this.selectedProduct })
+    chooseProduct(product) {
+      this.editProposal({ prop: 'product', value: product })
       this.$emit('complete')
       this.$emit('next')
     },
@@ -79,7 +59,7 @@ export default {
       return this.$array.difference(this.allItems, productItems)
     },
     openCustomProductModal() {
-      this.$refs.custom.open()
+      this.$refs.custom.openModal()
     }
   }
 }
@@ -151,11 +131,4 @@ export default {
     color: $brandLayer;
   }
 }
-
-// /deep/ .product {
-// Change child component
-//   background: none;
-//   box-shadow: none;
-//   border-radius: none;
-// }
 </style>

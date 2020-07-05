@@ -67,7 +67,7 @@ export default {
     ...mapState({ stats: (state) => state.payment.stats })
   },
   methods: {
-    ...mapActions('event', ['loadPresentation']),
+    ...mapActions('presentation', ['loadPresentation']),
     openWithdrawModal() {
       this.$refs.withdrawRequest.openModal()
     },

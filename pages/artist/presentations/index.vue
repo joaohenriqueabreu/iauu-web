@@ -37,7 +37,7 @@ export default {
     ...mapGetters('schedule', ['presentations'])
   },
   methods: {
-    ...mapActions('event', ['loadPresentation']),
+    ...mapActions('presentation', ['loadPresentation']),
     async open(id) {
       await this.loadPresentation(id)
       this.$refs.presentationModal.open()

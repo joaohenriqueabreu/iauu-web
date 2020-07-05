@@ -53,7 +53,7 @@ export default {
     },
     async save(product) {
       await this.saveProduct(product)
-      this.$toasted.success('Produto salvo')
+      this.$toast.success('Produto salvo')
     },
     async remove(productId) {
       await this.removeProduct(productId)
