@@ -68,7 +68,7 @@ export default {
     try {
       this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.media.url}`)
     } catch (error) {
-      this.$toast.error('Endereço fornecido é inválido')
+      this.$sentry.captureException(error)
     }
 
     this.loaded = true

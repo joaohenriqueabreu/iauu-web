@@ -87,7 +87,15 @@ h6 {
 
 .submenu {
   @include mobile {
-    height: 20vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h5 {
+      margin-bottom: 5 * $space;
+    }
   }
   width: 100vw;
   background: $layer1;

@@ -10,7 +10,7 @@ export default class Presentation extends Model {
     this.status = null
     this.artist = new Artist()
     this.contractor = new Contractor()
-    this.timeslot = new Timeslot()
+    this.timeslots = []
 
     this.assign(proposal)
   }

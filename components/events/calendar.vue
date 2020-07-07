@@ -53,7 +53,8 @@ export default {
     readOnly: { type: Boolean, default: true },
     weekMode: { type: Boolean, default: false },
     timeslots: { type: Array, default: () => {} },
-    ownerMode: { type: Boolean, default: false }
+    ownerMode: { type: Boolean, default: false },
+    max: { type: Number, default: null }
   },
   data() {
     return {
@@ -77,6 +78,9 @@ export default {
     },
     unavailableTimeslots() {
       return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'busy')
+    },
+    availableTimeslots() {
+      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type !== 'busy')
     },
     headerButtons: () => {
       return {
@@ -168,8 +172,14 @@ export default {
       }
     },
     selected(selection) {
+      // do nothing if it's a busy day - don't allow actions here
       if (this.isBusyDay(selection.start) && !this.ownerMode) {
-        // do nothing if it's a busy day - don't allow actions here
+        this.$toast.error('Dia indisponível, não pode acrescentar um evento aqui.')
+        return
+      }
+
+      if (!this.$utils.empty(this.max) && this.availableTimeslots.length + 1 > this.max) {
+        this.$toast.error(`Não pode adicionar mais do que ${this.max} opções`)
         return
       }
 

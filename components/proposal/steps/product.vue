@@ -6,13 +6,21 @@
     </div>
     <carousel class="full-height" :per-page="3">
       <slide v-for="(product, index) in products" :key="index" class="col-sm-4">
-        <product-info :product="product" :not-items="notItems(product.items)" @selected="chooseProduct(product)" proposal-view></product-info>
+        <overlay :rounded="rounded">
+          <template v-slot:default>
+            <product-info :product="product" :not-items="notItems(product.items)" @selected="chooseProduct(product)" proposal-view></product-info>
+          </template>
+          <template v-slot:hover>
+            <div class="vertical middle center" @click="chooseProduct(product)">
+              <h3><font-awesome icon="hand-rock-n-roll"></font-awesome> Escolher formato</h3>
+            </div>
+          </template>
+        </overlay>
       </slide>
     </carousel>
     <custom-product :allItems="allItems" @selected="chooseProduct" ref="custom"></custom-product>
   </div>
 </template>
-
 <script>
 import { mapActions } from 'vuex'
 import Step from '@/components/proposal/steps/step'

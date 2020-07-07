@@ -17,12 +17,9 @@
         </div>
         <div v-if="!$utils.empty(proposal.location)">
           {{ proposal.location.toString() }}
-        </div>
-        <div v-if="!$utils.empty(proposal.timeslot) && !$utils.empty(proposal.timeslot.start_dt)">
-          {{ proposal.timeslot.start_dt | date }}
-        </div>
+        </div>        
         <div v-if="!$utils.empty(proposal.timeslots)">
-          {{ proposal.timeslot[0].start_dt | date }}
+          {{ proposal.timeslots[0].start_dt | date }}
         </div>
         <div v-if="!$utils.empty(proposal.product) && proposal.product.name !== 'custom'">
           <div>

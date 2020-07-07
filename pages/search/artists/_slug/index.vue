@@ -63,8 +63,8 @@
       </div>
     </div>
     <div class="proposal">
-      <div class="row">
-        <div class="vertical col-sm-4 col-6">
+      <div class="d-flex justify-content-around">
+        <div class="vertical">
           <small class="hide-mobile">
             <span v-if="$auth.loggedIn">Valor da apresentação</span>
             <span v-else>Valor aproximado da apresentação</span>
@@ -73,13 +73,13 @@
           <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4>
           <div class="mb-4 hide-desktop"></div>
         </div>
-        <div class="vertical col-sm-4 col-6">
+        <div class="vertical">
           <small>
             <span class="hide-mobile">Duração média</span>
           </small>
           <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ avgDuration }} horas</h4>
         </div>
-        <div class="col-sm-4 col-12 horizontal middle center">
+        <div class="horizontal middle center">
           <nuxt-link
             v-if="$auth.loggedIn && $auth.hasScope('contractor')"
             class="brand-btn"

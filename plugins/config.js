@@ -5,7 +5,7 @@ const config = {
   alertTimer: 3000,
   closePresentationDeadline: 15,
   defaultBGImgUrl: require('@/assets/imgs/concert.png'),
-  defaultAvatarImgUrl: require('@/assets/imgs/music.png'),
+  defaultAvatarImgUrl: require('@/assets/imgs/music.png'),  
 
   // Substrings to match url pattern and identify social media
   facebookSubstringMatch: ['facebook'],
@@ -16,7 +16,9 @@ const config = {
   spotifySubstringMatch: ['open.spotify'],
   pdfSubstringMatch: ['pdf'],
 
-  sampleProductItems: [{ name: 'Apresentação' }, { name: 'Iluminação' }]
+  sampleProductItems: [{ name: 'Apresentação' }, { name: 'Iluminação' }],
+
+  maxProposedTimeslots: 3,
 }
 
 export default ({ app }, inject) => {

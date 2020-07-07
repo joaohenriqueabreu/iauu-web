@@ -3,10 +3,14 @@
     <div class="horizontal d-flex justify-content-between mb-4">
       <div class="intro">
         <h6>Escolha a data do seu evento:</h6>
-        <small
-          >Esta é a agenda do artista. Clique em uma data, selecione um horário de início e arraste
-          para determinar a duração do seu evento.</small
-        >
+        <small class="mb-2">
+          Esta é a agenda do artista. Clique em uma data, selecione um horário de início e arraste
+          para determinar a duração do seu evento.
+        </small>
+        <small>
+          Você pode propor até <u>{{ $config.maxProposedTimeslots }} opções</u> de datas para o artista 
+          responder com sua disponibilidade.
+        </small>
       </div>
       <div class="horizontal center middle">
         <font-awesome icon="times"></font-awesome>
@@ -19,6 +23,7 @@
         week-mode
         :timeslots="timeslots"
         class="content"
+        :max="$config.maxProposedTimeslots"
         @event-click="removeProposalTimeslot"
         @selected="addTimeslot"
       ></calendar>
@@ -42,6 +47,11 @@ export default {
       proposedTimeslotCount: 0
     }
   },
+  computed: {
+    proposedTimeslots() {
+      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'proposal')
+    }
+  },
   methods: {
     ...mapActions('schedule', ['loadSchedule', 'appendTimeslot', 'deselectTimeslot']),
     addTimeslot(selectedTimeslot) {
@@ -54,8 +64,10 @@ export default {
       this.proposalTimeslotId++
       this.proposedTimeslotCount++
 
-      this.editProposal({ prop: 'timeslot', value: selectedTimeslot })
+      // Schedule operation (will affect calendar but not proposal)
       this.appendTimeslot(selectedTimeslot)
+
+      this.editProposal({ prop: 'timeslots', value: this.proposedTimeslots })      
 
       if (this.proposedTimeslotCount === 1) {
         this.$toast.success(
@@ -67,13 +79,12 @@ export default {
       this.$emit('complete')
     },
     removeProposalTimeslot({ eventId, timeslotId, type }) {
-      if (type === 'proposal') {
-        this.deselectTimeslot(timeslotId)
-        // Fullcalendar will update itself due to watcher
+      if (type !== 'proposal') { return }
+      this.deselectTimeslot(timeslotId)
+      // Fullcalendar will update itself due to watcher
 
-        if (this.timeslots.length) {
-          this.$emit('incomplete')
-        }
+      if (this.timeslots.length) {
+        this.$emit('incomplete')
       }
     }
   }

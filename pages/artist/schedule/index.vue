@@ -58,10 +58,7 @@ export default {
     presentation: Presentation
   },
   async asyncData({ app, store }) {
-    await store.dispatch('schedule/loadSchedule', {
-      id: app.$auth.user.role_id,
-      year: new Date().getFullYear()
-    })
+    await store.dispatch('schedule/loadMySchedule', new Date().getFullYear())
   },
   data() {
     return {
@@ -72,8 +69,8 @@ export default {
   },
   computed: {
     ...mapState({ timeslots: (state) => state.schedule.timeslots }),
-    ...mapState({ presentation: (state) => state.event.presentation }),
-    ...mapState({ proposal: (state) => state.event.proposal })
+    ...mapState({ presentation: (state) => state.presentation.presentation }),
+    ...mapState({ proposal: (state) => state.presentation.proposal })
   },
   methods: {
     ...mapActions('presentation', [
@@ -84,10 +81,10 @@ export default {
       'confirmPresentation',
       'cancelPresentation'
     ]),
-    ...mapActions('schedule', ['loadSchedule', 'saveTimeslot', 'removeTimeslot']),
+    ...mapActions('schedule', ['loadMySchedule', 'saveTimeslot', 'removeTimeslot']),
     ...mapActions('app', ['setAlert']),
     async reloadTimeslotsForYear(year) {
-      await this.loadSchedule({ id: this.$auth.user.id, year })
+      await this.loadMySchedule(year)
       this.$refs.calendar.loadCalendarEvents()
     },
     openBusyModal(timeslot) {
