@@ -2,7 +2,12 @@
   <modal ref="modal" hide-header>
     <template v-slot:main>
       <div class="bg-image" :style="{ 'background-image': `url(${productPhoto})` }"></div>
-      <carousel v-if="!$utils.empty(product.medias)" :per-page="2" :navigationEnabled="true" :paginationEnabled="false">
+      <carousel
+        v-if="!$utils.empty(product.medias)"
+        :per-page="2"
+        :navigation-enabled="true"
+        :pagination-enabled="false"
+      >
         <slide
           v-for="(media, index) in product.medias"
           :key="index"
@@ -16,7 +21,7 @@
         <h2 class="mb-4">{{ product.name }}</h2>
         <p class="px-4">{{ product.description }}</p>
       </div>
-      <div class="px-5 mb-4" v-if="!$utils.empty(product.items)">
+      <div v-if="!$utils.empty(product.items)" class="px-5 mb-4">
         <h5>O que está incluido neste formato?</h5>
         <div v-for="(item, index) in product.items" :key="index">
           <hr />
@@ -26,9 +31,12 @@
           </span>
         </div>
       </div>
-      <div class="px-5" v-if="!$utils.empty(notItems)">
+      <div v-if="!$utils.empty(notItems)" class="px-5">
         <h5 class="mb-2">O que não está incluido neste formato?</h5>
-        <small>Oferecemos estes itens em outros produtos. Selecione um formato mais completo se desejar contratar.</small>
+        <small
+          >Oferecemos estes itens em outros produtos. Selecione um formato mais completo se desejar
+          contratar.</small
+        >
         <div v-for="(item, index) in notItems" :key="index" class="not-items">
           <hr />
           <span>
@@ -60,9 +68,11 @@
 
 <script>
 export default {
-  props: {
-    product: { type: Object, default: () => {} },
-    notItems: { type: Array, default: () => {} }
+  data() {
+    return {
+      product: {},
+      notItems: []
+    }
   },
   computed: {
     productPhoto() {
@@ -75,7 +85,13 @@ export default {
     openMedia(media) {
       window.open(media.url, '_blank')
     },
-    openModal() {
+    openModal(product, notItems) {
+      if (this.$utils.empty(product)) {
+        return
+      }
+      this.product = product
+      this.notItems = notItems
+
       this.$refs.modal.open()
     },
     selectProduct() {

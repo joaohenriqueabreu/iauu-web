@@ -11,24 +11,38 @@
         <div class="top-right pt-1 pr-2">
           <font-awesome icon="check-circle" class="m-0"></font-awesome>
         </div>
-        <h6 class="mb-4">Confirme sua proposta para {{ proposal.artist.name }}</h6>
-        <div>
+        <h6 class="mb-4">Prezados integrantes do(a) <u>{{ proposal.artist.company_name }}</u>,</h6>
+        <p class="mb-5">
+          Solicito orçamento 
+          <span v-if="!$empty(proposal.product) && proposal.product.name !== 'custom'">do formato <b>{{ proposal.product.name }}</b></span> 
+          <span v-if="!$empty(proposal.title)">para o evento <u>{{ proposal.title }}</u></span>
+          a ser realizado <span v-if="!$empty(proposal.location)">na <u>{{ proposal.location.toString() }}</u></span>
+          <span v-if="!$empty(proposal.timeslots)">em <u>{{ proposal.timeslots[0].start_dt | longDate }}</u></span>
+        </p>
+        <div class="vertical center">
+          <h1><font-awesome icon="signature"></font-awesome></h1>
+          <hr class="light thick" />
+          <h6>{{ $auth.user.name }}</h6>
+        </div>
+        
+
+        <!-- <div>
           {{ proposal.title }}
         </div>
-        <div v-if="!$utils.empty(proposal.location)">
+        <div v-if="!$empty(proposal.location)">
           {{ proposal.location.toString() }}
-        </div>        
-        <div v-if="!$utils.empty(proposal.timeslots)">
+        </div>
+        <div v-if="!$empty(proposal.timeslots)">
           {{ proposal.timeslots[0].start_dt | date }}
         </div>
-        <div v-if="!$utils.empty(proposal.product) && proposal.product.name !== 'custom'">
+        <div v-if="!$empty(proposal.product) && proposal.product.name !== 'custom'">
           <div>
             {{ proposal.product.name }}
           </div>
           <hr class="light thick" />
           <div class="d-flex justify-content-end">
             <h4>{{ proposal.product.price | currency }}</h4>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="half-width horizontal middle center">
@@ -44,7 +58,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -55,7 +68,7 @@ export default {
   computed: {
     areAllStepsCompleted() {
       return (
-        !this.$utils.empty(this.completedSteps) &&
+        !this.$empty(this.completedSteps) &&
         this.completedSteps.length >= this.steps.length - 1 // do not count confirm step
       )
     }
@@ -75,13 +88,19 @@ export default {
 .review {
   @extend .vertical, .half-width;
   position: relative;
-  border: solid 4px $brand;
-  border-radius: $edges;
+  // border: solid 4px $brand;
+  // border-radius: $edges;
   margin: 3 * $space;
   padding: 4 * $space;
+  background: $layer4;
+  box-shadow: $shadow;
 }
 
 .confirm {
   @extend .vertical, .center, .middle, .full-height;
+}
+
+p {
+  line-height: 20px;;
 }
 </style>

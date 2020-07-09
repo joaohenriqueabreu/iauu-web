@@ -2,21 +2,31 @@
   <div>
     <client-only>
       <fade-transition>
-        <div class="filters mx-5 d-flex justify-content-around" v-if="!selectingFilter">
+        <div v-if="!selectingFilter" class="filters mx-5 d-flex justify-content-around">
           <font-awesome icon="search" @click="showSearchFilter"></font-awesome>
           <font-awesome icon="map-marker-alt" @click="showAddressFilter"></font-awesome>
           <font-awesome icon="dollar-sign" @click="showPriceFilter"></font-awesome>
           <font-awesome icon="sort-alpha-down" @click="showSortFilter"></font-awesome>
         </div>
-        <div class="mx-0 row" v-else>
+        <div v-else class="mx-0 row">
           <form-input
             v-show="currentFilter === 'term'"
             v-model="term"
             class="col-sm-4"
             placeholder="Aniversário, Casamento, Rock Anos 80, ..."
           ></form-input>
-          <form-location v-show="currentFilter === 'address'" v-model="location" class="col-sm-3" placeholder="Próximo de"></form-location>
-          <form-range v-show="currentFilter === 'price'" v-model="price" filter-name="currency" class="col-sm-3"></form-range>
+          <form-location
+            v-show="currentFilter === 'address'"
+            v-model="location"
+            class="col-sm-3"
+            placeholder="Próximo de"
+          ></form-location>
+          <form-range
+            v-show="currentFilter === 'price'"
+            v-model="price"
+            filter-name="currency"
+            class="col-sm-3"
+          ></form-range>
           <form-select
             v-show="currentFilter === 'sort'"
             :allow-input="false"

@@ -42,5 +42,7 @@ const utils = {
 }
 
 export default ({ app }, inject) => {
+  // We use empty a lot, so inject it separately too
+  inject('empty', utils.empty)
   inject('utils', utils)
 }

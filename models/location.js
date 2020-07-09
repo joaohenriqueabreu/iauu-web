@@ -24,6 +24,7 @@ export default class Location extends Model {
     this.state = ''
     this.country = ''
     this.zipcode = ''
+    this.display = ''
     this.coordinates = {
       latitude: 0,
       longitude: 0

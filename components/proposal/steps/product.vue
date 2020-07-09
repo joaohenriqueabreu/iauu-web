@@ -2,34 +2,51 @@
   <div>
     <div class="mb-5 vertical">
       <h6 class="mb-2">Escolha o produto do artista que você deseja contratar</h6>
-      <u class="custom-product" @click="openCustomProductModal">Ou então clique aqui e escolha o que deseja incluir na apresentação</u>
+      <!-- <u class="custom-product" @click="openCustomProductModal"
+        >Ou então clique aqui e escolha o que deseja incluir na apresentação</u
+      > -->
     </div>
-    <carousel class="full-height" :per-page="3">
-      <slide v-for="(product, index) in products" :key="index" class="col-sm-4">
-        <overlay :rounded="rounded">
+    <carousel class="full-height" :per-page="2" :navigationEnabled="true">
+      <slide v-for="(product, index) in products" :key="index">
+        <overlay>
           <template v-slot:default>
-            <product-info :product="product" :not-items="notItems(product.items)" @selected="chooseProduct(product)" proposal-view></product-info>
+            <div :class="{ selected: product === selectedProduct }">
+              <product-info
+                :ref="`info_${product.id}`"
+                :product="product"
+                :not-items="notItems(product.items)"
+                proposal-view
+                @selected="chooseProduct(product)"
+              ></product-info>
+            </div>
           </template>
           <template v-slot:hover>
-            <div class="vertical middle center" @click="chooseProduct(product)">
-              <h3><font-awesome icon="hand-rock-n-roll"></font-awesome> Escolher formato</h3>
+            <div class="full-height vertical middle center">
+              <h3 class="mb-5" @click="chooseProduct(product)">
+                <font-awesome icon="hand-rock-n-roll"></font-awesome>
+                Escolher formato
+              </h3>
+              <form-button @action="openPreviewModal(product)">Ver mais informações</form-button>
             </div>
           </template>
         </overlay>
       </slide>
+      <slide class="product"></slide>
     </carousel>
-    <custom-product :allItems="allItems" @selected="chooseProduct" ref="custom"></custom-product>
+    <product-preview ref="preview" @selected="chooseProduct"></product-preview>
+    <custom-product ref="custom" :all-items="allItems" @selected="chooseProduct"></custom-product>
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Step from '@/components/proposal/steps/step'
 import ProductInfo from '@/components/artist/product/info'
+import ProductPreview from '@/components/artist/product/preview'
 import CustomProduct from '@/components/proposal/steps/customProduct'
-import Product from '@/models/product'
 export default {
   components: {
     'product-info': ProductInfo,
+    'product-preview': ProductPreview,
     'custom-product': CustomProduct
   },
   extends: Step,
@@ -38,11 +55,11 @@ export default {
   },
   data() {
     return {
-      selectedProduct: null,
       customItems: []
     }
   },
   computed: {
+    ...mapState({ selectedProduct: (state) => state.contractor.proposal.product }),
     allItems() {
       const allItems = []
       this.products.forEach((product) => {
@@ -54,10 +71,6 @@ export default {
   },
   methods: {
     ...mapActions('contractor', ['editProposal']),
-    view(product) {
-      this.selectedProduct = product
-      this.$refs.modal.open()
-    },
     chooseProduct(product) {
       this.editProposal({ prop: 'product', value: product })
       this.$emit('complete')
@@ -68,75 +81,82 @@ export default {
     },
     openCustomProductModal() {
       this.$refs.custom.openModal()
+    },
+    openPreviewModal(product) {
+      this.$refs.preview.openModal(product, this.notItems(product.items))
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.product-container {
-  @extend .horizontal;
-  width: 100%;
-  margin-bottom: 4 * $space;
-  background: $layer4;
-  img,
-  .video {
-    height: 100%;
-    width: 50%;
-    padding: 0;
+// .product-container {
+//   @extend .horizontal;
+//   width: 100%;
+//   margin-bottom: 4 * $space;
+//   background: $layer4;
+//   img,
+//   .video {
+//     height: 100%;
+//     width: 50%;
+//     padding: 0;
 
-    iframe {
-      width: 100%;
-      height: 100%;
-    }
-  }
+//     iframe {
+//       width: 100%;
+//       height: 100%;
+//     }
+//   }
 
-  div {
-    position: relative;
-    padding: 2 * $space;
-    width: 100%;
+//   div {
+//     position: relative;
+//     padding: 2 * $space;
+//     width: 100%;
 
-    h5 {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      padding: 2 * $space;
-    }
-  }
+//     h5 {
+//       position: absolute;
+//       bottom: 0;
+//       right: 0;
+//       padding: 2 * $space;
+//     }
+//   }
 
-  cursor: pointer;
-  box-shadow: none;
-  transition: $transition;
+//   cursor: pointer;
+//   box-shadow: none;
+//   transition: $transition;
 
-  &:hover {
-    box-shadow: $shadow;
-    transition: $transition;
-  }
-  // margin: 4 * $space;
-}
+//   &:hover {
+//     box-shadow: $shadow;
+//     transition: $transition;
+//   }
+//   // margin: 4 * $space;
+// }
 
-.products-container {
-  @include desktop {
-    display: flex;
-    flex-direction: row;
-    // width: 80vw;
-    overflow-y: hidden;
-  }
+// .products-container {
+//   @include desktop {
+//     display: flex;
+//     flex-direction: row;
+//     // width: 80vw;
+//     overflow-y: hidden;
+//   }
 
-  @include mobile {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-}
+//   @include mobile {
+//     display: flex;
+//     flex-direction: column;
+//     width: 100%;
+//   }
+// }
 
-.custom-product {
-  @extend .clickable;
-  transition: $transition;
+// .custom-product {
+//   @extend .clickable;
+//   transition: $transition;
 
-  &:hover {
-    transition: $transition;
-    color: $brandLayer;
-  }
+//   &:hover {
+//     transition: $transition;
+//     color: $brandLayer;
+//   }
+// }
+
+.selected {
+  border: 20px solid $brandLayer;
 }
 </style>

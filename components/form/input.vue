@@ -82,7 +82,7 @@ export default {
     font-size: $regular;
     resize: none;
     background-color: $layer1;
-    color: $white;
+    color: $brand;
     font-weight: $bold;
     box-shadow: $lightShadow;
     margin-bottom: 2 * $space;
@@ -102,7 +102,7 @@ export default {
       transition: $transition;
       // background: $layer5;
       background: $brandLayer;
-      color: $brand;
+      color: $layer1;
     }
     &:hover {
       // background-color: $layer5;

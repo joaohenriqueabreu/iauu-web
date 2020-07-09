@@ -1,7 +1,6 @@
 import Model from './model'
 import Artist from './artist'
 import Contractor from './contractor'
-import Timeslot from './timeslot'
 
 export default class Presentation extends Model {
   constructor(proposal) {

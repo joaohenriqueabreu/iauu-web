@@ -11,7 +11,7 @@
       </image-uploader>
       <div v-else class="media" :style="{ 'background-image': `url(${productPhoto})` }"></div>
       <div class="product">
-        <div class="title" @click="editProduct" v-if="!proposalView">
+        <div v-if="!proposalView" class="title" @click="editProduct">
           <h2 class="cap mb-2">{{ product.name }}</h2>
           <font-awesome icon="edit" class="ml-4"></font-awesome>
         </div>
@@ -50,13 +50,13 @@
           <form-button class="mb-3" @action="editProduct">Modificar</form-button>
           <h6 class="clickable" @click="openPreviewModal">Preview</h6>
         </div>
-        <div v-else class="vertical middle center">
-          <form-button class="mb-3" @action="$emit('selected', product)">Selecionar</form-button>
-          <h6 class="clickable" @click="openPreviewModal">Ver mais</h6>
-        </div>
+        <!-- <div v-else class="vertical middle center"> -->
+        <!-- <form-button class="mb-3" @action="$emit('selected', product)">Selecionar</form-button> -->
+        <!-- <h6 class="clickable" @click="openPreviewModal">Ver mais</h6> -->
+        <!-- </div> -->
       </div>
     </div>
-    <product-preview :product="product" :not-items="notItems" ref="preview"></product-preview>
+    <product-preview v-if="!proposalView" ref="preview"></product-preview>
   </div>
 </template>
 
@@ -70,7 +70,7 @@ export default {
   props: {
     product: { type: Object, default: () => {} },
     proposalView: { type: Boolean, default: false },
-    notItems: { type: Array, default: () => {}}
+    notItems: { type: Array, default: () => {} }
   },
   computed: {
     productPhoto() {
@@ -96,7 +96,7 @@ export default {
       await this.saveProduct(product)
     },
     openPreviewModal() {
-      this.$refs.preview.openModal()
+      this.$refs.preview.openModal(this.product, this.notItems)
     }
   }
 }

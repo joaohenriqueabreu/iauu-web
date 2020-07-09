@@ -3,7 +3,7 @@
     <modal ref="modal">
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
-          <div class="horizontal middle">
+          <div v-if="!$empty(presentation.contractor)" class="horizontal middle">
             <avatar
               class="mr-4"
               :src="presentation.contractor.photo"
@@ -58,7 +58,7 @@
 
 <script>
 import VueCountdown from '@chenfengyuan/vue-countdown'
-import EventDetails from '@/components/artist/eventDetails'
+import EventDetails from '@/components/presentation/details'
 
 export default {
   components: {
@@ -115,7 +115,7 @@ export default {
 .identifier {
   text-transform: uppercase;
   letter-spacing: $space / 2;
-  color: $layer3;
+  color: $layer5;
   padding-right: 10 * $space;
   font-weight: $bold;
   border-bottom: 5px solid $layer3;

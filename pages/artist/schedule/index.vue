@@ -17,21 +17,21 @@
         @selected="openBusyModal"
       ></calendar>
       <busy ref="busy" @save="saveBusyTimeslot"></busy>
-      <proposal
-        v-if="!$utils.empty(proposal)"
-        ref="proposal"
-        :proposal="proposal"
-        @accept="handleAcceptProposal"
-        @reject="handleRejectProposal"
-      ></proposal>
-      <presentation
-        v-if="!$utils.empty(presentation)"
-        ref="presentation"
-        :read-only="false"
-        :presentation="presentation"
-        @confirm="handleConfirmPresentation"
-        @cancel="handleCancelPresentation"
-      ></presentation>
+      <div v-if="!$empty(presentation)">
+        <proposal
+          ref="proposal"
+          :presentation="presentation"
+          @accept="handleAcceptProposal"
+          @reject="handleRejectProposal"
+        ></proposal>
+        <presentation
+          ref="presentation"
+          :read-only="false"
+          :presentation="presentation"
+          @confirm="handleConfirmPresentation"
+          @cancel="handleCancelPresentation"
+        ></presentation>
+      </div>
     </div>
     <div class="horizontal middle center text-right">
       <div class="horizontal middle mr-4">
@@ -49,8 +49,8 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import BusySlot from '@/components/artist/schedule/busy'
-import Proposal from '@/components/artist/proposal'
-import Presentation from '@/components/artist/presentation'
+import Proposal from '@/components/presentation/proposal'
+import Presentation from '@/components/presentation/presentation'
 export default {
   components: {
     busy: BusySlot,
@@ -69,8 +69,8 @@ export default {
   },
   computed: {
     ...mapState({ timeslots: (state) => state.schedule.timeslots }),
-    ...mapState({ presentation: (state) => state.presentation.presentation }),
-    ...mapState({ proposal: (state) => state.presentation.proposal })
+    ...mapState({ presentation: (state) => state.presentation.presentation })
+    // ...mapState({ proposal: (state) => state.presentation.proposal })
   },
   methods: {
     ...mapActions('presentation', [
@@ -98,22 +98,21 @@ export default {
       this.selectedTimeslot = timeslot
       this.$refs.busy.openModal(timeslot)
     },
-    async handleEvent({ eventId, timeslotId, type }) {
+    async handleEvent({ eventId, timeslotId, type, presentationId }) {
       if (type === 'busy') {
         await this.removeTimeslot(timeslotId)
         this.$toast.success('Evento removido!')
-        // this.$refs.calendar.removeEvent(eventId)
+        return
       }
+
+      await this.loadPresentation(presentationId)
 
       if (type === 'proposal') {
-        await this.loadProposal(timeslotId)
         this.$refs.proposal.openModal()
+        return
       }
 
-      if (type === 'presentation') {
-        await this.loadPresentation(timeslotId)
-        this.$refs.presentation.openModal()
-      }
+      this.$refs.presentation.openModal()
     },
     async saveBusyTimeslot(timeslot) {
       await this.saveTimeslot(timeslot)

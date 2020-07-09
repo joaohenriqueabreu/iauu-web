@@ -144,6 +144,8 @@ export default {
       this.$emit('event-click', {
         eventId: event.id,
         timeslotId: event.extendedProps.id,
+        proposalId: event.extendedProps.proposal_id,
+        presentationId: event.extendedProps.presentation_id,
         type: event.extendedProps.type
       })
     },
@@ -205,17 +207,22 @@ export default {
 
       const fullcalendarEvent = {
         id: `${timeslot.type}_${timeslot.id}`,
-        title: timeslot.type === 'busy' ? 'Indisponível' : timeslot.title,
+        title: timeslot.type === 'busy' ? 'Indisponível' : timeslot.label,
         start: startDt,
         end: endDt,
         allDay: isFullDay,
-        extendedProps: { id: timeslot.id, type: timeslot.type }
+        extendedProps: timeslot
       }
 
       if (isBackground) {
         fullcalendarEvent.rendering = 'background'
       } else {
-        fullcalendarEvent.classNames = ['event', timeslot.type]
+        const classes = ['event', timeslot.type]
+        if (!this.ownerMode) {
+          classes.push('proposing')
+        }
+
+        fullcalendarEvent.classNames = classes
       }
 
       return fullcalendarEvent
@@ -270,7 +277,7 @@ export default {
     }
   }
 
-  &.proposal {
+  &.proposing.proposal {
     background: $proposalTimeslot;
     span {
       color: $layer2;

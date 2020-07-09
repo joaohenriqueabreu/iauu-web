@@ -16,8 +16,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import EventInfo from '@/components/artist/eventInfo'
-import Proposal from '@/components/artist/proposal'
+import EventInfo from '@/components/presentation/info'
+import Proposal from '@/components/presentation/proposal'
 export default {
   components: {
     proposal: Proposal,

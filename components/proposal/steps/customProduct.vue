@@ -1,29 +1,35 @@
 <template>
   <modal ref="modal" height="small">
-      <template v-slot:header>
-        <h4>Monte sua apresentação</h4>
-      </template>
-      <template v-slot:main>
-        <h6 class="mb-2">Escolha os itens que deseja incluir em sua apresentação</h6>
-        <p class="mb-5">O artista irá retornar brevemente com o valor final da apresentação</p>
-        <div class="vertical mx-5 mb-4">
-          <div v-for="(item, index) in allItems" :key="index" class="items mb-3" :class="{ selected: isCustomItemSelected(item) }" @click="toggleItem(item)">
-            <div class="horizontal">
-              <font-awesome icon="check" class="mr-5"></font-awesome>
-              <h6 class="mb-2">{{ item }}</h6>
-            </div>
-            <hr/>
+    <template v-slot:header>
+      <h4>Monte sua apresentação</h4>
+    </template>
+    <template v-slot:main>
+      <h6 class="mb-2">Escolha os itens que deseja incluir em sua apresentação</h6>
+      <p class="mb-5">O artista irá retornar brevemente com o valor final da apresentação</p>
+      <div class="vertical mx-5 mb-4">
+        <div
+          v-for="(item, index) in allItems"
+          :key="index"
+          class="items mb-3"
+          :class="{ selected: isCustomItemSelected(item) }"
+          @click="toggleItem(item)"
+        >
+          <div class="horizontal">
+            <font-awesome icon="check" class="mr-5"></font-awesome>
+            <h6 class="mb-2">{{ item }}</h6>
           </div>
+          <hr />
         </div>
-        <form-textarea v-model="notes" placeholder="Observações"></form-textarea>
-      </template>
-      <template v-slot:footer>
-        <div class="vertical center">
-          <form-button class="mb-3 half-width" @action="selectProduct">Selecionar</form-button>
-          <span class="clickable text-center" @click="cancel">Escolher outro formato</span>
-        </div>
-      </template>
-    </modal>
+      </div>
+      <form-textarea v-model="notes" placeholder="Observações"></form-textarea>
+    </template>
+    <template v-slot:footer>
+      <div class="vertical center">
+        <form-button class="mb-3 half-width" @action="selectProduct">Selecionar</form-button>
+        <span class="clickable text-center" @click="cancel">Escolher outro formato</span>
+      </div>
+    </template>
+  </modal>
 </template>
 
 <script>
@@ -55,11 +61,14 @@ export default {
       return this.$collection.includes(this.customItems, item)
     },
     selectProduct() {
-      this.$emit('selected', new Product({ 
-        name: 'custom',
-        description: this.notes,
-        items: this.customItems 
-      }))
+      this.$emit(
+        'selected',
+        new Product({
+          name: 'custom',
+          description: this.notes,
+          items: this.customItems
+        })
+      )
       this.$refs.modal.close()
     },
     cancel() {

@@ -7,10 +7,16 @@
         <font-awesome icon="plus"></font-awesome>
       </h5>
     </div>
-    <div class="row align-items-stretch full-height">
-      <div v-for="(product, index) in products" :key="index" class="col-sm-4 mb-4">
-        <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct"></product-info>
-      </div>
+    <div class="align-items-stretch full-height">
+      <carousel :per-page="2" :navigationEnabled="true">
+        <slide v-for="(product, index) in products" :key="index">
+          <div class="product mr-4">
+            <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct">
+            </product-info>
+          </div>
+          
+        </slide>
+      </carousel>      
     </div>
     <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
   </div>
@@ -122,6 +128,10 @@ button {
 
 .new-product-form {
   max-height: 50vh;
+}
+
+.product {
+  width: 40vw;
 }
 </style>
 /* eslint-enable */

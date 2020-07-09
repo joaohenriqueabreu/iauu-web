@@ -20,8 +20,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import EventInfo from '@/components/artist/eventInfo'
-import Presentation from '@/components/artist/presentation'
+import EventInfo from '@/components/presentation/info'
+import Presentation from '@/components/presentation/presentation'
 export default {
   components: {
     presentation: Presentation,

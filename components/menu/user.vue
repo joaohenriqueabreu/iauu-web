@@ -3,7 +3,7 @@ h6 {
   margin-left: 5 * $space;
 }
 
-.menu-items {  
+.menu-items {
   @include desktop {
     display: flex;
     flex-direction: row;
@@ -16,7 +16,7 @@ h6 {
       font-size: $huge;
       margin-bottom: 2 * $space;
     }
-    
+
     display: flex;
     flex-direction: column;
     justify-content: center;

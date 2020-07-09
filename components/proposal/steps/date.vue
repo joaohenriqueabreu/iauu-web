@@ -8,8 +8,8 @@
           para determinar a duração do seu evento.
         </small>
         <small>
-          Você pode propor até <u>{{ $config.maxProposedTimeslots }} opções</u> de datas para o artista 
-          responder com sua disponibilidade.
+          Você pode propor até <u>{{ $config.maxProposedTimeslots }} opções</u> de datas para o
+          artista responder com sua disponibilidade.
         </small>
       </div>
       <div class="horizontal center middle">
@@ -67,7 +67,7 @@ export default {
       // Schedule operation (will affect calendar but not proposal)
       this.appendTimeslot(selectedTimeslot)
 
-      this.editProposal({ prop: 'timeslots', value: this.proposedTimeslots })      
+      this.editProposal({ prop: 'timeslots', value: this.proposedTimeslots })
 
       if (this.proposedTimeslotCount === 1) {
         this.$toast.success(
@@ -79,7 +79,9 @@ export default {
       this.$emit('complete')
     },
     removeProposalTimeslot({ eventId, timeslotId, type }) {
-      if (type !== 'proposal') { return }
+      if (type !== 'proposal') {
+        return
+      }
       this.deselectTimeslot(timeslotId)
       // Fullcalendar will update itself due to watcher
 

@@ -1,25 +1,34 @@
 <template>
   <div>
-    <div>
-      <h4>{{ event.title }}</h4>
+    <div class="horizontal center middle">
+      <h1 class="cap">{{ presentation.proposal.title }}</h1>
     </div>
     <div class="boxed">
-      <div class="horizontal middle">
+      <div v-if="presentation.status === 'proposal'" class="vertical center middle mb-4">
+        <h6 class="mb-4">Escolha uma opção de horário para a apresentação:</h6>
+        <pick-timeslot
+          :default="presentation.timeslot"
+          :timeslots="presentation.proposal.timeslots"
+          @selected="selectedTimeslot"
+        >
+        </pick-timeslot>
+      </div>
+      <div v-else>
         <h4>
           <font-awesome icon="calendar-alt"></font-awesome>
           {{ eventDate }}
         </h4>
         <h5>{{ eventTime }}</h5>
       </div>
-      <div class="horizontal middle">
+      <div v-if="!$empty(presentation.address)" class="horizontal middle">
         <font-awesome icon="map-marker-alt"></font-awesome>
         <a :href="encodedMapsLocation" target="_blank">
-          <h6>{{ event.location.display }}</h6>
+          <h6>{{ presentation.address.display }}</h6>
         </a>
       </div>
     </div>
     <div>
-      <span>{{ event.description }}</span>
+      <span>{{ presentation.description }}</span>
     </div>
     <div class="boxed vertical position-relative">
       <!-- TODO b-tooltip failing -->
@@ -31,54 +40,68 @@
       <!-- <font-awesome icon="info"></font-awesome>
           </div> -->
       <div>
-        <h5>{{ event.product.name }}</h5>
+        <h5>Produto selecinado <u>{{ selectedProduct }}</u></h5>
       </div>
       <div>
         <h6>
           <font-awesome icon="dollar-sign"></font-awesome>
-          {{ event.product.price }}
+          {{ presentation.proposal.product.price }}
         </h6>
       </div>
       <div>
         <h6>
           <font-awesome icon="clock"></font-awesome>
-          {{ event.product.duration }}
-          {{ $utils.pluralize('hora', event.product.duration) }}
+          {{ presentation.proposal.product.duration }}
+          {{ $utils.pluralize('hora', presentation.proposal.product.duration) }}
         </h6>
       </div>
     </div>
     <div class="attachments">
-      <attachment v-for="(file, index) in event.files" :key="index" :file="file"> </attachment>
+      <attachment v-for="(file, index) in presentation.files" :key="index" :file="file">
+      </attachment>
     </div>
   </div>
 </template>
 
 <script>
+import PickTimeslot from '@/components/presentation/timeslot'
 import Attachment from '@/components/form/attachment'
 export default {
   components: {
-    attachment: Attachment
+    attachment: Attachment,
+    'pick-timeslot': PickTimeslot
   },
   props: {
-    event: { type: Object, default: () => {} }
+    presentation: { type: Object, default: () => {} }
   },
   computed: {
     encodedMapsLocation() {
-      if (!this.$utils.empty(this.event.location)) {
-        return encodeURI(`http://maps.google.com/maps?q=${this.event.location.display}`)
+      if (!this.$empty(this.presentation.address)) {
+        return encodeURI(`http://maps.google.com/maps?q=${this.presentation.address.display}`)
       }
 
       return ''
     },
     eventTime() {
       return (
-        this.moment(this.event.start_dt).format(this.$config.timeFormat) +
+        this.moment(this.presentation.start_dt).format(this.$config.timeFormat) +
         ' - ' +
-        this.moment(this.event.end_dt).format(this.$config.timeFormat)
+        this.moment(this.presentation.end_dt).format(this.$config.timeFormat)
       )
     },
     eventDate() {
-      return this.moment(this.event.start_dt).format(this.$config.dateFormat)
+      return this.moment(this.presentation.start_dt).format(this.$config.dateFormat)
+    },
+    isCustomProduct() {
+      return this.presentation.proposal.product.custom
+    },
+    selectedProduct() {
+      return this.isCustomProduct ? 'Personalizado' : this.presentation.proposal.product.name
+    }
+  },
+  methods: {
+    selectedTimeslot(timeslot) {
+      this.$emit('selected-timeslot', timeslot)
     }
   }
 }

@@ -17,8 +17,12 @@ export const mutations = {
 
 export const actions = {
   async loadProposal({ commit }, id) {
-    const response = await this.$axios.get(`proposals/${id}`)
-    commit('set_proposal', response.data)
+    const { data } = await this.$axios.get(`presentations/proposal/${id}`)
+    console.log(data)
+    commit('set_proposal', data)
+  },
+  async selectTimeslot({ commit }, { id, timeslot }) {
+    await this.$axios.put(`presentations/${id}/timeslot`, { timeslot })
   },
   async acceptProposal({ commit }, id) {
     const response = await this.$axios.post(`proposals/${id}`)
@@ -33,8 +37,8 @@ export const actions = {
     })
   },
   async loadPresentation({ commit }, id) {
-    const response = await this.$axios.get(`presentations/${id}`)
-    commit('set_presentation', response.data)
+    const { data } = await this.$axios.get(`presentations/${id}`)
+    commit('set_presentation', data)
   },
   async confirmPresentation({ commit }, id) {
     await this.$axios.post(`presentations/${id}`)

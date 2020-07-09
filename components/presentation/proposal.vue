@@ -4,8 +4,8 @@
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
           <div class="horizontal middle">
-            <avatar :src="proposal.contractor.photo" :username="proposal.contractor.name"></avatar>
-            <h5>{{ proposal.contractor.name }}</h5>
+            <!-- <avatar :src="presentation.contractor.photo" :username="presentation.contractor.name"></avatar> -->
+            <h5 v-if="!$empty(presentation.contractor)">{{ presentation.contractor.name }}</h5>
           </div>
           <div class="d-flex align-items-end">
             <span class="identifier">Proposta</span>
@@ -13,7 +13,10 @@
         </div>
       </template>
       <template v-slot:main>
-        <event-details :event="proposal"></event-details>
+        <presentation-details
+          :presentation="presentation"
+          @selected-timeslot="selectedTimeslot"
+        ></presentation-details>
       </template>
       <template v-slot:footer>
         <div class="horizontal center middle full-height">
@@ -30,27 +33,33 @@
 </template>
 
 <script>
-import EventDetails from '@/components/artist/eventDetails'
+import { mapActions } from 'vuex'
+import PresentationDetails from '@/components/presentation/details'
 
 export default {
   components: {
-    'event-details': EventDetails
+    'presentation-details': PresentationDetails
   },
   props: {
-    proposal: { type: Object, default: () => {} }
+    presentation: { type: Object, default: () => {} }
   },
   methods: {
+    ...mapActions('presentation', ['selectTimeslot']),
     openModal() {
       return this.$refs.modal.open()
     },
     closeModal() {
       return this.$refs.modal.close()
     },
+    async selectedTimeslot(timeslot) {
+      await this.selectTimeslot({ id: this.presentation.id, timeslot })
+      this.$toast.success('Data da apresentação selecionada')
+    },
     accept() {
-      this.$emit('accept', this.proposal.id)
+      this.$emit('accept', this.presentation.id)
     },
     reject() {
-      this.$emit('reject', this.proposal.id)
+      this.$emit('reject', this.presentation.id)
     }
   }
 }
@@ -66,7 +75,7 @@ export default {
   .identifier {
     text-transform: uppercase;
     letter-spacing: $space / 2;
-    color: $layer3;
+    color: $layer5;
     padding-right: 10 * $space;
     font-weight: $bold;
     border-bottom: 5px solid $layer3;

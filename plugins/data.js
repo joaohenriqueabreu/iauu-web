@@ -16,6 +16,10 @@ const dateFilter = (value) => {
   return moment(value).format('DD/MM/YYYY')
 }
 
+const longDateFilter = (value) => {
+  return moment(value).format('LL')
+}
+
 const datetimeFilter = (value) => {
   return moment(value).format('DD/MM/YYYY HH:mm')
 }
@@ -26,6 +30,7 @@ const timeFilter = (value) => {
 
 // Registering custom filters
 Vue.filter('date', dateFilter)
+Vue.filter('longDate', longDateFilter)
 Vue.filter('datetime', datetimeFilter)
 Vue.filter('time', timeFilter)
 

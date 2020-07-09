@@ -1,7 +1,9 @@
 <template>
   <div class="vertical middle center">
     <div class="half-width">
-      <h4 class="mb-4 text-center">Conta pra gente os detalhes do seu evento para finalizar a proposta ao artista</h4>
+      <h4 class="mb-4 text-center">
+        Conta pra gente os detalhes do seu evento para finalizar a proposta ao artista
+      </h4>
       <form-input
         v-model="title"
         class="mb-2"

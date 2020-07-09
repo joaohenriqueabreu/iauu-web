@@ -53,7 +53,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import WidthdrawRequest from '@/components/payment/withdrawRequest'
-import Presentation from '@/components/artist/presentation'
+import Presentation from '@/components/presentation/presentation'
 export default {
   components: {
     'withdraw-request': WidthdrawRequest,
