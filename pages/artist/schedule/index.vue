@@ -19,15 +19,15 @@
       <busy ref="busy" @save="saveBusyTimeslot"></busy>
       <div v-if="!$empty(presentation)">
         <proposal
+          v-if="!$empty(presentation.proposal) && presentation.status === 'proposal'"
           ref="proposal"
-          :presentation="presentation"
           @accept="handleAcceptProposal"
           @reject="handleRejectProposal"
         ></proposal>
         <presentation
+          v-if="!$empty(presentation) && presentation.status === 'accepted'"
           ref="presentation"
           :read-only="false"
-          :presentation="presentation"
           @confirm="handleConfirmPresentation"
           @cancel="handleCancelPresentation"
         ></presentation>
@@ -98,7 +98,7 @@ export default {
       this.selectedTimeslot = timeslot
       this.$refs.busy.openModal(timeslot)
     },
-    async handleEvent({ eventId, timeslotId, type, presentationId }) {
+    async handleEvent({ eventId, timeslotId, type, status, presentationId }) {
       if (type === 'busy') {
         await this.removeTimeslot(timeslotId)
         this.$toast.success('Evento removido!')
@@ -107,27 +107,30 @@ export default {
 
       await this.loadPresentation(presentationId)
 
-      if (type === 'proposal') {
+      if (type === 'event' && status === 'proposal') {
         this.$refs.proposal.openModal()
         return
       }
 
-      this.$refs.presentation.openModal()
+      if (type === 'event' && status === 'accepted') {
+        this.$refs.presentation.openModal()
+      }
     },
     async saveBusyTimeslot(timeslot) {
       await this.saveTimeslot(timeslot)
-      // this.$refs.calendar.addEvent(timeslot)
       this.$refs.busy.closeModal()
     },
     async handleAcceptProposal(id) {
       await this.acceptProposal(id)
       this.$refs.calendar.refresh()
       this.$refs.proposal.closeModal()
+      this.$toast.success('Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato')
     },
     async handleRejectProposal(id) {
       await this.rejectProposal(id)
       this.$refs.calendar.refresh()
       this.$refs.proposal.closeModal()
+      this.$toast.success('Proposta recusada com sucesso')
     },
     async handleConfirmPresentation(id) {
       await this.confirmPresentation(id)

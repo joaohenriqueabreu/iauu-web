@@ -19,6 +19,7 @@
 
 <script>
 import VueFilters from 'vue2-filters'
+
 export default {
   filters: {
     getFilter(value, type) {
@@ -38,7 +39,8 @@ export default {
     placeholder: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
     icon: { type: String, default: null },
-    value: { type: [String, Number, Boolean], default: null }
+    value: { type: [String, Number, Boolean], default: null },
+    required: { type: Boolean, default: false }
   },
   computed: {
     type() {
@@ -47,7 +49,7 @@ export default {
     iconHelper() {
       return !this.$utils.empty(this.icon) ? this.icon : 'search'
     }
-  }
+  },
 }
 </script>
 

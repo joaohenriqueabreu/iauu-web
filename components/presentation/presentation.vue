@@ -6,10 +6,10 @@
           <div v-if="!$empty(presentation.contractor)" class="horizontal middle">
             <avatar
               class="mr-4"
-              :src="presentation.contractor.photo"
-              :username="presentation.contractor.name"
+              :src="presentation.contractor.user.photo"
+              :username="presentation.contractor.user.name"
             ></avatar>
-            <h5>{{ presentation.contractor.name }}</h5>
+            <h5>{{ presentation.contractor.user.name }}</h5>
           </div>
           <div class="d-flex align-items-end">
             <span class="identifier">Apresentação</span>
@@ -17,28 +17,25 @@
         </div>
       </template>
       <template v-slot:main>
-        <div class="my-4 countdown horizontal middle center">
-          <countdown v-if="!isPresentationPast" :time="timeUntilPresentation">
-            <template slot-scope="props">
-              <h5>
-                Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos
-              </h5>
-            </template>
-          </countdown>
-          <div v-else>
-            <p>
-              Conta pra gente como foi a apresentação!
-              <a href="#" @click.prevent="confirm">Confirme a Realização</a> para podermos finalizar
-              o processo de pagamento.
-            </p>
-            <p>
-              Caso a apresentação não seja confirmada por ambas as partes em até
-              <b>{{ $config.closePresentationDeadline }} dias</b> ela será automaticamente
-              encerrada.
-            </p>
-          </div>
+        <div class="boxed mb-4">
+          <presentation-date :presentation="presentation"></presentation-date>
         </div>
-        <event-details :event="presentation"></event-details>
+        <div class="mx-4 mb-4 vertical center middle">
+          <h3 class="mb-4">{{ presentation.proposal.title }}</h3>
+          <span>{{ presentation.proposal.description }}</span>
+        </div>
+        <div class="boxed mb-4">
+          <presentation-address :presentation="presentation"></presentation-address>
+        </div>
+        <div class="mb-2 horizontal center middle">
+          <h6>Apresentação contratada</h6>
+        </div>
+        <div class="boxed mb-4">
+          <presentation-price :presentation="presentation" class="horizontal center middle"></presentation-price>
+        </div>
+        <div>
+          <presentation-product :presentation="presentation"></presentation-product>
+        </div>
       </template>
       <template v-if="!readOnly" v-slot:footer>
         <div class="horizontal center middle full-height">
@@ -48,7 +45,7 @@
             </form-button>
           </div>
           <div>
-            <h5 v-if="!isPresentationPast" @click="cancel">Cancelar</h5>
+            <h5 v-if="!hasPresentationStarted" @click="cancel">Cancelar</h5>
           </div>
         </div>
       </template>
@@ -57,29 +54,16 @@
 </template>
 
 <script>
-import VueCountdown from '@chenfengyuan/vue-countdown'
-import EventDetails from '@/components/presentation/details'
+import BasePresentation from './base'
 
 export default {
-  components: {
-    countdown: VueCountdown,
-    eventDetails: EventDetails
-  },
+  extends: BasePresentation,
   props: {
     readOnly: { type: Boolean, default: true },
-    presentation: { type: Object, default: () => {} }
   },
   computed: {
-    timeUntilPresentation() {
-      return this.moment
-        .duration(this.moment().diff(this.moment(this.presentation.start_dt)))
-        .as('milliseconds')
-    },
-    isPresentationPast() {
-      // const endDate = this.moment(this.presentation.end_dt)
-      // const now = this.moment()
-      // TODO usar moment#isAfter
-      return false
+    hasPresentationStarted() {
+      return this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment())
     }
   },
   methods: {
@@ -91,22 +75,10 @@ export default {
     },
     confirm() {
       this.$emit('confirm', this.presentation.id)
-      // try {
-      //   await this.confirmPresentation(this.presentation.id)
-      // } catch (error) {
-      // } finally {
-      //   this.$emit('update')
-      // }
     },
     cancel() {
       this.$emit('cancel', this.presentation.id)
-      // try {
-      //   await this.cancelPresentation(this.presentation.id)
-      // } catch (error) {
-      // } finally {
-      //   this.$emit('update')
-      // }
-    }
+    },
   }
 }
 </script>

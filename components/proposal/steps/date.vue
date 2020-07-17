@@ -35,6 +35,8 @@
 <script>
 import { mapActions } from 'vuex'
 import Step from '@/components/proposal/steps/step'
+
+const PROPOSED_TIMESLOT_ID_PREFIX = 'event_'
 export default {
   extends: Step,
   props: {
@@ -49,18 +51,18 @@ export default {
   },
   computed: {
     proposedTimeslots() {
-      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'proposal')
-    }
+      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'event' && timeslot.id.startsWith(PROPOSED_TIMESLOT_ID_PREFIX))
+    },
   },
   methods: {
     ...mapActions('schedule', ['loadSchedule', 'appendTimeslot', 'deselectTimeslot']),
     addTimeslot(selectedTimeslot) {
       // Assign timeslot as proposal
       selectedTimeslot.title = 'Proposta de data para o evento'
-      selectedTimeslot.type = 'proposal'
+      selectedTimeslot.type = 'event'
 
       // assign some temp id
-      selectedTimeslot.id = `proposal_${this.proposalTimeslotId}`
+      selectedTimeslot.id = `${PROPOSED_TIMESLOT_ID_PREFIX}${this.proposalTimeslotId}`
       this.proposalTimeslotId++
       this.proposedTimeslotCount++
 
@@ -79,7 +81,7 @@ export default {
       this.$emit('complete')
     },
     removeProposalTimeslot({ eventId, timeslotId, type }) {
-      if (type !== 'proposal') {
+      if (type !== 'event') {
         return
       }
       this.deselectTimeslot(timeslotId)

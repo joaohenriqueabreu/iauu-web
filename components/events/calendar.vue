@@ -67,20 +67,22 @@ export default {
     defaultView() {
       return this.weekMode ? 'timeGridWeek' : 'dayGridMonth'
     },
-    // TODO maybe would be a good thing to move this to some "prevented-dates" prop instead
     busyDates() {
+      const self = this
       const busyTimeslots = this.$collection.filter(
         this.timeslots,
-        (timeslot) => timeslot.type === 'busy'
+        (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot)
       )
 
       return this.$collection.map(busyTimeslots, 'start_dt')
     },
     unavailableTimeslots() {
-      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'busy')
+      const self = this
+      return this.$collection.filter(this.timeslots, (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot))
     },
     availableTimeslots() {
-      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type !== 'busy')
+      const self = this
+      return this.$collection.filter(this.timeslots, (timeslot) => !self.$empty(timeslot) && !self.isUnavailable(timeslot))
     },
     headerButtons: () => {
       return {
@@ -146,7 +148,8 @@ export default {
         timeslotId: event.extendedProps.id,
         proposalId: event.extendedProps.proposal_id,
         presentationId: event.extendedProps.presentation_id,
-        type: event.extendedProps.type
+        type: event.extendedProps.type,
+        status: event.extendedProps.status
       })
     },
     addEvent(timeslot) {
@@ -176,7 +179,7 @@ export default {
     selected(selection) {
       // do nothing if it's a busy day - don't allow actions here
       if (this.isBusyDay(selection.start) && !this.ownerMode) {
-        this.$toast.error('Dia indisponível, não pode acrescentar um evento aqui.')
+        this.$toast.error('O artista não está disponível nesta data')
         return
       }
 
@@ -195,29 +198,32 @@ export default {
     dateClick(day) {
       this.$emit('date-click', day)
     },
-    formatEventFromTimeslot(timeslot, isFullDay, isBackground) {
+    formatEventFromTimeslot(timeslot, isBackground) {
       let startDt = moment(timeslot.start_dt).toISOString()
       const endDt = moment(timeslot.end_dt).toISOString()
 
-      if (timeslot.type === 'busy' && !this.ownerMode) {
+      // According to viewer and timeslot status setup event status to change its display
+      const eventStatus = isBackground ? 'unavailable' : timeslot.status
+
+      if (isBackground) {
         startDt = moment(timeslot.start_dt)
           .startOf('day')
           .toISOString()
       }
 
       const fullcalendarEvent = {
-        id: `${timeslot.type}_${timeslot.id}`,
-        title: timeslot.type === 'busy' ? 'Indisponível' : timeslot.label,
+        id: `${timeslot.status}_${timeslot.id}`,
+        title: isBackground ? 'Indisponível' : timeslot.label,
         start: startDt,
         end: endDt,
-        allDay: isFullDay,
+        allDay: isBackground,
         extendedProps: timeslot
       }
 
       if (isBackground) {
         fullcalendarEvent.rendering = 'background'
       } else {
-        const classes = ['event', timeslot.type]
+        const classes = ['event', eventStatus]
         if (!this.ownerMode) {
           classes.push('proposing')
         }
@@ -237,8 +243,9 @@ export default {
     loadCalendarEvents() {
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
-        const isBusy = timeslot.type === 'busy' && !this.ownerMode
-        this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, isBusy, isBusy))
+        if (!this.$empty(timeslot)) {
+          this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot)))
+        }
       })
     },
     refresh() {
@@ -248,6 +255,9 @@ export default {
     },
     isBusyDay(date) {
       return this.busyDates.some((busyDate) => moment(date).isSame(moment(busyDate), 'day'))
+    },
+    isUnavailable(timeslot) {
+      return ['busy', 'accepted'].includes(timeslot.status) && !this.ownerMode
     }
   }
 }
@@ -277,7 +287,7 @@ export default {
     }
   }
 
-  &.proposing.proposal {
+  &.proposing {
     background: $proposalTimeslot;
     span {
       color: $layer2;
@@ -299,7 +309,7 @@ export default {
     }
   }
 
-  &.presentation {
+  &.accepted {
     background: $presentationTimeslot;
   }
 
@@ -339,6 +349,10 @@ export default {
       }
     }
   }
+}
+
+.fc-time {
+  color: $layer1;
 }
 
 // for "busy" events

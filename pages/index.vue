@@ -59,6 +59,7 @@ export default {
 <style lang="scss" scoped>
 .section {
   min-height: 100vh;
+  // overflow:   scroll;
   z-index: $base;
 
   &.main {

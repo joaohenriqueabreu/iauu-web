@@ -1,5 +1,5 @@
 <template>
-  <vue-carousel :perPage="page" :navigationEnabled="navigate">
+  <vue-carousel :perPageCustom="[[0, 1], [768, 2], [1024, 3]]" :navigationEnabled="navigate">
     <slot></slot>
   </vue-carousel>
 </template>
@@ -11,7 +11,7 @@ export default {
     'vue-carousel': Carousel
   },
   props: {
-    page: 0,
+    pages: 0,
     navigate: false
   }
 }
@@ -19,5 +19,10 @@ export default {
 
 <!-- VueCarousel overrides -->
 <style lang="scss">
-
+.VueCarousel-pagination {
+  height: 2vh;
+  .VueCarousel-dot-container {
+    margin-top: 0 !important;
+  }
+}
 </style>

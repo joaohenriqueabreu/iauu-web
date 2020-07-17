@@ -6,8 +6,8 @@
         >Ou então clique aqui e escolha o que deseja incluir na apresentação</u
       > -->
     </div>
-    <carousel class="full-height" :per-page="2" :navigationEnabled="true">
-      <slide v-for="(product, index) in products" :key="index">
+    <carousel class="full-height" :navigationEnabled="true">
+      <slide v-for="(product, index) in products" :key="index" class="mr-5">
         <overlay>
           <template v-slot:default>
             <div :class="{ selected: product === selectedProduct }">
@@ -31,7 +31,11 @@
           </template>
         </overlay>
       </slide>
-      <slide class="product"></slide>
+      <slide>
+        <div class="custom-product" @click="openCustomProductModal">
+          <h3>Personalize sua apresentação</h3>
+        </div>
+      </slide>
     </carousel>
     <product-preview ref="preview" @selected="chooseProduct"></product-preview>
     <custom-product ref="custom" :all-items="allItems" @selected="chooseProduct"></custom-product>
@@ -158,5 +162,11 @@ export default {
 
 .selected {
   border: 20px solid $brandLayer;
+}
+
+.custom-product {
+  @extend .full-height, .vertical, .middle, .center, .clickable;
+  background: $layer4;
+  box-shadow: $shadow;
 }
 </style>

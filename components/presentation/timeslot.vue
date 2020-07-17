@@ -1,6 +1,7 @@
 <template>
-  <div class="horizontal center middle">
-    <carousel>
+  <div>
+    <h6 class="mb-4">Escolha uma opção de data e  horário para a apresentação:</h6>
+    <carousel class="horizontal center middle">
       <slide
         v-for="(timeslot, index) in timeslots"
         :key="index"
