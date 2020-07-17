@@ -49,7 +49,7 @@
             {{ presentation.contractor.user.name }} solicitou um produto personalizado. Envie um orçamento para depois confirmar a apresentação.
           </div>
         <div class="horizontal center middle full-height">
-          <div class="mr-5" v-if="!isCustomProduct || hasAcceptedCounterOffer">
+          <div class="mr-5" v-if="(!isCustomProduct || hasAcceptedCounterOffer) && hasSelectedTimeslot">
             <form-button @action="accept">Aceitar</form-button>
           </div>
           <div>
@@ -74,6 +74,9 @@ export default {
     },
     hasAcceptedCounterOffer() {
       return this.presentation.proposal.counterOffer.status === 'accepted'
+    },
+    hasSelectedTimeslot() {
+      return !this.$empty(this.presentation.timeslot)
     },
     isCustomProduct() {
       return this.presentation.proposal.product.custom || this.presentation.proposal.product.name === 'custom'
