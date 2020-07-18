@@ -1,6 +1,6 @@
 <template>
   <div class="event">
-    <h4>{{ presentation.start_dt | date }}</h4>
+    <h4>{{ presentationDate | date }}</h4>
     <div class="info">
       <div class="mb-3">
         <h5 class="mb-0">{{ presentation.title }}</h5>
@@ -9,7 +9,7 @@
       <div class="horizontal">
         <h6 class="mr-5">
           <font-awesome icon="clock" class="mr-2"></font-awesome>
-          {{ presentation.start_dt | time }}
+          {{ presentationDate | time }}
         </h6>
         <span class="">
           <font-awesome icon="map-marker-alt" class="mr-2"></font-awesome>
@@ -26,6 +26,17 @@ export default {
     presentation: { type: Object, default: () => {} }
   },
   computed: {
+    presentationDate() {
+      if (!this.$empty(this.presentation.timeslot)) {
+        return this.presentation.timeslot.start_dt
+      }
+
+      if (this.presentation.status === 'proposal') {
+        return this.presentation.proposal.timeslots[0].start_dt
+      }
+
+      return ''
+    },
     getOtherParty() {
       if (this.$auth.hasScope('artist')) {
         return this.presentation.contractor.user.name

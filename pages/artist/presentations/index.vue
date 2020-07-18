@@ -22,6 +22,7 @@ export default {
     PresentationInfo
   },
   async asyncData({ store, app }) {
+    store.dispatch('presentation/resetPresentation')
     await store.dispatch('presentation/loadPresentations')
   },
   computed: {
@@ -32,7 +33,6 @@ export default {
     ...mapActions('presentation', ['loadPresentation']),
     async open(id) {
       await this.loadPresentation(id)
-      console.log(this.$refs)
       this.$refs.presentation.openModal()
     }
   }

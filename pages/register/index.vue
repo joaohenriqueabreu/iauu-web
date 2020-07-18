@@ -53,7 +53,6 @@ export default {
         await this.register(this.credentials)
         this.$router.push('/register/verify')
       } catch (error) {
-        console.log('deveria ter parado aqui')
         this.$sentry.captureException(error)
         this.error = error
       }

@@ -45,11 +45,11 @@ export default {
 <style lang="scss" scoped>
 [data-icon] {
   @include desktop {
-    // margin-right: 4 * $space;
+    margin-right: 0;
   }
 
   @include mobile {
-    // margin-right: $space;
+    margin-right: 4 * $space;
   }
 
   height: 100%;
@@ -71,19 +71,20 @@ export default {
 }
 
 .progress {
-  transition: $transition;
-  background: $layer5;
-  border-radius: 0;
-  height: 5px;
-  // border-bottom: solid 4px $layer5;
-  min-width: 100px;
-  margin-left: 2 * $space;
-  margin-right: 2 * $space;
-
-  &.completed {
+  @include desktop {
     transition: $transition;
-    background: $brand;
-    // border-bottom: solid 4px $brand;
+    background: $layer5;
+    border-radius: 0;
+    height: 5px;
+    min-width: 100px;
+    margin-left: 2 * $space;
+    margin-right: 2 * $space;
+
+    &.completed {
+      transition: $transition;
+      background: $brand;
+      // border-bottom: solid 4px $brand;
+    }
   }
 }
 </style>

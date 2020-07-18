@@ -1,42 +1,39 @@
 <template>
   <div>
     <div class="vertical">
-      <h6 class="mb-4">Últimas propostas recebidas</h6>
-      <div v-for="(proposal, index) in proposals" :key="index" @click="open(proposal.id)">
-        <event-info :event="proposal"></event-info>
+      <h6 class="mb-4">Últimas propostas</h6>
+      <div v-for="(presentation, index) in presentations" :key="index" @click="open(presentation.id)">
+        <presentation-info :presentation="presentation"></presentation-info>
       </div>
     </div>
-    <modal ref="proposalModal">
-      <template v-slot:main>
-        <proposal></proposal>
-      </template>
-    </modal>
+    <!-- Data loaded from state -->
+    <proposal-details v-if="!$empty(presentationState)" ref="proposal" :read-only="false">
+    </proposal-details>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import EventInfo from '@/components/presentation/info'
-import Proposal from '@/components/presentation/proposal'
+import { mapState, mapActions } from 'vuex'
+import PresentationInfo from '@/components/presentation/info'
+import ProposalDetails from '@/components/presentation/proposal'
 export default {
   components: {
-    proposal: Proposal,
-    'event-info': EventInfo
+    ProposalDetails,
+    PresentationInfo
   },
   async asyncData({ store, app }) {
-    await store.dispatch('schedule/loadSchedule', {
-      id: app.$auth.user.id,
-      year: new Date().getFullYear()
-    })
+    store.dispatch('presentation/resetPresentation')
+    await store.dispatch('presentation/loadProposals')
   },
   computed: {
-    ...mapGetters('schedule', ['proposals'])
+    ...mapState({ presentations: (state) => state.presentation.presentations }),
+    ...mapState({ presentationState: (state) => state.presentation.presentation })
   },
   methods: {
-    ...mapActions('presentation', ['loadProposal']),
+    ...mapActions('presentation', ['loadPresentation']),
     async open(id) {
-      await this.loadProposal(id)
-      this.$refs.proposalModal.open()
+      await this.loadPresentation(id)
+      this.$refs.proposal.openModal()
     }
   }
 }
