@@ -58,7 +58,7 @@ export default {
     presentation: Presentation
   },
   async asyncData({ app, store }) {
-    await store.dispatch('schedule/loadMySchedule', new Date().getFullYear())
+    await store.dispatch('schedule/loadMySchedule', { year: new Date().getFullYear() })
   },
   data() {
     return {
@@ -84,7 +84,7 @@ export default {
     ...mapActions('schedule', ['loadMySchedule', 'saveTimeslot', 'removeTimeslot']),
     ...mapActions('app', ['setAlert']),
     async reloadTimeslotsForYear(year) {
-      await this.loadMySchedule(year)
+      await this.loadMySchedule({ year })
       this.$refs.calendar.loadCalendarEvents()
     },
     openBusyModal(timeslot) {

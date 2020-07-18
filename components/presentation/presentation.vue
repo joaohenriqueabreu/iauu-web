@@ -34,19 +34,36 @@
           <presentation-price :presentation="presentation" class="horizontal center middle"></presentation-price>
         </div>
         <div>
-          <presentation-product :presentation="presentation"></presentation-product>
+          <presentation-product :presentation="presentation" hide-price></presentation-product>
         </div>
       </template>
       <template v-if="!readOnly" v-slot:footer>
-        <div class="horizontal center middle full-height">
+        <div class="horizontal center middle mb-3">
           <div class="mr-5">
-            <form-button @action="confirm">
+            <form-button @action="confirm" v-if="hasPresentationStarted">
               Confirmar Realização
             </form-button>
           </div>
           <div>
-            <h5 v-if="!hasPresentationStarted" @click="cancel">Cancelar</h5>
+            <h5 v-if="!hasPresentationStarted" @click="openConfirmCancelModal">Cancelar</h5>
           </div>
+        </div>
+        <div v-if="hasPresentationStarted">
+          <small>Apresentação realizada em {{ presentation.timeslot.start_dt | date }}, caso houve algum problema com a apresentação entrar em contato conosco imediatamente.</small>
+        </div>
+      </template>
+    </modal>
+    <modal ref="cancel" height="tiny">
+      <template v-slot:main>
+        <div class="horizontal middle center full-height">
+          <h6 v-if="!hasPresentationStarted">Tem certeza que quer cancelar a apresentação? </h6>
+          <h6 v-else>Não é possível cancelar a apresentação após sua data de realização</h6>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <div class="horizontal center middle">
+          <h6 class="clickable mr-4" @click="cancel">Sim, quero cancelar</h6>
+          <form-button @action="closeCancelModal">Não, retornar para agenda</form-button>
         </div>
       </template>
     </modal>
@@ -54,6 +71,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import BasePresentation from './base'
 
 export default {
@@ -67,17 +85,34 @@ export default {
     }
   },
   methods: {
+    ...mapActions('presentation', ['confirmPresentation', 'cancelPresentation']),
     openModal() {
       this.$refs.modal.open()
     },
     closeModal() {
       this.$refs.modal.close()
     },
-    confirm() {
-      this.$emit('confirm', this.presentation.id)
+    openConfirmCancelModal() {
+      this.$refs.cancel.open()
     },
-    cancel() {
-      this.$emit('cancel', this.presentation.id)
+    closeCancelModal() {
+      this.$refs.cancel.close()
+    },
+    async confirm() {
+      await this.confirmPresentation(this.presentation.id)
+      // this.$refs.modal.close()
+      this.$toast.success("Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento e você deverá receber em alguns dias.")
+    },
+    async cancel() {
+      try {
+        await this.cancelPresentation(this.presentation.id)
+        this.$toast.info("Apresentação cancelada")
+      } catch (error) {
+        console.log(error)
+        this.$toast.error(error)
+      } finally {
+        this.$refs.cancel.close()
+      }
     },
   }
 }

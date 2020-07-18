@@ -2,9 +2,6 @@
   <div>
     <div class="mb-5 vertical">
       <h6 class="mb-2">Escolha o produto do artista que você deseja contratar</h6>
-      <!-- <u class="custom-product" @click="openCustomProductModal"
-        >Ou então clique aqui e escolha o que deseja incluir na apresentação</u
-      > -->
     </div>
     <carousel class="full-height" :navigationEnabled="true">
       <slide v-for="(product, index) in products" :key="index" class="mr-5">

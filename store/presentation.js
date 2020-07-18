@@ -3,8 +3,9 @@ import Presentation from '@/models/presentation'
 import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
-  proposal: new Proposal(),
-  presentation: new Presentation()
+  proposal: {},
+  presentation: {},
+  presentations: []
 })
 
 export const mutations = {
@@ -14,17 +15,24 @@ export const mutations = {
   },
   set_presentation(state, presentationData) {
     state.presentation = new Presentation(presentationData)
+  },
+  set_presentations(state, presentationsData) {
+    state.presentations = presentationsData
   }
 }
 
 export const actions = {
   async loadProposal({ commit }, id) {
     const { data } = await this.$axios.get(`presentations/proposal/${id}`)
-    console.log(data)
     commit('set_proposal', data)
   },
+  async loadPresentations({ commit }) {
+    const { data } = await this.$axios.get('presentations')
+    commit('set_presentations', data)
+  },
   async selectTimeslot({ commit }, { id, timeslot }) {
-    await this.$axios.put(`presentations/${id}/timeslot`, { timeslot })
+    const { data } = await this.$axios.put(`presentations/${id}/timeslot`, { timeslot })
+    commit('set_presentation', data)
   },
   async sendCounterOffer({ state, commit }, counterOffer) {
     await this.$axios.post(`presentations/${state.presentation.id}/proposal/counterOffer`, { counterOffer })
@@ -49,16 +57,14 @@ export const actions = {
     commit('set_presentation', data)
   },
   async confirmPresentation({ commit }, id) {
-    await this.$axios.post(`presentations/${id}`)
-    this.dispatch('schedule/removeTimeslot', { type: 'presentation', id })
-    this.dispatch('app/setAlert', {
-      message:
-        'Obrigado por confirmar a realização da apresentação! Vamos agora finalizar os pagamentos pendentes'
-    })
+    const { data } = await this.$axios.put(`presentations/${id}`)
+    commit('set_presentation', data)
+    this.dispatch('schedule/loadMySchedule')
   },
   async cancelPresentation({ commit }, id) {
-    await this.$axios.delete(`presentations/${id}`)
-    this.dispatch('schedule/removeTimeslot', { type: 'presentation', id })
+    const { data } = await this.$axios.delete(`presentations/${id}`)
+    commit('set_presentation', data)
+    this.dispatch('schedule/loadMySchedule')
   }
 }
 

@@ -2,45 +2,38 @@
   <div>
     <div class="vertical">
       <h6 class="mb-4">Próximas apresentações</h6>
-      <div
-        v-for="(presentation, index) in presentations"
-        :key="index"
-        @click="open(presentation.id)"
-      >
-        <event-info :event="presentation"></event-info>
+      <div v-for="(presentation, index) in presentations" :key="index" @click="open(presentation.id)">
+        <presentation-info :presentation="presentation"></presentation-info>
       </div>
     </div>
-    <modal ref="presentationModal">
-      <template v-slot:main>
-        <presentation></presentation>
-      </template>
-    </modal>
+    <!-- Data loaded from state -->
+    <presentation-details v-if="!$empty(presentationState)" ref="presentation" :read-only="false">
+    </presentation-details>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import EventInfo from '@/components/presentation/info'
-import Presentation from '@/components/presentation/presentation'
+import { mapState, mapActions } from 'vuex'
+import PresentationInfo from '@/components/presentation/info'
+import PresentationDetails from '@/components/presentation/presentation'
 export default {
   components: {
-    presentation: Presentation,
-    'event-info': EventInfo
+    PresentationDetails,
+    PresentationInfo
   },
   async asyncData({ store, app }) {
-    await store.dispatch('schedule/loadSchedule', {
-      id: app.$auth.user.id,
-      year: new Date().getFullYear()
-    })
+    await store.dispatch('presentation/loadPresentations')
   },
   computed: {
-    ...mapGetters('schedule', ['presentations'])
+    ...mapState({ presentations: (state) => state.presentation.presentations }),
+    ...mapState({ presentationState: (state) => state.presentation.presentation })
   },
   methods: {
     ...mapActions('presentation', ['loadPresentation']),
     async open(id) {
       await this.loadPresentation(id)
-      this.$refs.presentationModal.open()
+      console.log(this.$refs)
+      this.$refs.presentation.openModal()
     }
   }
 }

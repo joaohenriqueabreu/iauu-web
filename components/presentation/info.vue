@@ -1,20 +1,19 @@
 <template>
   <div class="event">
-    <h4>{{ eventDate(event) }}</h4>
+    <h4>{{ presentation.start_dt | date }}</h4>
     <div class="info">
       <div class="mb-3">
-        <h5 class="mb-0">{{ event.title }}</h5>
-        <small>{{ getOtherParty(event) }}</small>
+        <h5 class="mb-0">{{ presentation.title }}</h5>
+        <small>{{ getOtherParty }}</small>
       </div>
       <div class="horizontal">
         <h6 class="mr-5">
           <font-awesome icon="clock" class="mr-2"></font-awesome>
-          {{ eventTime(event) }}
+          {{ presentation.start_dt | time }}
         </h6>
         <span class="">
           <font-awesome icon="map-marker-alt" class="mr-2"></font-awesome>
-          {{ event.location.address }}, {{ event.location.city }},
-          {{ event.location.state }}
+          {{ presentation.address.display }}
         </span>
       </div>
     </div>
@@ -24,28 +23,17 @@
 <script>
 export default {
   props: {
-    event: { type: Object, default: () => {} }
+    presentation: { type: Object, default: () => {} }
   },
-  computed: {},
-  methods: {
-    eventDate(event) {
-      return this.moment(event.start_dt).format(this.$config.dateFormat)
-    },
-    eventTime(event) {
-      return (
-        this.moment(event.start_dt).format(this.$config.timeFormat) +
-        ' - ' +
-        this.moment(event.end_dt).format(this.$config.timeFormat)
-      )
-    },
-    getOtherParty(event) {
+  computed: {
+    getOtherParty() {
       if (this.$auth.hasScope('artist')) {
-        return event.contractor.name
+        return this.presentation.contractor.user.name
       }
 
-      return event.artist.name
+      return this.presentation.artist.user.name
     }
-  }
+  },
 }
 </script>
 

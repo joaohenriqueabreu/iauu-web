@@ -1,9 +1,7 @@
 import Vue from 'vue'
-// import Schedule from '@/models/schedule'
 import Timeslot from '@/models/timeslot'
 
 export const state = () => ({
-  // schedule: new Schedule(),
   timeslots: [],
   lastRemovedTimeslotId: null,
   newlyAddedTimeslot: null
@@ -29,8 +27,8 @@ export const actions = {
     const { data } = await this.$axios.get(`schedules/public/${id}/${year}`)
     commit('set_schedule', data)
   },
-  async loadMySchedule({ commit }, year) {
-    const { data } = await this.$axios.get(`schedules/my/${year}`)
+  async loadMySchedule({ commit }, query) {
+    const { data } = await this.$axios.get('schedules/my', { params: query })
     commit('set_schedule', data)
   },
   async saveTimeslot({ commit }, timeslot) {
@@ -54,9 +52,9 @@ export const getters = {
     return this.$array.last(state.timeslots)
   },
   presentations(state) {
-    return state.timeslots.filter((timeslot) => timeslot.type === 'presentation')
+    return state.timeslots.filter((timeslot) => ['accepted', 'completed', 'cancelled'].includes(timeslot.status))
   },
   proposals(state) {
-    return state.timeslots.filter((timeslot) => timeslot.type === 'proposal')
+    return state.timeslots.filter((timeslot) => timeslot.status === 'proposal')
   }
 }

@@ -54,7 +54,8 @@ export default {
     weekMode: { type: Boolean, default: false },
     timeslots: { type: Array, default: () => {} },
     ownerMode: { type: Boolean, default: false },
-    max: { type: Number, default: null }
+    max: { type: Number, default: null },
+    futureOnly: { type: Boolean, default: true }
   },
   data() {
     return {
@@ -177,6 +178,11 @@ export default {
       }
     },
     selected(selection) {
+      if (this.isDatePast(selection.start) && this.futureOnly) {
+        this.$toast.error('Selecione uma data futura')
+        return
+      }
+
       // do nothing if it's a busy day - don't allow actions here
       if (this.isBusyDay(selection.start) && !this.ownerMode) {
         this.$toast.error('O artista não está disponível nesta data')
@@ -255,6 +261,9 @@ export default {
     },
     isBusyDay(date) {
       return this.busyDates.some((busyDate) => moment(date).isSame(moment(busyDate), 'day'))
+    },
+    isDatePast(date) {
+      return this.moment(date).isBefore(this.moment())
     },
     isUnavailable(timeslot) {
       return ['busy', 'accepted'].includes(timeslot.status) && !this.ownerMode

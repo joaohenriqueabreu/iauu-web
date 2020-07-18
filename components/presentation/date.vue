@@ -3,9 +3,8 @@
     <div class="my-4 countdown horizontal middle center">
       <countdown v-if="!isPresentationPast" :time="timeUntilPresentation">
         <template slot-scope="props">
-          <h5>
-            Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos
-          </h5>
+          <h5 v-if="props.days > 1">Faltam {{ props.days }} dias</h5>
+          <h5 v-else>Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos</h5>
         </template>
       </countdown>
       <div v-else>

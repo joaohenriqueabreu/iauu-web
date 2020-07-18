@@ -27,13 +27,7 @@
         <div class="boxed mb-4">
           <presentation-address :presentation="presentation"></presentation-address>
         </div>
-        <div class="boxed mb-4" v-if="!isCustomProduct">
-          <div class="mb-2 horizontal center middle">
-            <h6>Apresentação contratada</h6>
-          </div>
-          <presentation-price :presentation="presentation" class="horizontal center middle"></presentation-price>
-        </div>
-        <div v-else>
+        <div v-if="isCustomProduct">
           <counter-offer ref="counter" :presentation="presentation" @send="dispatchCounterOffer"></counter-offer>
         </div>
         <div class="boxed">
@@ -45,9 +39,15 @@
         </div>
       </template>
       <template v-slot:footer>
-        <div v-if="!hasCounterOffer && !hasAcceptedCounterOffer" class="error">
-            {{ presentation.contractor.user.name }} solicitou um produto personalizado. Envie um orçamento para depois confirmar a apresentação.
-          </div>
+        <div v-if="isCustomProduct && !hasCounterOffer" class="error mb-2">
+          {{ presentation.contractor.user.name }} solicitou um produto personalizado. Envie um orçamento para depois confirmar a apresentação.
+        </div>
+        <div v-if="hasCounterOffer && !hasAcceptedCounterOffer" class="error mb-2">
+          O contratante deve aceitar o orçamento para poder confirmar a apresentação
+        </div>
+        <div class="error mb-2" v-if="!hasSelectedTimeslot">
+          Selecione uma opção de data para evento
+        </div>
         <div class="horizontal center middle full-height">
           <div class="mr-5" v-if="(!isCustomProduct || hasAcceptedCounterOffer) && hasSelectedTimeslot">
             <form-button @action="accept">Aceitar</form-button>
@@ -66,14 +66,20 @@ import { mapActions } from 'vuex'
 import BasePresentation from './base'
 
 export default {
-  extends: BasePresentation,  
+  extends: BasePresentation,
+  async mounted() {
+    if (this.presentation.proposal.timeslots.length === 1) {
+      await this.selectTimeslot({ id: this.presentation.id, timeslot: this.presentation.proposal.timeslots[0] })
+    }
+  },
   computed: {
     hasCounterOffer() {
       return !this.$empty(this.presentation.proposal.counterOffer) && 
         this.presentation.proposal.counterOffer.status !== 'void'
     },
     hasAcceptedCounterOffer() {
-      return this.presentation.proposal.counterOffer.status === 'accepted'
+      return !this.$empty(this.presentation.proposal.counterOffer) && 
+        this.presentation.proposal.counterOffer.status === 'accepted'
     },
     hasSelectedTimeslot() {
       return !this.$empty(this.presentation.timeslot)

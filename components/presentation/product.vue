@@ -1,7 +1,11 @@
 <template>
-  <div class="vertical center middle">
-    <h5 class="mb-4">Produto selecionado <u>{{ selectedProduct }}</u></h5>    
-    <div class="vertical middle center">
+  <div class="vertical center middle mx-4">
+    <h5 class="mb-4">Produto selecionado <u>{{ selectedProduct }}</u></h5>
+    <div v-if="!isCustomProduct && !hidePrice" class="horizontal center middle mb-4">
+      <h3>{{ presentation.proposal.product.price | currency }} para {{ presentation.proposal.product.duration }} horas de apresentação</h3>
+    </div>
+    <div class="items">
+      <h6 class="mb-4">Itens contratados</h6>
       <perfect-scrollbar>
         <div v-for="(item, index) in presentation.proposal.product.items" :key="index">
           {{ item }}
@@ -13,21 +17,18 @@
 </template>
 
 <script>
-import BasePresentation from './base'
 export default {
-  extends: BasePresentation,
   props: {
-    presentation: { type: Object, default: () => {}}
-  },
-  methods: {
-    isCustomProduct() {
-      return this.presentation.proposal.product.custom || this.presentation.proposal.product.name === 'custom'
-    },
+    presentation: { type: Object, default: () => {}},
+    hidePrice: { type: Boolean, default: false }
   },
   computed: {
     selectedProduct() {
-      return this.isCustomProduct() ? 'Personalizado' : this.presentation.proposal.product.name
-    }
+      return this.isCustomProduct ? 'Personalizado' : this.presentation.proposal.product.name
+    },
+    isCustomProduct() {
+      return this.presentation.proposal.product.custom || this.presentation.proposal.product.name === 'custom'
+    },
   }
 }
 </script>
@@ -35,5 +36,12 @@ export default {
 <style lang="scss" scoped>
 .ps {
   max-height: 20vh;
+}
+
+.items {
+  padding: 2 * $space;
+  border-radius: $edges;
+  width: 100%;
+  background: $layer1;
 }
 </style>
