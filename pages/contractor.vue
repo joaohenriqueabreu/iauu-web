@@ -1,10 +1,12 @@
 <template>
-  <nuxt-child />
+  <div>
+    <nuxt-child />
+  </div>
 </template>
 
 <script>
 export default {
-  // layout: 'app',
+  layout: 'app',
   middleware: ['auth', 'contractor']
 }
 </script>

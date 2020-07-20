@@ -67,12 +67,13 @@
         </div>
       </template>
     </modal>
+    <presentation-feedback ref="feedback" @feedback="handleFeedback" :presentation="presentation"></presentation-feedback>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import BasePresentation from './base'
+import BasePresentation from '../base'
 
 export default {
   extends: BasePresentation,
@@ -100,20 +101,24 @@ export default {
     },
     async confirm() {
       await this.confirmPresentation(this.presentation.id)
-      // this.$refs.modal.close()
       this.$toast.success("Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento e você deverá receber em alguns dias.")
+      this.$emit('completed')
+      this.$refs.feedback.openModal()
     },
     async cancel() {
       try {
         await this.cancelPresentation(this.presentation.id)
         this.$toast.info("Apresentação cancelada")
+        this.$emit('cancelled', this.presentation.id)
+        this.closeCancelModal()
       } catch (error) {
         console.log(error)
         this.$toast.error(error)
-      } finally {
-        this.$refs.cancel.close()
       }
     },
+    handleFeedback() {
+      this.closeModal()
+    }
   }
 }
 </script>

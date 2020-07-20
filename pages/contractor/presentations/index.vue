@@ -1,29 +1,32 @@
 <template>
   <div>
     <div class="vertical">
-      <h6 class="mb-4">Últimas propostas</h6>
+      <h6 class="mb-4">Próximas apresentações contratadas</h6>
       <div v-for="(presentation, index) in presentations" :key="index" @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
     </div>
+    <div v-if="presentations.length === 0" class="mb-4">
+      Nenhuma apresentação confirmada <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
+    </div>
     <!-- Data loaded from state -->
-    <proposal-details v-if="!$empty(presentationState)" ref="proposal" :read-only="false">
-    </proposal-details>
+    <presentation-details v-if="!$empty(presentationState)" ref="presentation" :read-only="false">
+    </presentation-details>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import PresentationInfo from '@/components/presentation/info'
-import ProposalDetails from '@/components/presentation/artist/proposal'
+import PresentationDetails from '@/components/presentation/contractor/presentation'
 export default {
   components: {
-    ProposalDetails,
+    PresentationDetails,
     PresentationInfo
   },
   async asyncData({ store, app }) {
     store.dispatch('presentation/resetPresentation')
-    await store.dispatch('presentation/loadProposals')
+    await store.dispatch('presentation/loadPresentations')
   },
   computed: {
     ...mapState({ presentations: (state) => state.presentation.presentations }),
@@ -33,7 +36,7 @@ export default {
     ...mapActions('presentation', ['loadPresentation']),
     async open(id) {
       await this.loadPresentation(id)
-      this.$refs.proposal.openModal()
+      this.$refs.presentation.openModal()
     }
   }
 }

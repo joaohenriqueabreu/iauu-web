@@ -15,7 +15,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import PresentationInfo from '@/components/presentation/info'
-import PresentationDetails from '@/components/presentation/presentation'
+import PresentationDetails from '@/components/presentation/artist/presentation'
 export default {
   components: {
     PresentationDetails,

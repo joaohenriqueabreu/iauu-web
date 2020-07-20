@@ -7,6 +7,7 @@ import PresentationDate from '@/components/presentation/date'
 import PresentationProduct from '@/components/presentation/product'
 import PresentationPrice from '@/components/presentation/price'
 import CounterOffer from '@/components/presentation/counterOffer'
+import PresentationFeedback from '@/components/presentation/feedback'
 
 export default {
   components: {
@@ -16,6 +17,7 @@ export default {
     PresentationProduct,
     PresentationPrice,
     CounterOffer,
+    PresentationFeedback,
   },
   computed: {
     ...mapState({ presentation: (state) => state.presentation.presentation })
@@ -64,4 +66,65 @@ export default {
     }
   }
 }
+
+// .presentation-container {
+//   @extend .vertical;
+//   padding: 10px;
+//   max-height: 100%;
+//   position: relative;
+
+  .identifier {
+    text-transform: uppercase;
+    letter-spacing: $space / 2;
+    color: $layer5;
+    padding-right: 10 * $space;
+    font-weight: $bold;
+    border-bottom: 5px solid $layer3;
+    border-radius: rounded;
+  }
+
+  .header {
+    @extend .full-width, .horizontal, .middle;
+    justify-content: space-between;
+    width: 100%;
+
+    .vue-avatar--wrapper {
+      margin-right: 2 * $space;
+    }
+  }
+
+  .main {
+    @extend .vertical;
+    margin-top: 2 * $space;
+    margin-bottom: 2 * $space;
+    padding: 2 * $space;
+    box-shadow: $shadow;
+    background: $layer3;
+    border-radius: $edges;
+    width: 100%;
+    max-height: 60vh;
+  }
+
+  .footer {
+    @extend .horizontal, .center, .middle;
+    margin-top: $space;
+
+    h5 {
+      color: transparentize($brand, 0.2);
+      cursor: pointer;
+      transition: $transition;
+
+      &:hover {
+        transition: $transition;
+        color: $brand;
+      }
+    }
+  }
+
+  // h4 {
+  //   margin-right: 4 * $space;
+  //   padding-right: 4 * $space;
+  //   border-right: 5px solid $layer3;
+  // }
+// }
 </style>

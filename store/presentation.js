@@ -43,21 +43,20 @@ export const actions = {
   },
   async sendCounterOffer({ state, commit }, counterOffer) {
     await this.$axios.post(`presentations/${state.presentation.id}/proposal/counterOffer`, { counterOffer })
-    this.dispatch('schedule/loadMySchedule')
   },
   async acceptCounterOffer({ state, commit }) {
-    await this.$axios.put(`presentations/${state.presentation.id}/proposal/counterOffer`)
+    const { data } = await this.$axios.put(`presentations/${state.presentation.id}/proposal/counterOffer`)
+    commit('set_presentation', data)
   },
   async rejectCounterOffer({ state, commit }) {
-    await this.$axios.delete(`presentations/${state.presentation.id}/proposal/counterOffer`)
+    const { data } = await this.$axios.delete(`presentations/${state.presentation.id}/proposal/counterOffer`)
+    commit('set_presentation', data)
   },
   async acceptProposal({ commit }, id) {
-    const { data } = await this.$axios.post(`presentations/${id}/proposal/`)
-    this.dispatch('schedule/loadMySchedule')
+    await this.$axios.post(`presentations/${id}/proposal/`)
   },
   async rejectProposal({ commit }, id) {
-    const { data } = await this.$axios.delete(`presentations/${id}/proposal/`)
-    this.dispatch('schedule/loadMySchedule')
+    await this.$axios.delete(`presentations/${id}/proposal/`)
   },
   async loadPresentation({ commit }, id) {
     const { data } = await this.$axios.get(`presentations/${id}`)
@@ -66,12 +65,10 @@ export const actions = {
   async confirmPresentation({ commit }, id) {
     const { data } = await this.$axios.put(`presentations/${id}`)
     commit('set_presentation', data)
-    this.dispatch('schedule/loadMySchedule')
   },
   async cancelPresentation({ commit }, id) {
     const { data } = await this.$axios.delete(`presentations/${id}`)
     commit('set_presentation', data)
-    this.dispatch('schedule/loadMySchedule')
   },
   resetPresentation({ commit }) {
     commit('reset_presentation')

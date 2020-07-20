@@ -5,8 +5,8 @@
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
     </div>
-    <div>
-      <top-menu></top-menu>
+    <div class="full-height">
+      <top-menu class="full-height"></top-menu>
     </div>
   </nav>
 </template>
@@ -26,6 +26,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.navbar {
+  @extend .full-height, .horizontal, .middle;
+}
 // nav {
 //   transition: $transition;
 //   background: $layer1;

@@ -61,7 +61,11 @@ export const actions = {
   async removeProduct({ commit }, { id }) {
     const { data } = await this.$axios.delete(`artists/products/${id}`)
     commit('set_products', data)
-  }
+  },
+  async sendFeedback({ commit }, data) {
+    const { id } = data
+    await this.$axios.put(`artists/${id}/feedback`, data)
+  },
 }
 
 export const getters = {

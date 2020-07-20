@@ -21,15 +21,15 @@
         <proposal
           v-if="!$empty(presentation.proposal) && presentation.status === 'proposal'"
           ref="proposal"
-          @accept="handleAcceptProposal"
-          @reject="handleRejectProposal"
+          @accepted="handleAcceptProposal"
+          @rejected="handleRejectProposal"
         ></proposal>
         <presentation
-          v-if="!$empty(presentation) && presentation.status === 'accepted'"
+          v-if="!$empty(presentation) && ['accepted', 'completed', 'cancelled'].includes(presentation.status)"
           ref="presentation"
           :read-only="false"
-          @confirm="handleConfirmPresentation"
-          @cancel="handleCancelPresentation"
+          @completed="handleConfirmPresentation"
+          @cancelled="handleCancelPresentation"
         ></presentation>
       </div>
     </div>
@@ -49,8 +49,8 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import BusySlot from '@/components/artist/schedule/busy'
-import Proposal from '@/components/presentation/proposal'
-import Presentation from '@/components/presentation/presentation'
+import Proposal from '@/components/presentation/artist/proposal'
+import Presentation from '@/components/presentation/artist/presentation'
 export default {
   components: {
     busy: BusySlot,
@@ -121,24 +121,24 @@ export default {
       this.$refs.busy.closeModal()
     },
     async handleAcceptProposal(id) {
-      await this.acceptProposal(id)
+      await this.loadMySchedule()
       this.$refs.calendar.refresh()
       this.$refs.proposal.closeModal()
       this.$toast.success('Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato')
     },
     async handleRejectProposal(id) {
-      await this.rejectProposal(id)
+      await this.loadMySchedule()
       this.$refs.calendar.refresh()
       this.$refs.proposal.closeModal()
       this.$toast.success('Proposta recusada com sucesso')
     },
     async handleConfirmPresentation(id) {
-      await this.confirmPresentation(id)
+      await this.loadMySchedule()
       this.$refs.calendar.refresh()
       this.$refs.presentation.closeModal()
     },
     async handleCancelPresentation(id) {
-      await this.cancelPresentation(id)
+      await this.loadMySchedule()
       this.$refs.calendar.refresh()
       this.$refs.presentation.closeModal()
     },

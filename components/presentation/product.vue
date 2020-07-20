@@ -5,7 +5,7 @@
       <h3>{{ presentation.proposal.product.price | currency }} para {{ presentation.proposal.product.duration }} horas de apresentação</h3>
     </div>
     <div class="items">
-      <h6 class="mb-4">Itens contratados</h6>
+      <h6 class="mb-4">Itens <span v-if="presentation.status === 'proposal'">solicitados</span><span v-else>contratados</span></h6>
       <perfect-scrollbar>
         <div v-for="(item, index) in presentation.proposal.product.items" :key="index">
           {{ item }}

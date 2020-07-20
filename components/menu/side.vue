@@ -14,9 +14,13 @@
       </div>
     </header>
     <main>
-      <nuxt-link :to="`/${role}/schedule`" :class="{ routed: routed('schedule') }">
+      <nuxt-link v-if="role === 'artist'" :to="`/${role}/schedule`" :class="{ routed: routed('schedule') }">
         <font-awesome icon="calendar-alt"></font-awesome>
         <span v-show="!minimized">Agenda</span>
+      </nuxt-link>
+      <nuxt-link v-if="role === 'contractor'" to="/search">
+        <font-awesome icon="search"></font-awesome>
+        <span v-show="!minimized">Pesquisar</span>
       </nuxt-link>
       <nuxt-link :to="`/${role}/presentations`" :class="{ routed: routed('presentations') }">
         <font-awesome icon="music"></font-awesome>
@@ -26,7 +30,7 @@
         <font-awesome icon="search-dollar"></font-awesome>
         <span v-show="!minimized">Propostas</span>
       </nuxt-link>
-      <nuxt-link :to="`/${role}/account`" :class="{ routed: routed('account') }">
+      <nuxt-link v-if="role === 'artist'" :to="`/${role}/account`" :class="{ routed: routed('account') }">
         <font-awesome icon="piggy-bank"></font-awesome>
         <span v-show="!minimized">Conta</span>
       </nuxt-link>

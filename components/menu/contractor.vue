@@ -4,10 +4,10 @@
       <nuxt-link to="/search">
         <h6>Procurar artistas</h6>
       </nuxt-link>
-      <nuxt-link to="/search">
-        <h6>Agenda</h6>
+      <nuxt-link to="/contractor/presentations">
+        <h6>Apresentações</h6>
       </nuxt-link>
-      <nuxt-link to="/artist/profile">
+      <nuxt-link to="/contractor/profile">
         <h6>Perfil</h6>
       </nuxt-link>
       <nuxt-link to="/logout">
