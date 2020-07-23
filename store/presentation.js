@@ -1,5 +1,7 @@
 import Proposal from '@/models/proposal'
 import Presentation from '@/models/presentation'
+import _ from 'lodash'
+import moment from 'moment'
 import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
@@ -80,5 +82,13 @@ export const getters = {
   isApiLoaded: (state) => state.apiLoaded,
   isMenuOpened: (state) => state.showMenu,
   hasMessage: (state) => state.message !== undefined,
-  getMessage: (state) => state.message
+  getMessage: (state) => state.message,
+  openPresentations: (state) => state.presentations,
+  pendingConfirmPresentations: (state) => state.presentations,  
+  completedPresentations: (state) => state.presentations,
+  cancelledPresentations: (state) => state.presentations,
+
+  // openPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.end_dt).isAfter(moment())),
+  // pendingConfirmPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.end_dt).isBefore(moment())),  
+  // completedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
 }

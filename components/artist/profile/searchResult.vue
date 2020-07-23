@@ -28,7 +28,7 @@
       <div class="col-sm-6 d-flex justify-content-end">
         <div class="vertical">
           <div v-if="!$utils.empty(artist.rating)" class="mb-3">
-            <rating :score="artist.rating.score" :amount="artist.rating.amount"></rating>
+            <rating :score="artist.rating" :amount="artist.feedback_count"></rating>
           </div>
           <div class="d-flex full-height">
             <div class="vertical">

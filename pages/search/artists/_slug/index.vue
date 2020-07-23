@@ -7,7 +7,10 @@
     </div>
     <div class="horizontal center middle mb-4">
       <font-awesome icon="music"></font-awesome>
-      <h3>{{ artist.category.name }}</h3>
+      <h3 class="mr-4">{{ artist.category.name }}</h3>
+      <h3>
+        <rating :score="artist.rating" :amount="artist.feedback_count" short></rating>
+      </h3>
     </div>
     <div v-if="!$utils.empty(artist.category.subcategories)" class="horizontal center middle mb-4">
       <div v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="badge">
@@ -52,18 +55,23 @@
       <h4 class="mb-5">Nossa história</h4>
       {{ artist.story }}
     </div>
-    <div v-if="!$utils.empty(artist.testemonials)" class="mb-5 mx-5">
+    <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
       <h4 class="mb-5">O que falam sobre nosso show?</h4>
-      <div v-for="(testemonial, index) in artist.testemonials" :key="index" class="horizontal">
-        <avatar :src="testemonial.photo" :size="50" class="mr-1"></avatar>
-        <div class="testemonial">
-          <h6>{{ testemonial.user }}</h6>
-          <i>{{ testemonial.content }}</i>
+      <div v-for="(feedback, index) in artist.feedbacks" :key="index" class="horizontal">
+        <div v-if="!$empty(feedback.notes)">
+          <div class="testemonial">
+            <h6 class="mb-2">{{ feedback.from.name }}</h6>
+            <div class="horizontal mb-4">
+              <h6 class="mr-2">{{ feedback.rating }}</h6>
+              <font-awesome icon="star"></font-awesome>
+            </div>
+            <i>{{ feedback.notes }}</i>
+          </div>
         </div>
       </div>
     </div>
     <div class="proposal">
-      <div class="d-flex justify-content-around">
+      <div class="horizontal middle full-height d-flex justify-content-around">
         <div class="vertical">
           <small class="hide-mobile">
             <span v-if="$auth.loggedIn">Valor da apresentação</span>
@@ -216,6 +224,7 @@ div:not(.bg) {
   border-bottom-right-radius: $rounded;
   border-bottom-left-radius: $rounded;
   max-width: 80vw;
+  min-width: 20vw;
 }
 
 .proposal {

@@ -28,7 +28,7 @@
           v-if="!$empty(presentation) && ['accepted', 'completed', 'cancelled'].includes(presentation.status)"
           ref="presentation"
           :read-only="false"
-          @completed="handleConfirmPresentation"
+          @confirmed="handleConfirmPresentation"
           @cancelled="handleCancelPresentation"
         ></presentation>
       </div>

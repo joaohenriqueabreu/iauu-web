@@ -24,6 +24,9 @@
           <slot name="footer"></slot>
         </footer>
       </div>
+      <aside>
+        <slot name="external"></slot>
+      </aside>
     </v-modal>
   </div>
 </template>
@@ -112,7 +115,6 @@ export default {
       height: 30px;
       opacity: 1; // overwrite from some other style
       padding-left: 9px;
-      z-index: $moveToTop;
     }
   }
 
@@ -142,6 +144,13 @@ export default {
       height: 10vh;
     }
     padding: 0 4 * $space;
+    z-index: auto;
+  }
+
+  aside {
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 
   [data-icon] {

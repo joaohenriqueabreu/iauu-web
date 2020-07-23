@@ -36,6 +36,13 @@ const utils = {
 
     return false
   },
+  isMobile: () =>  {
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      return true
+    } else {
+      return false
+    }
+  }, 
   delay: () => {
     return setTimeout(() => {}, 5000)
   }
@@ -44,5 +51,6 @@ const utils = {
 export default ({ app }, inject) => {
   // We use empty a lot, so inject it separately too
   inject('empty', utils.empty)
+  inject('mobile', utils.isMobile)
   inject('utils', utils)
 }

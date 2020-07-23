@@ -37,10 +37,19 @@
           <presentation-product :presentation="presentation" hide-price></presentation-product>
         </div>
       </template>
+      <template v-slot:external>
+        <chat v-if="!$empty(presentation)" :presentation="presentation"></chat>
+      </template>
       <template v-if="!readOnly" v-slot:footer>
+        <div v-if="hasConfirmedPresentation && waitingForConfirmation">
+          <small>
+            Você já confirmou a apresentação! Obrigado. Estamos aguardando a confirmação do contratante para iniciar os procedimentos de pagamento.
+            Caso não haja confirmação até dia <b>{{ confirmationDueDate | date }}</b> a apresentação será encerrada automaticamente e seu pagamento processado.
+          </small>
+        </div>
         <div class="horizontal center middle mb-3">
           <div class="mr-5">
-            <form-button @action="confirm" v-if="hasPresentationStarted">
+            <form-button @action="confirm" v-if="hasPresentationStarted && !hasConfirmedPresentation">
               Confirmar Realização
             </form-button>
           </div>
@@ -48,7 +57,7 @@
             <h5 v-if="!hasPresentationStarted" @click="openConfirmCancelModal">Cancelar</h5>
           </div>
         </div>
-        <div v-if="hasPresentationStarted">
+        <div v-if="hasPresentationStarted && !hasConfirmedPresentation">
           <small>Apresentação realizada em {{ presentation.timeslot.start_dt | date }}, caso houve algum problema com a apresentação entrar em contato conosco imediatamente.</small>
         </div>
       </template>
@@ -67,7 +76,6 @@
         </div>
       </template>
     </modal>
-    <presentation-feedback ref="feedback" @feedback="handleFeedback" :presentation="presentation"></presentation-feedback>
   </div>
 </template>
 
@@ -83,6 +91,15 @@ export default {
   computed: {
     hasPresentationStarted() {
       return this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment())
+    },
+    hasConfirmedPresentation() {
+      return this.presentation.confirm_status.includes('artist')
+    },
+    waitingForConfirmation() {
+      return ! this.presentation.confirm_status.includes('contractor')
+    },
+    confirmationDueDate() {
+      return this.moment(this.presentation.end_dt).add(15, 'days');
     }
   },
   methods: {
@@ -101,9 +118,9 @@ export default {
     },
     async confirm() {
       await this.confirmPresentation(this.presentation.id)
-      this.$toast.success("Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento e você deverá receber em alguns dias.")
-      this.$emit('completed')
-      this.$refs.feedback.openModal()
+      this.$toast.success("Obrigado por confirmar a realização da apresentação. Iniciaremos agora o faturamento da apresentação e você deverá receber seu pagamento em alguns dias.")
+      this.closeModal()
+      this.$emit('confirmed')
     },
     async cancel() {
       try {
@@ -116,9 +133,6 @@ export default {
         this.$toast.error(error)
       }
     },
-    handleFeedback() {
-      this.closeModal()
-    }
   }
 }
 </script>

@@ -28,11 +28,21 @@ const timeFilter = (value) => {
   return moment(value).format('HH:mm')
 }
 
+const oneDecimal = (value) => {
+  return (Math.round(value * 100) / 100).toFixed(1);
+}
+
+const twoDecimals = (value) => {
+  return (Math.round(value * 100) / 100).toFixed(2);
+}
+
 // Registering custom filters
 Vue.filter('date', dateFilter)
 Vue.filter('longDate', longDateFilter)
 Vue.filter('datetime', datetimeFilter)
 Vue.filter('time', timeFilter)
+Vue.filter('oneDecimal', oneDecimal)
+Vue.filter('twoDecimals', twoDecimals)
 
 export default ({ app }, inject) => {
   inject('array', array)

@@ -11,6 +11,7 @@ import VueModal from 'vue-js-modal'
 import VueSweetalert2 from 'vue-sweetalert2'
 import { ToggleButton } from 'vue-js-toggle-button'
 import LinkPrevue from 'link-prevue'
+import Chat from 'vue-beautiful-chat'
 import moment from 'moment'
 
 // Form components
@@ -55,6 +56,7 @@ Vue.use(PerfectScrollbar)
 Vue.use(VueSweetalert2)
 Vue.use(VueModal, { componentName: 'v-modal' })
 Vue.use(VueTheMask)
+Vue.use(Chat)
 
 Vue.component('logo', Logo)
 Vue.component('avatar', Avatar)

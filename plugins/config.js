@@ -18,7 +18,19 @@ const config = {
 
   sampleProductItems: [{ name: 'Apresentação' }, { name: 'Iluminação' }],
 
-  maxProposedTimeslots: 3
+  maxProposedTimeslots: 3,
+  // SCSS Colors to be used in js modules
+  colors: {
+    brandLayer: '#ff990a',
+    layer1: '#141414',
+    layer2: '#232323',
+    layer3: '#373737',
+    layer4: '#4b4b4b',
+    layer5: '#5f5f5f',
+    layer7: '#afafaf',
+    layer10: '#efefef',
+    white: '#fefefe' 
+  }
 }
 
 export default ({ app }, inject) => {

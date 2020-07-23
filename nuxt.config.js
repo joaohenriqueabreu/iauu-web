@@ -111,6 +111,7 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/proxy',
     '@nuxtjs/auth',
+    'nuxt-socket-io',
     '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
     '@nuxtjs/toast'
@@ -173,6 +174,13 @@ export default {
       // tokenType: 'bearer',
       // globalToken: true
     }
+  },
+  io: {
+    // module options
+    sockets: [{
+      name: 'chat',
+      url: 'http://localhost:500'
+    }]
   },
   sentry: {
     dsn: process.env.SENTRY_DSN,

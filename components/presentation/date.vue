@@ -9,9 +9,7 @@
       </countdown>
       <div v-else>
         <p>
-          Conta pra gente como foi a apresentação!
-          <a href="#" @click.prevent="confirm">Confirme a Realização</a> para podermos finalizar
-          o processo de pagamento.
+          Conta pra gente como foi a apresentação! Confirme a Realização para podermos finalizar o processo de pagamento.
         </p>
         <p>
           Caso a apresentação não seja confirmada por ambas as partes em até

@@ -1,46 +1,5 @@
 <template>
   <div>
-    <client-only>
-      <fade-transition>
-        <div v-if="!selectingFilter" class="filters mx-5 d-flex justify-content-around">
-          <font-awesome icon="search" @click="showSearchFilter"></font-awesome>
-          <font-awesome icon="map-marker-alt" @click="showAddressFilter"></font-awesome>
-          <font-awesome icon="dollar-sign" @click="showPriceFilter"></font-awesome>
-          <font-awesome icon="sort-alpha-down" @click="showSortFilter"></font-awesome>
-        </div>
-        <div v-else class="mx-0 row">
-          <form-input
-            v-show="currentFilter === 'term'"
-            v-model="term"
-            class="col-sm-4"
-            placeholder="Aniversário, Casamento, Rock Anos 80, ..."
-          ></form-input>
-          <form-location
-            v-show="currentFilter === 'address'"
-            v-model="location"
-            class="col-sm-3"
-            placeholder="Próximo de"
-          ></form-location>
-          <form-range
-            v-show="currentFilter === 'price'"
-            v-model="price"
-            filter-name="currency"
-            class="col-sm-3"
-          ></form-range>
-          <form-select
-            v-show="currentFilter === 'sort'"
-            :allow-input="false"
-            class="col-sm-2"
-            icon="sort-alpha-down"
-            placeholder="Ordenar por"
-            :options="['Relevância', 'Núm de Apresentações', 'Avaliação']"
-          ></form-select>
-        </div>
-      </fade-transition>
-    </client-only>
-    <div class="full-width px-4">
-      <hr />
-    </div>
     <div class="px-4 py-2">
       <h4 v-if="!$utils.empty(term)">Resultados para "{{ term }}"</h4>
       <h4 v-else>Artistas encontrados</h4>
@@ -49,6 +8,68 @@
       <div v-for="(artist, index) in artists" :key="index" class="px-4 mb-4">
         <artist-info :artist="artist" @select="selectedArtist"></artist-info>
       </div>
+    </div>
+    <div class="compensate-filters"></div>
+    <div class="filters">
+      <client-only>
+        <fade-transition>
+          <div v-if="!selectingFilter" class="filters d-flex justify-content-around">
+            <div class="vertical middle center" @click="showSearchFilter">
+              <font-awesome icon="search" class="mb-2"></font-awesome>
+              <h6>Pesquisa livre</h6>
+            </div>
+            <div class="vertical middle center" @click="showAddressFilter">
+              <font-awesome icon="map-marker-alt" class="mb-2"></font-awesome>
+              <h6>Filtrar localização</h6>
+            </div>
+            <div class="vertical middle center" @click="showPriceFilter">
+              <font-awesome icon="dollar-sign" class="mb-2"></font-awesome>
+              <h6>Faixa de preço</h6>
+            </div>
+            <div class="vertical middle center" @click="showSortFilter">
+              <font-awesome icon="sort-alpha-down" class="mb-2"></font-awesome>
+              <h6>Ordenar resultados</h6>
+            </div>
+          </div>
+          <div v-else class="horizontal center middle">
+            <form-input
+              class="search-filter"
+              label="Pesquisa livre"
+              v-show="currentFilter === 'term'"
+              v-model="term"
+              placeholder="Aniversário, Casamento, Rock Anos 80, ..."
+            ></form-input>
+            <form-location
+              class="search-filter"
+              label="Filtrar Localização"
+              v-show="currentFilter === 'address'"
+              v-model="location"
+              placeholder="Próximo de"
+            ></form-location>
+            <form-range
+              class="search-filter"
+              label="Faixa de preço"
+              v-show="currentFilter === 'price'"
+              v-model="price"
+              filter-name="currency"
+            ></form-range>
+            <form-select
+              class="search-filter"
+              label="Ordernar resultados"
+              v-show="currentFilter === 'sort'"
+              :allow-input="false"
+              icon="sort-alpha-down"
+              placeholder="Ordenar por"
+              :options="['Relevância', 'Núm de Apresentações', 'Avaliação']"
+            ></form-select>
+            <form-button @action="filter">
+              <span class="d-none d-sm-block">Buscar</span>
+              <span class=""></span>
+            </form-button>
+            <font-awesome icon="times" @click="selectingFilter = false"></font-awesome>
+          </div>
+        </fade-transition>
+      </client-only>
     </div>
   </div>
 </template>
@@ -102,32 +123,67 @@ export default {
     showSortFilter() {
       this.selectingFilter = true
       this.currentFilter = 'sort'
+    },
+    filter() {
+      console.log('filtering...')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.search-results {
-  height: 65vh;
+// Do not let filters overlap last search result
+.compensate-filters {
+  height: 15vh;
 }
 
 .filters {
-  [data-icon] {
-    cursor: pointer;
-    background: $layer4;
-    height: 30px;
-    width: 30px;
-    border-radius: $rounded;
-    box-shadow: $shadow;
-    color: $brand;
-    padding: 5px;
-    margin-right: 4 * $space;
-    transition: $transition;
+  @extend .horizontal, .center, .middle;
+  position: fixed;
+  background: $layer2;
+  height: 10vh;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  z-index: $moveToTop;
 
+  div {
+    cursor: pointer;
+    transition: $transition;
+    color: $brand;
     &:hover {
       transition: $transition;
       color: $brandLayer;
+    }
+  }
+
+  h6 {
+    margin-bottom: 2 * $space;
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .search-filter {
+    width: 40vw;
+    margin-right: 2 * $space;
+  }
+
+  [data-icon] {
+    font-size: $huge;
+  }
+
+  [data-icon="times"] {
+    @include desktop {
+      position: absolute;
+      right: 10 * $space;
+      top: 40%;
+    }
+
+    @include mobile {
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
 }

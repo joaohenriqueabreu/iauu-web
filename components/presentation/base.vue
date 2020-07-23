@@ -8,6 +8,7 @@ import PresentationProduct from '@/components/presentation/product'
 import PresentationPrice from '@/components/presentation/price'
 import CounterOffer from '@/components/presentation/counterOffer'
 import PresentationFeedback from '@/components/presentation/feedback'
+import Chat from '@/components/layout/chat'
 
 export default {
   components: {
@@ -18,6 +19,7 @@ export default {
     PresentationPrice,
     CounterOffer,
     PresentationFeedback,
+    Chat,
   },
   computed: {
     ...mapState({ presentation: (state) => state.presentation.presentation })

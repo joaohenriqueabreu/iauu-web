@@ -65,7 +65,9 @@ input {
   font-weight: $bold;
   border: none;
   outline: none;
-  min-width: 150px;
+  @include desktop {
+    min-width: 150px;
+  }
 
   &.disabled {
     background: $layer3;

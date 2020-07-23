@@ -3,7 +3,7 @@
     <h4>{{ presentationDate | date }}</h4>
     <div class="info">
       <div class="mb-3">
-        <h5 class="mb-0">{{ presentation.title }}</h5>
+        <h5 class="mb-0">{{ presentation.proposal.title }}</h5>
         <small>{{ getOtherParty }}</small>
       </div>
       <div class="horizontal">

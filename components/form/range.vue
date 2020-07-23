@@ -68,7 +68,7 @@ export default {
   @extend .vertical, .middle, .center;
   .knob-content {
     position: absolute;
-    top: -20px;
+    top: 20px;
     left: -10px;
     font-weight: $bold;
   }

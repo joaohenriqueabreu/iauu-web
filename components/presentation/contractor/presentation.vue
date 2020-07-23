@@ -2,15 +2,15 @@
   <div>
     <modal ref="modal">
       <template v-slot:header>
-        <div class="horizontal d-flex justify-content-between">
-          <div v-if="!$empty(presentation.contractor)" class="horizontal middle">
+        <div class="horizontal d-flex justify-content-between">          
+          <nuxt-link v-if="!$empty(presentation.artist)" :to="`/search/artists/${presentation.artist.slug}`" class="horizontal middle">
             <avatar
               class="mr-4"
-              :src="presentation.contractor.user.photo"
-              :username="presentation.contractor.user.name"
+              :src="presentation.artist.user.photo"
+              :username="presentation.artist.user.name"
             ></avatar>
-            <h5>{{ presentation.contractor.user.name }}</h5>
-          </div>
+            <h5>{{ presentation.artist.user.name }}</h5>
+          </nuxt-link>
           <div class="d-flex align-items-end">
             <span class="identifier">Apresentação</span>
           </div>
@@ -18,7 +18,7 @@
       </template>
       <template v-slot:main>
         <div class="boxed mb-4">
-          <presentation-date :presentation="presentation"></presentation-date>
+          <presentation-date :presentation="presentation" @complete="confirm"></presentation-date>
         </div>
         <div class="mx-4 mb-4 vertical center middle">
           <h3 class="mb-4">{{ presentation.proposal.title }}</h3>
@@ -37,18 +37,30 @@
           <presentation-product :presentation="presentation" hide-price></presentation-product>
         </div>
       </template>
+      <template v-slot:external>
+        <chat v-if="!$empty(presentation)" :presentation="presentation"></chat>
+      </template>
       <template v-if="!readOnly" v-slot:footer>
+        <div v-if="hasConfirmedPresentation && waitingForConfirmation">
+          <small>
+            Você já confirmou a apresentação! Obrigado. Estamos aguardando a confirmação do artista para iniciar os procedimentos de pagamento.
+            Caso não haja confirmação até dia <b>{{ confirmationDueDate | date }}</b> a apresentação será encerrada automaticamente e o pagamento será processado.
+          </small>
+        </div>
         <div class="horizontal center middle mb-3">
-          <div class="mr-5">
-            <form-button @action="confirm" v-if="hasPresentationStarted">
+          <div class="mr-5" v-if="hasPresentationStarted && !hasConfirmedPresentation">
+            <form-button @action="confirm">
               Confirmar Realização
             </form-button>
           </div>
+          <div v-if="hasPresentationStarted && hasConfirmedPresentation" class="clickable my-4" @click="openFeedbackModal">
+            <h4><u>Enviar Feedback</u></h4>
+          </div>
           <div>
-            <h5 v-if="!hasPresentationStarted" @click="openConfirmCancelModal">Cancelar</h5>
+            <h5 v-if="!hasPresentationStarted" @click="openConfirmCancelModal" class="error">Cancelar Apresentação</h5>
           </div>
         </div>
-        <div v-if="hasPresentationStarted">
+        <div v-if="hasPresentationStarted && !hasConfirmedPresentation">
           <small>Apresentação realizada em {{ presentation.timeslot.start_dt | date }}, caso houve algum problema com a apresentação entrar em contato conosco imediatamente.</small>
         </div>
       </template>
@@ -67,7 +79,7 @@
         </div>
       </template>
     </modal>
-    <presentation-feedback ref="feedback" @feedback="handleFeedback" :presentation="presentation"></presentation-feedback>
+    <presentation-feedback ref="feedback" @sent="handleFeedback" :presentation="presentation"></presentation-feedback>
   </div>
 </template>
 
@@ -76,22 +88,38 @@ import { mapActions } from 'vuex'
 import BasePresentation from '../base'
 
 export default {
-  extends: BasePresentation,
+  extends: BasePresentation,  
   props: {
     readOnly: { type: Boolean, default: true },
+  },
+  data() {
+    return {
+      isPresentationSelected: false
+    }
   },
   computed: {
     hasPresentationStarted() {
       return this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment())
+    },
+    hasConfirmedPresentation() {
+      return this.presentation.confirm_status.includes('contractor')
+    },
+    waitingForConfirmation() {
+      return ! this.presentation.confirm_status.includes('artist')
+    },
+    confirmationDueDate() {
+      return this.moment(this.presentation.end_dt).add(15, 'days');
     }
   },
   methods: {
     ...mapActions('presentation', ['confirmPresentation', 'cancelPresentation']),
     openModal() {
       this.$refs.modal.open()
+      this.isPresentationSelected = true
     },
     closeModal() {
       this.$refs.modal.close()
+      this.isPresentationSelected = false
     },
     openConfirmCancelModal() {
       this.$refs.cancel.open()
@@ -99,11 +127,22 @@ export default {
     closeCancelModal() {
       this.$refs.cancel.close()
     },
-    async confirm() {
-      await this.confirmPresentation(this.presentation.id)
-      this.$toast.success("Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento e você deverá receber em alguns dias.")
-      this.$emit('completed')
+    openFeedbackModal() {
       this.$refs.feedback.openModal()
+    },
+    async confirm() {
+      try {
+        await this.confirmPresentation(this.presentation.id)
+        this.$toast.success(
+          "Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento. Por favor, reserve alguns minutos para avaliar o artista, seu feedback é muito importante.", 
+          { duration: 10000 }
+        )
+
+        this.openFeedbackModal()
+        this.$emit('confirmed')
+      } catch (error) {
+        this.$toast.info('Você já confirmou a realização da apresentação, obrigado!')
+      }
     },
     async cancel() {
       try {
