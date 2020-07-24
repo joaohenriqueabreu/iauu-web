@@ -38,6 +38,9 @@
           </attachment>
         </div>
       </template>
+      <template v-slot:external>
+        <chat v-if="!$empty(presentation)" :presentation="presentation"></chat>
+      </template>
       <template v-slot:footer>
         <div v-if="isCustomProduct && !hasCounterOffer" class="error mb-2">
           {{ presentation.contractor.user.name }} solicitou um produto personalizado. Envie um orçamento para depois confirmar a apresentação.

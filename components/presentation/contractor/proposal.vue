@@ -56,6 +56,9 @@
           </attachment>
         </div>
       </template>
+      <template v-slot:external>
+        <chat v-if="!$empty(presentation)" :presentation="presentation"></chat>
+      </template>
       <template v-slot:footer>
         <div class="horizontal middle center mb-2" v-if="hasCounterOffer && !hasAcceptedCounterOffer">
           Aguardando definição de orçamento

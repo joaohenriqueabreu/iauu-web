@@ -28,7 +28,7 @@
           <avatar :src="otherParty.photo" :username="otherParty.name" :size="50" class="mr-4"></avatar>
           <div class="vertical">
             <h6>{{ otherParty.name }}</h6>
-            <span>{{ presentation.proposal.title }}</span>
+            <span class="horizontal middle"><span class="mr-2">{{ presentation.proposal.title }}</span><span v-if="presentation.status === 'proposal'"><u>Proposta</u></span></span>
             <span class="horizontal middle"><font-awesome icon="calendar-alt" class="mr-2"></font-awesome>{{ presentationDate | date }}</span>
           </div>
         </div>
