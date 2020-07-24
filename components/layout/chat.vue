@@ -12,21 +12,33 @@
       :icons="icons"
       :open="openChat"
       :showEmoji="true"
-      :showFile="true"
-      :showEdition="true"
-      :showDeletion="true"
+      :showFile="false"
+      :showEdition="false"
+      :showDeletion="false"
       :showTypingIndicator="showTypingIndicator"
+      :placeholder="placeholder"
       :showLauncher="true"
       :showCloseButton="true"
       :colors="colors"
       :alwaysScrollToBottom="alwaysScrollToBottom"
       :messageStyling="messageStyling"
-      @edit="editMessage">
+      @remove="deleteMessage">
       <template v-slot:header>
-        <div class="vertical ml-4">
-          <h5 class="mb-2">{{ presentation.proposal.title }}</h5>
-          <h6 class="horizontal middle mb-2"><font-awesome icon="clock" class="mr-2"></font-awesome> {{ presentationDate | date }}</h6>
-          <h6 class="horizontal middle mb-2"><font-awesome icon="user" class="mr-2"></font-awesome>{{ otherPartyName }}</h6>
+        <div class="horizontal ml-4">
+          <avatar :src="otherParty.photo" :username="otherParty.name" :size="50" class="mr-4"></avatar>
+          <div class="vertical">
+            <h6>{{ otherParty.name }}</h6>
+            <span>{{ presentation.proposal.title }}</span>
+            <span class="horizontal middle"><font-awesome icon="calendar-alt" class="mr-2"></font-awesome>{{ presentationDate | date }}</span>
+          </div>
+        </div>
+      </template>
+      <template v-slot:user-avatar="{ user }"><div></div></template>
+      <template v-slot:text-message-body="{ message }">
+        <div class="vertical">
+          <h6 class="mb-2" v-if="message.author !== 'me'">{{ message.author }}</h6>
+          <span class="mb-2">{{ message.data.text }}</span>
+          <span class="d-flex justify-content-end full-width message-date">{{ message.created_at | datetime }}</span>
         </div>
       </template>
     </beautiful-chat>
@@ -78,6 +90,7 @@ export default {
         receivedMessage: { bg: this.$config.colors.layer7, text: this.$config.colors.white },
         userInput: { bg: this.$config.colors.layer10, text: this.$config.colors.layer1 }
       },
+      placeholder: 'Escreva uma mensagem...',
       alwaysScrollToBottom: true,
       messageStyling: true
     }
@@ -93,7 +106,7 @@ export default {
     self.socket.emit('join', self.presentation.id)
     
     /* Listen for events: */
-    self.socket.on('welcome', (messages) => { 
+    self.socket.on('welcome', (messages) => {
       self.authorized = true
       if (!self.$empty(messages)) {
         messages.forEach((message) => { self.messageList.push(self.parseMyMessage(message)) })
@@ -119,19 +132,18 @@ export default {
 
       return this.presentation.timeslot.start_dt
     },
-    otherPartyName() {
+    otherParty() {
       if (this.$auth.hasScope('artist')) {
-        return this.presentation.contractor.user.name
+        return this.presentation.contractor.user
       }
 
-      return this.presentation.artist.user.name
+      return this.presentation.artist.user
     }
   },
   methods: {
     parseMyMessage(message) {
-      if (message.author === this.$auth.user.id) {
-        message.author = 'me'
-      }
+      message.author = !this.$empty(message.author) && message.author.id === this.$auth.user.id 
+        ? 'me' : message.author.name
 
       return message
     },
@@ -142,10 +154,12 @@ export default {
       // }
     },
     onMessageWasSent (message) {
-      // called when the user sends a message
-      
       // Parse author to user id
-      message.author = this.$auth.user.id
+      message.author = { 
+        id: this.$auth.user.id,
+        name: this.$auth.user.name
+      }
+
       this.socket.emit('send', message)
     },
     openChat () {
@@ -161,15 +175,20 @@ export default {
       // called when the user scrolls message list to top
       // leverage pagination for loading another page of messages
     },
-    editMessage(message){
-      const m = this.messageList.find(m=>m.id === message.id);
-      m.isEdited = true;
-      m.data.text = message.data.text;
+    deleteMessage(message) {
+
     }
   }
 }
 
 </script>
+
+<style lang="scss" scoped>
+  .message-date {
+    font-size: 8px;
+    float: right;
+  }
+</style>
 
 <style lang="scss">
   .sc-launcher {
@@ -184,6 +203,13 @@ export default {
     font-family: Gotham, Roboto !important;
     &.opened {
       z-index: 10 * $moveToTop;
+    }
+
+    .sc-header--close-button {
+      &:hover {
+        box-shadow: none;
+        color: $layer3;
+      }
     }
 
     .sc-user-input--button {
