@@ -14,13 +14,21 @@
           v-model="credentials.passwordConfirmation"
           placeholder="Confirme sua senha"
         ></form-password>
+        <form-checkbox class="my-4" v-model="credentials.accept_terms">
+          Li e estou de acordo com os <u><nuxt-link class="ml-2" to="terms">Termos de Uso da plataforma</nuxt-link></u>
+        </form-checkbox>
         <div v-if="error" class="mt-2 error">
           Problemas ao registrar sua conta
         </div>
+        <div v-if="termsError" class="mt-2 error">
+          Leia e marque que concorda com os termos da plataforma antes de prosseguir
+        </div>
         <div class="mb-4"></div>
-        <form-button class="mb-4" @action="signup">Cadastrar</form-button>
-        <facebook-login></facebook-login>
-        <google-login></google-login>
+        <div>
+          <form-button class="mb-4" @action="signup">Cadastrar</form-button>
+          <facebook-login></facebook-login>
+          <google-login></google-login>
+        </div>
       </form>
     </div>
   </div>
@@ -40,14 +48,34 @@ export default {
       credentials: {
         email: '',
         password: '',
-        name: ''
+        name: '',
+        accept_terms: false
       },
-      error: null
+      error: null,
+      termsError: false
+    }
+  },
+  computed: {
+    termsAccepted() {
+      return this.credentials.accept_terms
+    }
+  },
+  watch: {
+    termsAccepted(value) {
+      if (value) {
+        this.termsError = false
+        return
+      }
     }
   },
   methods: {
     ...mapActions('protected', ['register']),
     async signup() {
+      if (!this.credentials.accept_terms) {
+        this.termsError = true
+        return
+      }
+
       this.$auth.setToken('local', null)
       try {
         await this.register(this.credentials)

@@ -11,7 +11,7 @@
           </image-uploader>
         </div>
         <div class="pt-5"></div>
-        <div class="boxed">
+        <div class="boxed full-width">
           <ul class="nav nav-tabs mt-4">
             <li class="nav-link first">
               <a class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'">
@@ -131,7 +131,6 @@ export default {
     this.activeTab = 'stats'
   },
   methods: {
-    ...mapActions('app', ['setAlert']),
     ...mapActions('artist', ['saveProfile']),
     ...mapMutations('artist', { updateProfile: 'update_profile' }),
 
@@ -171,13 +170,13 @@ form {
   }
 
   main {
+    @extend .vertical, .center, .middle;
     min-height: 70vh;
     position: relative;
     margin-bottom: 5 * $space;
     .logo {
       position: absolute;
       top: -75px;
-      left: 40%;
       z-index: $above;
     }
 

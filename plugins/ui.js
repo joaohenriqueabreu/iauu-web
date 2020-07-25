@@ -34,6 +34,7 @@ import FormEmail from '@/components/form/email'
 import FormMasked from '@/components/form/masked'
 import FormMoney from '@/components/form/money'
 import FormTime from '@/components/form/time'
+import FormCheckbox from '@/components/form/checkbox'
 import FormRange from '@/components/form/range'
 import FormDate from '@/components/form/date'
 import FormTextarea from '@/components/form/textarea'
@@ -78,6 +79,7 @@ Vue.component('form-date', FormDate)
 Vue.component('form-money', FormMoney)
 Vue.component('form-location', FormLocation)
 Vue.component('form-select', FormSelect)
+Vue.component('form-checkbox', FormCheckbox)
 Vue.component('form-toggle', FormToggle)
 Vue.component('form-range', FormRange)
 Vue.component('form-validation', FormValidation)

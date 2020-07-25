@@ -37,15 +37,15 @@ export default {
   margin-left: 3 * $space;
   margin-right: 3 * $space;
 
-  h6 {
-    margin-right: 5 * $space;
-  }
+  // h6 {
+  //   margin-right: 5 * $space;
+  // }
 
-  h4 {
-    margin-right: 4 * $space;
-    padding-right: 4 * $space;
-    border-right: 5px solid $layer3;
-  }
+  // h4 {
+  //   margin-right: 4 * $space;
+  //   padding-right: 4 * $space;
+  //   border-right: 5px solid $layer3;
+  // }
 
   .position-absolute {
     @extend .vertical, .middle, .center;
@@ -86,42 +86,42 @@ export default {
   }
 
   .header {
-    @extend .full-width, .horizontal, .middle;
-    justify-content: space-between;
-    width: 100%;
+    // @extend .full-width, .horizontal, .middle;
+    // justify-content: space-between;
+    // width: 100%;
 
     .vue-avatar--wrapper {
       margin-right: 2 * $space;
     }
   }
 
-  .main {
-    @extend .vertical;
-    margin-top: 2 * $space;
-    margin-bottom: 2 * $space;
-    padding: 2 * $space;
-    box-shadow: $shadow;
-    background: $layer3;
-    border-radius: $edges;
-    width: 100%;
-    max-height: 60vh;
-  }
+  // .main {
+  //   @extend .vertical;
+  //   margin-top: 2 * $space;
+  //   margin-bottom: 2 * $space;
+  //   padding: 2 * $space;
+  //   box-shadow: $shadow;
+  //   background: $layer3;
+  //   border-radius: $edges;
+  //   width: 100%;
+  //   max-height: 60vh;
+  // }
 
-  .footer {
-    @extend .horizontal, .center, .middle;
-    margin-top: $space;
+  // .footer {
+  //   @extend .horizontal, .center, .middle;
+  //   margin-top: $space;
 
-    h5 {
-      color: transparentize($brand, 0.2);
-      cursor: pointer;
-      transition: $transition;
+  //   h5 {
+  //     color: transparentize($brand, 0.2);
+  //     cursor: pointer;
+  //     transition: $transition;
 
-      &:hover {
-        transition: $transition;
-        color: $brand;
-      }
-    }
-  }
+  //     &:hover {
+  //       transition: $transition;
+  //       color: $brand;
+  //     }
+  //   }
+  // }
 
   // h4 {
   //   margin-right: 4 * $space;
