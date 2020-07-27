@@ -1,9 +1,8 @@
-<style lang="scss" scoped>
-h6 {
-  margin-left: 5 * $space;
-}
-
+<style lang="scss">
 .menu-items {
+  h6 { 
+    margin-right: 5 * $space;
+  }
   @include desktop {
     display: flex;
     flex-direction: row;

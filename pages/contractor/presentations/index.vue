@@ -19,6 +19,13 @@
       <div v-for="(presentation, index) in completedPresentations" :key="index" @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
+      <hr>
+    </div>
+    <div class="vertical mb-4" v-if="!$empty(cancelledPresentations)">
+      <h6 class="mb-4">Apresentações canceladas</h6>
+      <div v-for="(presentation, index) in cancelledPresentations" :key="index" @click="open(presentation.id)">
+        <presentation-info :presentation="presentation"></presentation-info>
+      </div>
     </div>
     <div v-if="presentations.length === 0" class="mb-4">
       Nenhuma apresentação confirmada <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
@@ -43,7 +50,7 @@ export default {
     await store.dispatch('presentation/loadPresentations')
   },
   computed: {
-    ...mapGetters('presentation', ['openPresentations', 'pendingConfirmPresentations', 'completedPresentations']),
+    ...mapGetters('presentation', ['openPresentations', 'pendingConfirmPresentations', 'completedPresentations', 'cancelledPresentations']),
     ...mapState({ presentations: (state) => state.presentation.presentations }),
     ...mapState({ presentationState: (state) => state.presentation.presentation })
   },

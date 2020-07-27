@@ -9,6 +9,7 @@
             </nuxt-link>
           </div>
           <div class="pr-4 mr-5">
+            <admin-menu v-if="$auth.hasScope('admin')"></admin-menu>
             <artist-menu v-if="$auth.hasScope('artist')"></artist-menu>
             <contractor-menu v-if="$auth.hasScope('contractor')"></contractor-menu>
             <div class="clickable position-absolute top-right pr-4">
@@ -41,13 +42,15 @@
 
 <script>
 import ProductSetup from '@/components/artist/productSetup'
-import ArtistMenu from '@/components/menu/artist'
-import ContractorMenu from '@/components/menu/contractor'
+import AdminMenu from '@/components/menu/top/admin'
+import ArtistMenu from '@/components/menu/top/artist'
+import ContractorMenu from '@/components/menu/top/contractor'
 export default {
   components: {
-    'product-setup': ProductSetup,
-    'artist-menu': ArtistMenu,
-    'contractor-menu': ContractorMenu
+    ProductSetup,
+    AdminMenu,
+    ArtistMenu,
+    ContractorMenu
   },
   data() {
     return {
@@ -77,6 +80,7 @@ export default {
 h6 {
   font-weight: $bold;
   margin-bottom: 2 * $space;
+  margin-right: 5 * $space;
 }
 
 .guest {

@@ -83,12 +83,12 @@ export const getters = {
   isMenuOpened: (state) => state.showMenu,
   hasMessage: (state) => state.message !== undefined,
   getMessage: (state) => state.message,
-  openPresentations: (state) => state.presentations,
-  pendingConfirmPresentations: (state) => state.presentations,  
-  completedPresentations: (state) => state.presentations,
-  cancelledPresentations: (state) => state.presentations,
 
-  // openPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.end_dt).isAfter(moment())),
-  // pendingConfirmPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.end_dt).isBefore(moment())),  
-  // completedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
+  openProposals: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'proposal'),
+  rejectedProposals: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'rejected'),
+  
+  openPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isAfter(moment())),
+  pendingConfirmPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isBefore(moment())),
+  completedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
+  cancelledPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'cancelled'),
 }

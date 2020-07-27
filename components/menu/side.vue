@@ -14,47 +14,27 @@
       </div>
     </header>
     <main>
-      <nuxt-link v-if="role === 'artist'" :to="`/${role}/schedule`" :class="{ routed: routed('schedule') }">
-        <font-awesome icon="calendar-alt"></font-awesome>
-        <span v-show="!minimized">Agenda</span>
-      </nuxt-link>
-      <nuxt-link v-if="role === 'contractor'" to="/search">
-        <font-awesome icon="search"></font-awesome>
-        <span v-show="!minimized">Pesquisar</span>
-      </nuxt-link>
-      <nuxt-link :to="`/${role}/presentations`" :class="{ routed: routed('presentations') }">
-        <font-awesome icon="music"></font-awesome>
-        <span v-show="!minimized">Apresentações</span>
-      </nuxt-link>
-      <nuxt-link :to="`/${role}/proposals`" :class="{ routed: routed('proposals') }">
-        <font-awesome icon="search-dollar"></font-awesome>
-        <span v-show="!minimized">Propostas</span>
-      </nuxt-link>
-      <nuxt-link v-if="role === 'artist'" :to="`/${role}/account`" :class="{ routed: routed('account') }">
-        <font-awesome icon="piggy-bank"></font-awesome>
-        <span v-show="!minimized">Conta</span>
-      </nuxt-link>
+      <admin-menu v-if="$auth.hasScope('admin')" :minimized="minimized"></admin-menu>
+      <artist-menu v-if="$auth.hasScope('artist')" :minimized="minimized"></artist-menu>
+      <contractor-menu v-if="$auth.hasScope('contractor')" :minimized="minimized"></contractor-menu>
     </main>
   </div>
 </template>
 
 <script>
 import Logo from '@/components/layout/logo'
+import AdminMenu from '@/components/menu/side/admin'
+import ArtistMenu from '@/components/menu/side/artist'
+import ContractorMenu from '@/components/menu/side/contractor'
 export default {
   components: {
-    logo: Logo
+    AdminMenu,
+    ArtistMenu,
+    ContractorMenu
   },
   data() {
     return {
       minimized: true
-    }
-  },
-  computed: {
-    scheduleLink() {
-      return this.$auth.hasScope('artist') ? '/artist' : '/contractor'
-    },
-    role() {
-      return this.$auth.hasScope('artist') ? 'artist' : 'contractor'
     }
   },
   methods: {
@@ -62,9 +42,6 @@ export default {
       this.minimized = !this.minimized
       this.$emit('minimize', this.minimized)
     },
-    routed(option) {
-      return this.$route.path.split('/').includes(option)
-    }
   }
 }
 </script>

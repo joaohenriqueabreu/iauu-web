@@ -28,8 +28,7 @@
           prop="address"
           @selected="updateLocation"
         ></form-location>
-        <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone">
-        </form-masked>
+        <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone"></form-masked>
       </div>
     </div>
   </div>

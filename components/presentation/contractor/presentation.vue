@@ -48,7 +48,7 @@
           </small>
         </div>
         <div class="horizontal center middle mb-3">
-          <div class="mr-5" v-if="hasPresentationStarted && !hasConfirmedPresentation">
+          <div class="mr-5" v-if="canConfirmPresentation && hasPresentationStarted && !hasConfirmedPresentation">
             <form-button @action="confirm">
               Confirmar Realização
             </form-button>
@@ -98,6 +98,9 @@ export default {
     }
   },
   computed: {
+    canConfirmPresentation() {
+      return this.presentation.status === 'accepted'
+    },
     hasPresentationStarted() {
       return this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment())
     },

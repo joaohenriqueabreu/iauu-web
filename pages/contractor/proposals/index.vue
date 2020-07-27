@@ -1,10 +1,18 @@
 <template>
   <div>
-    <div class="vertical">
+    <div class="vertical" v-if="!$empty(openProposals)">
       <h6 class="mb-4">Propostas Enviadas</h6>
-      <div v-for="(presentation, index) in presentations" :key="index" @click="open(presentation.id)">
+      <div v-for="(presentation, index) in openProposals" :key="index" @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
+      <hr>
+    </div>
+    <div class="vertical" v-if="!$empty(rejectedProposals)">
+      <h6 class="mb-4">Propostas Recusadas</h6>
+      <div v-for="(presentation, index) in rejectedProposals" :key="index" @click="open(presentation.id)">
+        <presentation-info :presentation="presentation"></presentation-info>
+      </div>
+      <hr>
     </div>
     <div v-if="presentations.length === 0" class="mb-4">
       Nenhuma proposta enviada <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
@@ -16,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import PresentationInfo from '@/components/presentation/info'
 import ProposalDetails from '@/components/presentation/contractor/proposal'
 export default {
@@ -30,7 +38,8 @@ export default {
   },
   computed: {
     ...mapState({ presentations: (state) => state.presentation.presentations }),
-    ...mapState({ presentationState: (state) => state.presentation.presentation })
+    ...mapState({ presentationState: (state) => state.presentation.presentation }),
+    ...mapGetters('presentation', ['openProposals', 'rejectedProposals'])
   },
   methods: {
     ...mapActions('presentation', ['loadPresentation', 'resetPresentation', 'loadProposals']),

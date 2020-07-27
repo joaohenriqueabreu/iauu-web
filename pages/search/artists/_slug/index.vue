@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div v-if="artist.is_verified" class="verified">
+    <div v-if="artist.is_premium" class="verified">
       <h1 class="mr-4">
         <font-awesome icon="grin-stars"></font-awesome>
       </h1>

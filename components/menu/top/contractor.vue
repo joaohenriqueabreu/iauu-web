@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import UserMenu from '@/components/menu/user'
+import UserMenu from '@/components/menu/top/user'
 export default {
   extends: UserMenu
 }

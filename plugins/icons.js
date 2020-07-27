@@ -12,6 +12,8 @@ import {
   faMapMarkerAlt,
   faCoffee,
   faUser,
+  faUsers,
+  faUserFriends,
   faSignOutAlt,
   faProjectDiagram,
   faRuler,
@@ -71,7 +73,8 @@ import {
   faListOl,
   faFistRaised,
   faPlayCircle,
-  faStopCircle
+  faStopCircle,
+  faChartLine
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
@@ -121,6 +124,8 @@ library.add(
   faMapMarkerAlt,
   faCoffee,
   faUser,
+  faUsers,
+  faUserFriends,
   faSignOutAlt,
   faProjectDiagram,
   faRuler,
@@ -195,7 +200,8 @@ library.add(
   faFistRaised,
   faHandRockNRoll,
   faPlayCircle,
-  faStopCircle
+  faStopCircle,
+  faChartLine
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)
