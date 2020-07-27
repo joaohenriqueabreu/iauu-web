@@ -9,9 +9,13 @@
         <font-awesome icon="user-friends"></font-awesome>
         <span v-show="!minimized">Usuários</span>
       </nuxt-link>
-      <nuxt-link to="`/admin/presentations" :class="{ routed: routed('proposals') }">
+      <nuxt-link to="/admin/presentations" :class="{ routed: routed('proposals') }">
         <font-awesome icon="music"></font-awesome>
         <span v-show="!minimized">Apresentações</span>
+      </nuxt-link>
+      <nuxt-link to="/admin/reports" :class="{ routed: routed('proposals') }">
+        <font-awesome icon="list"></font-awesome>
+        <span v-show="!minimized">Relatórios</span>
       </nuxt-link>
     </div>
   </div>

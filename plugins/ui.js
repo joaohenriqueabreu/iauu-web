@@ -21,11 +21,13 @@ import AlertMessage from '@/components/layout/alert'
 import Overlay from '@/components/layout/overlay'
 import Carousel from '@/components/layout/carousel'
 import Loading from '@/components/layout/loading'
-import StatsDonut from '@/components/layout/statsDonut'
 import Notification from '@/components/layout/notification'
 import MediaViewer from '@/components/media/viewer'
 import MediaThumbnail from '@/components/media/thumbnail'
 import Rating from '@/components/artist/profile/rating'
+
+import LineChart from '@/components/layout/charts/line'
+import StatsDonut from '@/components/layout/charts/statsDonut'
 
 import FormInput from '@/components/form/input'
 import FormNumeric from '@/components/form/numeric'
@@ -92,11 +94,13 @@ Vue.component('slide-down-transition', SlideYDownTransition)
 Vue.component('link-preview', LinkPrevue)
 Vue.component('modal', Modal)
 Vue.component('alert', AlertMessage)
-Vue.component('stats-donut', StatsDonut)
 Vue.component('media-viewer', MediaViewer)
 Vue.component('media-thumbnail', MediaThumbnail)
 Vue.component('attachment', Attachment)
 Vue.component('rating', Rating)
+
+Vue.component('stats-donut', StatsDonut)
+Vue.component('line-chart', LineChart)
 
 Vue.prototype.moment = moment
 Vue.prototype.delay = setTimeout(() => {}, 500)

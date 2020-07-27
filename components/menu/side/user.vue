@@ -57,10 +57,10 @@ export default {
       display: flex;
       flex-direction: row;
       align-items: center;
-      margin-bottom: 10 * $space;
+      // margin-bottom: 10 * $space;
       transition: $transition;
       color: $brand;
-      padding: 0 4 * $space;
+      padding: 5 * $space;
       width: 100%;
       // border-top-right-radius: $rounded;
       // border-bottom-right-radius: $rounded;
