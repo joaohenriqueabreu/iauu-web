@@ -1,13 +1,321 @@
 <template>
-  <div></div>
+  <div>
+    <div class="vertical mb-5">
+      <div class="horizontal middle mb-4">
+        <h4 class="mr-4">Usuários</h4>
+        <form-input class="full-width mr-5" v-model="searchTerm" @enter="handleSearchUsers" @blur="handleSearchUsers" placeholder="Pesquisa" icon="user"></form-input>
+      </div>
+      <div class="horizontal">
+        <span v-for="role in ['artist', 'contractor']" 
+          :key="role" 
+          :class="{role, selected: role === filter}" 
+          class="role-badge mr-4 horizontal center middle clickable" 
+          @click="filterByRole(role)">
+          <font-awesome :icon="roleIcon(role)" class="mr-2"></font-awesome>
+          {{ roleLabel(role) }}s
+        </span>
+        <span v-for="status in ['active', 'blocked', 'pending']" 
+          :key="status" 
+          :class="{status, selected: status === filter}" 
+          class="status-badge mr-4 horizontal center middle clickable" 
+          @click="filterByStatus(status)">
+          <font-awesome :icon="statusIcon(status)" class="mr-2"></font-awesome>
+          {{ statusLabel(status) }}s
+        </span>
+      </div>
+    </div>
+    <perfect-scrollbar>
+      <table class="full-width">
+        <thead>
+          <th></th>
+          <th></th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Admissão</th>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.id" @click="openUserManagementModal(user)">
+            <td class="text-center">
+              <h6 class="role-badge icon-only" :class="user.role"><font-awesome :icon="roleIcon(user.role)"></font-awesome></h6>
+            </td>
+            <td class="text-center"><div class="status-badge icon-only" :class="user.status"><font-awesome :icon="statusIcon(user.status)"></font-awesome></div></td>
+            <td class="py-3 cap horizontal middle">
+              <span class="mr-2">{{ user.name }}</span>
+            </td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.created_at | date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </perfect-scrollbar>
+    <modal ref="modal">
+      <template v-slot:header v-if="!$empty(selectedUser)">
+        <div class="d-flex justify-content-between">
+          <div class="horizontal middle">
+            <avatar :src="selectedUser.photo" :username="selectedUser.name" class="mr-4"></avatar>
+            <div class="vertical middle">
+              <h4 class="mb-2">{{ selectedUser.name }}</h4>
+              <h6 class="status-badge" :class="selectedUser.status">{{ statusLabel(selectedUser.status) }}</h6>
+            </div>
+          </div>
+          <div class="d-flex align-items-end">
+            <h5 class="role-badge" :class="userRole(selectedUser)">{{ roleLabel(selectedUser.role) }}</h5>
+          </div>
+        </div>
+      </template>
+      <template v-slot:main v-if="!$empty(selectedUser)">
+        <div>
+          <h4 class="mb-4">Informações</h4>
+          <div>ID</div>
+          <h6 class="mb-4">{{ selectedUser.id }}</h6>
+          <div>Email</div>
+          <h6 class="mb-4">{{ selectedUser.email }}</h6>
+          <div>Admissão</div>
+          <h6 class="mb-4">{{ selectedUser.created_at | date }}</h6>
+          <div>Último Login</div>
+          <h6 class="mb-4" v-if="!$empty(selectedUser.last_logged_in_at)">{{ selectedUser.last_logged_in_at | datetime }}</h6>
+          <h6 v-else>-</h6>
+        </div>
+        <hr>
+        <div>
+          <h4 class="mb-4">Estatísticas</h4>
+          <div class="row">
+            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].presentations)">
+              <div class="boxed">
+                <h5>{{ userStats[0].presentations[0].count }}</h5>
+                <h6>Apresentações</h6>
+              </div>
+            </div>
+            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].proposals)">
+              <div class="boxed">
+                <h5>{{ userStats[0].proposals[0].count }}</h5>
+                <h6>Propostas</h6>
+              </div>
+            </div>
+            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].rejected)">
+              <div class="boxed">
+                <h5>{{ userStats[0].rejected[0].count }}</h5>
+                <h6>Rejeitadas</h6>
+              </div>
+            </div>
+            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].accepted)">
+              <div class="boxed">
+                <h5>{{ userStats[0].accepted[0].count }}</h5>
+                <h6>Contratads</h6>
+              </div>
+            </div>
+            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].completed)">
+              <div class="boxed">
+                <h5>{{ userStats[0].completed[0].count }}</h5>
+                <h6>Realizadas</h6>
+              </div>
+            </div>
+            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].cancelled)">
+              <div class="boxed">
+                <h5>{{ userStats[0].cancelled[0].count }}</h5>
+                <h6>Canceladas</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div>
+          <h4 class="mb-4">Ações</h4>
+          <div class="row">
+            <div class="col-sm-4 mb-4" v-if="['active', 'pending'].includes(selectedUser.status)">
+              <form-button @action="handleBlockUser">Bloquear</form-button>
+            </div>
+            <div class="col-sm-4 mb-4" v-if="['blocked', 'pending'].includes(selectedUser.status)">
+              <form-button @action="handleActivateUser">Ativar</form-button>
+            </div>
+            <div class="col-sm-4 mb-4">
+              <form-button @action="handleResendVerification">Reenviar verificação</form-button>
+            </div>
+            <div class="col-sm-4 mb-4">
+              <form-button @action="handleChangePassword">Enviar alteração de senha</form-button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </modal>
+  </div>
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
+  async asyncData({ store }) {
+    await store.dispatch('admin/loadUsers')
+  },
+  computed: {
+    ...mapState({ allUsers: (state) => state.admin.users }),
+    ...mapState({ selectedUser: (state) => state.admin.user }),
+    ...mapState({ userStats: (state) => state.admin.stats }),
+    ...mapGetters('admin', ['adminUsers', 'artistUsers', 'contractorUsers', 'pendingUsers', 'activeUsers', 'blockedUsers'])
+  },
+  data() {
+    return {
+      filter: null,
+      searchTerm: '',
+      users: []
+    }
+  },
+  mounted() {
+    this.users = this.allUsers
+  },
+  watch: {
+    allUsers(value) {
+      this.users = value
+    }
+  },
+  methods: {
+    ...mapActions('admin', ['loadUsers', 'loadUserStats', 'searchUsers', 'blockUser', 'activateUser']),
+    userRole(user) {
+      return this.selectedUser === ''
+    },
+    async handleSearchUsers() {
+      if (this.$empty(this.searchTerm)) {
+        await this.loadUsers()
+        return 
+      }
 
+      await this.searchUsers(this.searchTerm)
+    },
+    filterByRole(role) {
+      if (this.filter === role) {
+        this.users = this.allUsers
+        this.filter = null
+        return
+      }
+
+      this.filter = role
+
+      if (role === 'artist') { this.users = this.artistUsers }
+      if (role === 'contractor') { this.users = this.contractorUsers }
+    },
+    filterByStatus(status) {
+      if (this.filter === status) {
+        this.users = this.allUsers
+        this.filter = null
+        return
+      }
+
+      this.filter = status
+
+      if (status === 'pending') { this.users = this.pendingUsers }
+      if (status === 'active') { this.users = this.activeUsers }
+      if (status === 'blocked') { this.users = this.blockedUsers }
+    },
+    statusLabel(status) {
+      if (status === 'pending') { return 'Aguardando verificação' }
+      if (status === 'active') { return 'Ativo' }
+      if (status === 'blocked') { return 'Bloqueado' }
+      return ''
+    },
+    statusIcon(status) {
+      if (status === 'pending') { return 'ellipsis-h' }
+      if (status === 'active') { return 'check' }
+      if (status === 'blocked') { return 'lock' }
+      return ''
+    },
+    roleLabel(role) {
+      if (role === 'artist') { return 'Artista' }
+      if (role === 'contractor') { return 'Contratante' }
+      return ''
+    },
+    roleIcon(role) {
+      if (role === 'artist') { return 'music' }
+      if (role === 'contractor') { return 'dollar-sign' }
+      return ''
+    },
+    async openUserManagementModal(user) {
+      await this.loadUserStats(user.id)
+      this.$refs.modal.open()
+    },
+    async handleBlockUser() {
+      await this.blockUser(this.selectedUser)
+      this.$toast.success('Usuário bloqueado com sucesso')
+      await this.loadUsers()
+    },
+    async handleActivateUser() {
+      await this.activateUser(this.selectedUser)
+      this.$toast.success('Usuário ativado com sucesso')
+      await this.loadUsers()
+    },
+    async handleResendVerification() {
+      await this.blockUser(this.selectedUser)
+      this.$toast.success('Link de verificação reenviado com sucesso')
+    },
+    async handleChangePassword() {
+      await this.blockUser(this.selectedUser)
+      this.$toast.success('Link para troca de senha reenviado com sucesso')
+    },
+  }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.ps {
+  max-height: 60vh;
+}
 
+table {
+  tr {
+    padding-bottom: 4 * $space;
+    transition: $transition;
+    &:hover {
+      transition: $transition;
+      background: $layer5;
+    }
+  }
+}
+
+.boxed {
+  @extend .vertical, .middle, .center;
+  background: $layer4;
+  box-shadow: $shadow;
+  border-radius: $edges;
+  padding: 4 * $space;
+}
+
+.role-badge, .status-badge {
+  &.icon-only {
+    width: 25px;
+    height: 25px;
+  }
+
+  &.selected {
+    background: $brandLayer;
+  }
+
+  padding: $space;
+  border-radius: $edges;
+  [data-icon] {
+    margin: 0;
+  }
+
+  // Role specific classes
+  &.admin { background: $layer1; }
+  &.artist { background: $layer5; }
+  &.contractor { 
+    background: $brandLayer; 
+    color: $layer5;
+  }
+
+  // Status specific classes
+  &.pending { background: $layer5; }
+  &.active { background: $green; }
+  &.blocked { background: $error;  }
+}
+
+// .status-badge {
+//   background: $layer1;
+//   padding: $space;
+//   border-radius: $edges;
+
+//   &.icon-only {
+//     width: 25px;
+//     height: 25px;
+//   }
+// }
 </style>

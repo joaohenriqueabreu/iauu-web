@@ -23,7 +23,7 @@
       </div>
       <div class="col-sm-4">
         <div class="stat-box">
-          <h6 class="mb-4">Contratantes</h6>
+          <h6 class="mb-4">Organizadores de eventos</h6>
           <div class="d-flex justify-content-end">
             <h4>{{ user.contractors[0].count }}</h4>
           </div>

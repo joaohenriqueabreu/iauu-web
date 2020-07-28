@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mb-5 half-width" v-if="counterOffer.status === 'void'">
-      <form-button @action="openModal">Enviar orçamento para o contrante</form-button>
+      <form-button @action="openModal">Enviar orçamento para o organizador do evento</form-button>
     </div>
     <div v-else class="vertical middle center offer m-4" :class="counterOffer.status">
       <h5 class="mb-3">Orçamento enviado <u>{{ counterOfferStatusText }}</u></h5>
@@ -70,11 +70,11 @@ export default {
     },
     counterOfferStatusText() {
       if (this.counterOffer.status === 'pending') {
-        return 'Aguardando resposta do contratante'
+        return 'Aguardando resposta do organizador do evento'
       }
 
       if (this.counterOffer.status === 'accepted') {
-        return 'Orçamento aceito pelo contratante!'
+        return 'Orçamento aceito pelo organizador do evento!'
       }
 
       if (this.counterOffer.status === 'rejected') {
