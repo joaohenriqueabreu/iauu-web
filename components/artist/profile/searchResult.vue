@@ -1,8 +1,8 @@
 <template>
   <div class="result" @click="$emit('select', artist)">
-    <div class="logo">
+    <div class="logo" v-if="!$empty(artist.user)">
       <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
-      <avatar :src="artist.user.photo" :username="artist.name" :size="100"></avatar>
+      <avatar :src="artist.user.photo" :username="artist.user.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
       <div class="col-sm-6">

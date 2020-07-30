@@ -3,8 +3,8 @@
     <client-only>
       <transition name="fade">
         <div v-if="$auth.loggedIn && displaySubmenu" class="submenu">
-          <div>
-            <nuxt-link :to="`/${$auth.hasScope('artist') ? 'artist' : 'contractor'}/schedule`">
+          <div v-if="$auth.hasScope('artist')">
+            <nuxt-link to="/artist/schedule">
               <h5>{{ $auth.user.name }}</h5>
             </nuxt-link>
           </div>
@@ -101,6 +101,18 @@ h6 {
       margin-bottom: 5 * $space;
     }
   }
+
+  @include desktop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    h5 {
+      margin-bottom: 5 * $space;
+    }
+  }
+
   width: 100vw;
   background: $layer1;
   padding: 2 * $space;

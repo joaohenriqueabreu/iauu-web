@@ -78,7 +78,8 @@ import {
   faChartLine,
   faBullhorn,
   faWrench,
-  faEllipsisH
+  faEllipsisH,
+  faPlay
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
@@ -209,7 +210,8 @@ library.add(
   faChartLine,
   faBullhorn,
   faWrench,
-  faEllipsisH
+  faEllipsisH,
+  faPlay
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

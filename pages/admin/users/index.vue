@@ -29,6 +29,7 @@
         <thead>
           <th></th>
           <th></th>
+          <th class="text-center">Login</th>
           <th>Nome</th>
           <th>Email</th>
           <th>Admissão</th>
@@ -38,7 +39,12 @@
             <td class="text-center">
               <h6 class="role-badge icon-only" :class="user.role"><font-awesome :icon="roleIcon(user.role)"></font-awesome></h6>
             </td>
-            <td class="text-center"><div class="status-badge icon-only" :class="user.status"><font-awesome :icon="statusIcon(user.status)"></font-awesome></div></td>
+            <td class="text-center">
+              <div class="status-badge icon-only" :class="user.status"><font-awesome :icon="statusIcon(user.status)"></font-awesome></div>
+            </td>
+            <td class="text-center">
+              <font-awesome icon="play" class="login-as clickable" @click="handleLoginAs(user.id)"></font-awesome>
+            </td>
             <td class="py-3 cap horizontal middle">
               <span class="mr-2">{{ user.name }}</span>
             </td>
@@ -55,7 +61,10 @@
             <avatar :src="selectedUser.photo" :username="selectedUser.name" class="mr-4"></avatar>
             <div class="vertical middle">
               <h4 class="mb-2">{{ selectedUser.name }}</h4>
-              <h6 class="status-badge" :class="selectedUser.status">{{ statusLabel(selectedUser.status) }}</h6>
+              <div class="horizontal middle">
+                <h6 class="status-badge mr-4" :class="selectedUser.status">{{ statusLabel(selectedUser.status) }}</h6>
+                <h6 class="verification-badge" :class="{ verified: selectedUser.status }">{{ verificationLabel(selectedUser.verification.is_verified) }}</h6>
+              </div>
             </div>
           </div>
           <div class="d-flex align-items-end">
@@ -72,12 +81,25 @@
           <h6 class="mb-4">{{ selectedUser.email }}</h6>
           <div>Admissão</div>
           <h6 class="mb-4">{{ selectedUser.created_at | date }}</h6>
-          <div>Último Login</div>
-          <h6 class="mb-4" v-if="!$empty(selectedUser.last_logged_in_at)">{{ selectedUser.last_logged_in_at | datetime }}</h6>
-          <h6 v-else>-</h6>
+          <div class="mb-4">
+            <div>Último Login</div>
+            <h6 class="mb-4" v-if="!$empty(selectedUser.last_logged_in_at)">{{ selectedUser.last_logged_in_at | datetime }}</h6>
+            <h6 v-else>-</h6>
+          </div>
+          <div v-if="!isVerified" class="mb-4">
+            <div>Verificação</div>
+            <div class="horizontal middle">
+              <div class="vertical">
+                <h6 class="mr-4">Enviado em {{ selectedUser.verification.issued_at | datetime }}</h6>
+                <small class="error">Expira em {{ verifyTokenExpiry | datetime }}</small>
+              </div>
+              
+              <h6 class="clickable" @click="handleResendVerification"><u>Reenviar</u></h6>
+            </div>
+          </div>
         </div>
-        <hr>
-        <div>
+        <div v-if="!$empty(userStats)">
+          <hr>
           <h4 class="mb-4">Estatísticas</h4>
           <div class="row">
             <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].presentations)">
@@ -120,7 +142,7 @@
         </div>
         <hr>
         <div>
-          <h4 class="mb-4">Ações</h4>
+          <h4 class="mb-4">Gerenciar</h4>
           <div class="row">
             <div class="col-sm-4 mb-4" v-if="['active', 'pending'].includes(selectedUser.status)">
               <form-button @action="handleBlockUser">Bloquear</form-button>
@@ -128,11 +150,14 @@
             <div class="col-sm-4 mb-4" v-if="['blocked', 'pending'].includes(selectedUser.status)">
               <form-button @action="handleActivateUser">Ativar</form-button>
             </div>
-            <div class="col-sm-4 mb-4">
-              <form-button @action="handleResendVerification">Reenviar verificação</form-button>
+            <div class="col-sm-4 mb-4" v-if="!isVerified">
+              <form-button @action="handleVerification">Verificar usuário</form-button>
             </div>
             <div class="col-sm-4 mb-4">
-              <form-button @action="handleChangePassword">Enviar alteração de senha</form-button>
+              <form-button @action="handleChangePassword">Alterar de senha</form-button>
+            </div>
+            <div class="col-sm-12 mb-4" v-if="selectedUser.role === 'contractor'">
+              <form-button @action="handleLoginAs(selectedUser.id)">Enviar proposta em nome de {{ selectedUser.name }}</form-button>
             </div>
           </div>
         </div>
@@ -150,8 +175,14 @@ export default {
   computed: {
     ...mapState({ allUsers: (state) => state.admin.users }),
     ...mapState({ selectedUser: (state) => state.admin.user }),
-    ...mapState({ userStats: (state) => state.admin.stats }),
-    ...mapGetters('admin', ['adminUsers', 'artistUsers', 'contractorUsers', 'pendingUsers', 'activeUsers', 'blockedUsers'])
+    ...mapState({ userStats: (state) => state.admin.stats.users }),
+    ...mapGetters('admin', ['adminUsers', 'artistUsers', 'contractorUsers', 'pendingUsers', 'activeUsers', 'blockedUsers']),
+    isVerified() {
+      return !this.$empty(this.selectedUser.verification) && this.selectedUser.verification.is_verified
+    },
+    verifyTokenExpiry() {
+      return this.moment(this.selectedUser.verification.issued_at).add('1', 'days').toString()
+    }
   },
   data() {
     return {
@@ -169,7 +200,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('admin', ['loadUsers', 'loadUserStats', 'searchUsers', 'blockUser', 'activateUser']),
+    ...mapActions('admin', ['loadUsers', 'loadUserStats', 'searchUsers', 'blockUser', 'activateUser', 'resendVerification', 'verifyUser']),
     userRole(user) {
       return this.selectedUser === ''
     },
@@ -228,6 +259,9 @@ export default {
       if (role === 'contractor') { return 'dollar-sign' }
       return ''
     },
+    verificationLabel(verified) {
+      return verified ? 'Verificado' : 'Aguardando verificação'
+    },
     async openUserManagementModal(user) {
       await this.loadUserStats(user.id)
       this.$refs.modal.open()
@@ -243,13 +277,26 @@ export default {
       await this.loadUsers()
     },
     async handleResendVerification() {
-      await this.blockUser(this.selectedUser)
-      this.$toast.success('Link de verificação reenviado com sucesso')
+      await this.resendVerification(this.selectedUser)
+      this.$toast.success('Email de verificação reenviado com sucesso')
+    },
+    async handleVerification() {
+      await this.verifyUser(this.selectedUser)
+      this.$toast.success('Usuário verificado com sucesso')
+      await this.loadUsers()
     },
     async handleChangePassword() {
       await this.blockUser(this.selectedUser)
       this.$toast.success('Link para troca de senha reenviado com sucesso')
     },
+    async handleLoginAs(id) {
+      await this.$auth.loginWith('admin', {
+        data: {
+          token: this.$auth.user.admin_token,
+          id: id
+        }
+      })
+    }
   }
 }
 </script>
@@ -278,7 +325,7 @@ table {
   padding: 4 * $space;
 }
 
-.role-badge, .status-badge {
+.role-badge, .status-badge, .verification-label {
   &.icon-only {
     width: 25px;
     height: 25px;
@@ -306,16 +353,20 @@ table {
   &.pending { background: $layer5; }
   &.active { background: $green; }
   &.blocked { background: $error;  }
+
+  &.verified { background: $green; }
 }
 
-// .status-badge {
-//   background: $layer1;
-//   padding: $space;
-//   border-radius: $edges;
-
-//   &.icon-only {
-//     width: 25px;
-//     height: 25px;
-//   }
-// }
+.login-as {
+  background: $layer5;
+  padding: 5px;
+  height: 20px;
+  width: 20px;
+  border-radius: $rounded;
+  transition: $transition;
+  &:hover {
+    transition: $transition;
+    color: $brandLayer;
+  }
+}
 </style>

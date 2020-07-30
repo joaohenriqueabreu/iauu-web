@@ -162,9 +162,18 @@ export default {
         userinfo_endpoint: false,
         redirect_uri: `${process.env.WEB_URL}/login/google/`
       },
-      local: {
+      user: {
+        _scheme: 'local',
         endpoints: {
           login: { url: 'login', method: 'post', propertyName: false },
+          logout: { url: 'login', method: 'delete' },
+          user: { url: 'validate', method: 'post', propertyName: false }
+        }
+      },
+      admin: {
+        _scheme: 'local',
+        endpoints: {
+          login: { url: 'loginAs', method: 'post', propertyName: false },
           logout: { url: 'login', method: 'delete' },
           user: { url: 'validate', method: 'post', propertyName: false }
         }

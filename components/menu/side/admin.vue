@@ -15,7 +15,7 @@
       </nuxt-link>
       <nuxt-link to="/admin/referrals" :class="{ routed: routed('referrals') }">
         <font-awesome icon="bullhorn"></font-awesome>
-        <span v-show="!minimized">Indicações</span>
+        <span v-show="!minimized">Renda Passiva</span>
       </nuxt-link>
       <nuxt-link to="/admin/reports" :class="{ routed: routed('reports') }">
         <font-awesome icon="list"></font-awesome>

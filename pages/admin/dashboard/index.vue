@@ -4,12 +4,12 @@
       <h4 class="mr-4">Status do sistema:</h4>
       <div class="stat-status" :class="status"></div>
     </div>
-    <div class="row mb-4">
+    <div class="row mb-4" v-if="!$empty(usersStats)">
       <div class="col-sm-4">
         <div class="stat-box">
           <h6 class="mb-4">Usuários</h6>
           <div class="d-flex justify-content-end">
-            <h4>{{ user.all[0].count }}</h4>
+            <h4>{{ allUsersCount }}</h4>
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@
         <div class="stat-box">
           <h6 class="mb-4">Artistas</h6>
           <div class="d-flex justify-content-end">
-            <h4>{{ user.artists[0].count }}</h4>
+            <h4>{{ artistsCount }}</h4>
           </div>
         </div>
       </div>
@@ -25,23 +25,25 @@
         <div class="stat-box">
           <h6 class="mb-4">Organizadores de eventos</h6>
           <div class="d-flex justify-content-end">
-            <h4>{{ user.contractors[0].count }}</h4>
+            <h4>{{ contractorsCount }}</h4>
           </div>
         </div>
       </div>
     </div>
     <div class="mb-4">
-      <line-chart></line-chart>
+      <line-chart :chart-data="dailySignups" class="chart-wrapper"></line-chart>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import _ from 'lodash'
+import { mapGetters } from 'vuex'
 export default {
-  async asyncData({ store }) {
-    await store.dispatch('admin/loadStats')
-    
+  async asyncData({ store }) {    
+    await store.dispatch('admin/loadUsersStats')
+    await store.dispatch('admin/loadPresentationsStats')
+
     let status = 'active'
     try {
       await store.dispatch('admin/status')
@@ -58,7 +60,21 @@ export default {
     // new Chart
   },
   computed: {
-    ...mapState({ user: (state) => state.admin.stats.users[0] })
+    ...mapGetters('admin', ['usersStats']),
+    allUsersCount() {
+      return this.usersStats.all[0].count
+    },
+    contractorsCount() {
+      const contractors = _.filter(this.usersStats.roles, (role) => role._id === 'contractor')
+      return contractors[0].count
+    },
+    artistsCount() {
+      const artists = _.filter(this.usersStats.roles, (role) => role._id === 'artist')
+      return artists[0].count
+    },
+    dailySignups() {
+      return []
+    }
   }
 }
 </script>
@@ -85,7 +101,8 @@ export default {
     padding: 2 * $space;
   }
 
-  canvas {
-    height: 20vh;
+  .chart-wrapper {
+    max-height: 20vh;
+    max-width: 80vw;
   }
 </style>

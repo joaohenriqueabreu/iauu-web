@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
-  stats: [],
+  stats: {},
   user: {},
   users: [],
   presentations: []
@@ -11,8 +11,14 @@ export const state = () => ({
 
 export const mutations = {
   updateField,
-  set_stats(state, data) {
-    Vue.set(state, 'stats', data)
+  set_user_stats(state, data) {
+    Vue.set(state.stats, 'user', data)
+  },
+  set_users_stats(state, data) {
+    Vue.set(state.stats, 'users', data)
+  },
+  set_presentations_stats(state, data) {
+    Vue.set(state.stats, 'presentations', data)
   },
   set_user(state, data) {
     Vue.set(state, 'user', data)
@@ -29,9 +35,13 @@ export const actions = {
   async status() {
     await this.$axios.get('/')
   },
-  async loadStats({ commit }) {
-    const { data } = await this.$axios.get('admin/stats')
-    commit('set_stats', data)
+  async loadUsersStats({ commit }) {
+    const { data } = await this.$axios.get('admin/users/stats')
+    commit('set_users_stats', data)
+  },
+  async loadPresentationsStats({ commit }) {
+    const { data } = await this.$axios.get('admin/presentations/stats')
+    commit('set_presentations_stats', data)
   },
   async loadUsers({ commit }) {
     const { data } = await this.$axios.get('admin/users')
@@ -40,7 +50,7 @@ export const actions = {
   async loadUserStats({ commit }, id) {
     const { data } = await this.$axios.get(`admin/users/${id}/stats`)
     commit('set_user', data.user)
-    commit('set_stats', data.stats)
+    commit('set_user_stats', data.stats)
   },
   async loadPresentations({ commit }) {
     const { data } = await this.$axios.get('admin/presentations')
@@ -57,6 +67,14 @@ export const actions = {
   async activateUser({ commit }, { id }) {
     const { data } = await this.$axios.put(`admin/users/${id}`)
     commit('set_user', data)
+  },
+  async verifyUser({ commit }, { id }) {
+    const { data } = await this.$axios.put(`admin/users/${id}/verify`)
+    commit('set_user', data)
+  },
+  async resendVerification({ commit }, { id }) {
+    const { data } = await this.$axios.post(`admin/users/${id}/verify/resend`)
+    commit('set_user', data)
   }
 }
 
@@ -67,5 +85,7 @@ export const getters = {
   contractorUsers: (state) => _.filter(state.users, (user) => user.role === 'contractor'),
   pendingUsers: (state) => _.filter(state.users, (user) => user.status === 'pending'),
   activeUsers: (state) => _.filter(state.users, (user) => user.status === 'active'),
-  blockedUsers: (state) => _.filter(state.users, (user) => user.status === 'blocked')
+  blockedUsers: (state) => _.filter(state.users, (user) => user.status === 'blocked'),
+
+  usersStats: (state) => state.stats.users !== undefined ? state.stats.users[0] : {}
 }

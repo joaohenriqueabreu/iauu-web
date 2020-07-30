@@ -79,7 +79,7 @@ export default {
     ...mapActions('protected', ['forgotPassword']),
     async login() {
       try {
-        await this.$auth.loginWith('local', {
+        await this.$auth.loginWith('user', {
           data: this.credentials
         })
         this.$router.push('/artist/schedule')
