@@ -87,5 +87,11 @@ export const getters = {
   activeUsers: (state) => _.filter(state.users, (user) => user.status === 'active'),
   blockedUsers: (state) => _.filter(state.users, (user) => user.status === 'blocked'),
 
+  proposalPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'proposal'),
+  rejectedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'rejected'),
+  acceptedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted'),
+  completedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
+  cancelledPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'cancelled'),
+
   usersStats: (state) => state.stats.users !== undefined ? state.stats.users[0] : {}
 }

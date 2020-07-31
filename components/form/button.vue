@@ -1,7 +1,7 @@
 <template>
   <div>
     <fade-transition :duration="300" mode="out-in">
-      <div v-if="!submitted" key="submitting" class="button" :class="{ disabled }" @click="submit">
+      <div v-if="!submitted" key="submitting" class="button" :class="{ disabled, small }" @click="submit">
         <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
@@ -15,7 +15,8 @@
 <script>
 export default {
   props: {
-    disabled: { type: Boolean, default: false }
+    disabled: { type: Boolean, default: false },
+    small: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -66,7 +67,7 @@ input {
   border: none;
   outline: none;
   @include desktop {
-    min-width: 150px;
+    &:not(.small) { min-width: 150px; }
   }
 
   &.disabled {

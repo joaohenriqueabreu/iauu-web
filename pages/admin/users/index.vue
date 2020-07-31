@@ -29,7 +29,6 @@
         <thead>
           <th></th>
           <th></th>
-          <th class="text-center">Login</th>
           <th>Nome</th>
           <th>Email</th>
           <th>Admissão</th>
@@ -42,9 +41,6 @@
             <td class="text-center">
               <div class="status-badge icon-only" :class="user.status"><font-awesome :icon="statusIcon(user.status)"></font-awesome></div>
             </td>
-            <td class="text-center">
-              <font-awesome icon="play" class="login-as clickable" @click="handleLoginAs(user.id)"></font-awesome>
-            </td>
             <td class="py-3 cap horizontal middle">
               <span class="mr-2">{{ user.name }}</span>
             </td>
@@ -54,135 +50,25 @@
         </tbody>
       </table>
     </perfect-scrollbar>
-    <modal ref="modal">
-      <template v-slot:header v-if="!$empty(selectedUser)">
-        <div class="d-flex justify-content-between">
-          <div class="horizontal middle">
-            <avatar :src="selectedUser.photo" :username="selectedUser.name" class="mr-4"></avatar>
-            <div class="vertical middle">
-              <h4 class="mb-2">{{ selectedUser.name }}</h4>
-              <div class="horizontal middle">
-                <h6 class="status-badge mr-4" :class="selectedUser.status">{{ statusLabel(selectedUser.status) }}</h6>
-                <h6 class="verification-badge" :class="{ verified: selectedUser.status }">{{ verificationLabel(selectedUser.verification.is_verified) }}</h6>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex align-items-end">
-            <h5 class="role-badge" :class="userRole(selectedUser)">{{ roleLabel(selectedUser.role) }}</h5>
-          </div>
-        </div>
-      </template>
-      <template v-slot:main v-if="!$empty(selectedUser)">
-        <div>
-          <h4 class="mb-4">Informações</h4>
-          <div>ID</div>
-          <h6 class="mb-4">{{ selectedUser.id }}</h6>
-          <div>Email</div>
-          <h6 class="mb-4">{{ selectedUser.email }}</h6>
-          <div>Admissão</div>
-          <h6 class="mb-4">{{ selectedUser.created_at | date }}</h6>
-          <div class="mb-4">
-            <div>Último Login</div>
-            <h6 class="mb-4" v-if="!$empty(selectedUser.last_logged_in_at)">{{ selectedUser.last_logged_in_at | datetime }}</h6>
-            <h6 v-else>-</h6>
-          </div>
-          <div v-if="!isVerified" class="mb-4">
-            <div>Verificação</div>
-            <div class="horizontal middle">
-              <div class="vertical">
-                <h6 class="mr-4">Enviado em {{ selectedUser.verification.issued_at | datetime }}</h6>
-                <small class="error">Expira em {{ verifyTokenExpiry | datetime }}</small>
-              </div>
-              
-              <h6 class="clickable" @click="handleResendVerification"><u>Reenviar</u></h6>
-            </div>
-          </div>
-        </div>
-        <div v-if="!$empty(userStats)">
-          <hr>
-          <h4 class="mb-4">Estatísticas</h4>
-          <div class="row">
-            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].presentations)">
-              <div class="boxed">
-                <h5>{{ userStats[0].presentations[0].count }}</h5>
-                <h6>Apresentações</h6>
-              </div>
-            </div>
-            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].proposals)">
-              <div class="boxed">
-                <h5>{{ userStats[0].proposals[0].count }}</h5>
-                <h6>Propostas</h6>
-              </div>
-            </div>
-            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].rejected)">
-              <div class="boxed">
-                <h5>{{ userStats[0].rejected[0].count }}</h5>
-                <h6>Rejeitadas</h6>
-              </div>
-            </div>
-            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].accepted)">
-              <div class="boxed">
-                <h5>{{ userStats[0].accepted[0].count }}</h5>
-                <h6>Contratads</h6>
-              </div>
-            </div>
-            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].completed)">
-              <div class="boxed">
-                <h5>{{ userStats[0].completed[0].count }}</h5>
-                <h6>Realizadas</h6>
-              </div>
-            </div>
-            <div class="col-sm-3 mb-4" v-if="!$empty(userStats[0].cancelled)">
-              <div class="boxed">
-                <h5>{{ userStats[0].cancelled[0].count }}</h5>
-                <h6>Canceladas</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr>
-        <div>
-          <h4 class="mb-4">Gerenciar</h4>
-          <div class="row">
-            <div class="col-sm-4 mb-4" v-if="['active', 'pending'].includes(selectedUser.status)">
-              <form-button @action="handleBlockUser">Bloquear</form-button>
-            </div>
-            <div class="col-sm-4 mb-4" v-if="['blocked', 'pending'].includes(selectedUser.status)">
-              <form-button @action="handleActivateUser">Ativar</form-button>
-            </div>
-            <div class="col-sm-4 mb-4" v-if="!isVerified">
-              <form-button @action="handleVerification">Verificar usuário</form-button>
-            </div>
-            <div class="col-sm-4 mb-4">
-              <form-button @action="handleChangePassword">Alterar de senha</form-button>
-            </div>
-            <div class="col-sm-12 mb-4" v-if="selectedUser.role === 'contractor'">
-              <form-button @action="handleLoginAs(selectedUser.id)">Enviar proposta em nome de {{ selectedUser.name }}</form-button>
-            </div>
-          </div>
-        </div>
-      </template>
-    </modal>
+    <user-management ref="user" :user="selectedUser" :stats="userStats" @updated="loadUsers"></user-management>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import UserManagement from '@/components/admin/user'
 export default {
   async asyncData({ store }) {
     await store.dispatch('admin/loadUsers')
+  },
+  components: {
+    UserManagement
   },
   computed: {
     ...mapState({ allUsers: (state) => state.admin.users }),
     ...mapState({ selectedUser: (state) => state.admin.user }),
     ...mapState({ userStats: (state) => state.admin.stats.users }),
     ...mapGetters('admin', ['adminUsers', 'artistUsers', 'contractorUsers', 'pendingUsers', 'activeUsers', 'blockedUsers']),
-    isVerified() {
-      return !this.$empty(this.selectedUser.verification) && this.selectedUser.verification.is_verified
-    },
-    verifyTokenExpiry() {
-      return this.moment(this.selectedUser.verification.issued_at).add('1', 'days').toString()
-    }
   },
   data() {
     return {
@@ -200,10 +86,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('admin', ['loadUsers', 'loadUserStats', 'searchUsers', 'blockUser', 'activateUser', 'resendVerification', 'verifyUser']),
-    userRole(user) {
-      return this.selectedUser === ''
-    },
+    ...mapActions('admin', ['loadUsers', 'loadUserStats', 'searchUsers']),
     async handleSearchUsers() {
       if (this.$empty(this.searchTerm)) {
         await this.loadUsers()
@@ -264,39 +147,8 @@ export default {
     },
     async openUserManagementModal(user) {
       await this.loadUserStats(user.id)
-      this.$refs.modal.open()
+      this.$refs.user.openModal()
     },
-    async handleBlockUser() {
-      await this.blockUser(this.selectedUser)
-      this.$toast.success('Usuário bloqueado com sucesso')
-      await this.loadUsers()
-    },
-    async handleActivateUser() {
-      await this.activateUser(this.selectedUser)
-      this.$toast.success('Usuário ativado com sucesso')
-      await this.loadUsers()
-    },
-    async handleResendVerification() {
-      await this.resendVerification(this.selectedUser)
-      this.$toast.success('Email de verificação reenviado com sucesso')
-    },
-    async handleVerification() {
-      await this.verifyUser(this.selectedUser)
-      this.$toast.success('Usuário verificado com sucesso')
-      await this.loadUsers()
-    },
-    async handleChangePassword() {
-      await this.blockUser(this.selectedUser)
-      this.$toast.success('Link para troca de senha reenviado com sucesso')
-    },
-    async handleLoginAs(id) {
-      await this.$auth.loginWith('admin', {
-        data: {
-          token: this.$auth.user.admin_token,
-          id: id
-        }
-      })
-    }
   }
 }
 </script>

@@ -75,16 +75,6 @@ export default {
 //   max-height: 100%;
 //   position: relative;
 
-  .identifier {
-    text-transform: uppercase;
-    letter-spacing: $space / 2;
-    color: $layer5;
-    padding-right: 10 * $space;
-    font-weight: $bold;
-    border-bottom: 5px solid $layer3;
-    border-radius: rounded;
-  }
-
   .header {
     // @extend .full-width, .horizontal, .middle;
     // justify-content: space-between;
