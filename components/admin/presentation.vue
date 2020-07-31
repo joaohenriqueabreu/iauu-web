@@ -16,14 +16,14 @@
         <h4 class="mb-4">Informações</h4>
         <div>ID</div>
         <h6 class="mb-4">{{ presentation.id }}</h6>
-        <div class="vertical">
+        <div class="vertical mb-4">
           <div>Contratante</div>
-          <h6 class="mb-4">{{ presentation.contractor.user.name }}</h6>
+          <h6>{{ presentation.contractor.user.name }}</h6>
           <div>{{ presentation.contractor.user.email }}</div>
         </div>
-        <div class="vertical">
+        <div class="vertical mb-4">
           <div>Artista</div>
-          <h6 class="mb-4">{{ presentation.artist.user.name }}</h6>
+          <h6>{{ presentation.artist.user.name }}</h6>
           <div>{{ presentation.artist.user.email }}</div>
         </div>
         <div v-if="presentation.status === 'proposal'">
@@ -32,20 +32,25 @@
         <div v-else>
 
         </div>
-        <div v-if="presentation.status === 'proposal'">
+        <div v-if="presentation.status === 'proposal'" class="mb-4">
           <div>Datas da proposta</div>
           <div class="horizontal">
             <div v-for="(timeslot, index) in presentation.proposal.timeslots" :key="index" class="vertical">
-              <h6>{{ timeslot.start_dt | datetime }}</h6>
+              <h6 class="mr-2 horizontal">{{ timeslot.start_dt | datetime }} <span v-if="index < presentation.proposal.timeslots.length - 1">,</span></h6>
             </div>
           </div>
         </div>
-        <div v-else>
+        <div v-else class="mb-4">
           <div>Data da apresentação</div>
           <div class="horizontal">
-            <h6>{{ presentation.timeslot.start_dt | datetime }}</h6>
-            <h6>{{ presentation.timeslot.end_dt | datetime }}</h6>
+            <h6 class="mr-4"><font-awesome icon="play-circle" class="mr-2"></font-awesome> {{ presentation.timeslot.start_dt | datetime }}</h6>
+            <h6><font-awesome icon="stop-circle" class="mr-2"></font-awesome>{{ presentation.timeslot.end_dt | datetime }}</h6>
           </div>
+        </div>
+        <div v-if="presentation.status !== 'proposal'">
+          <div>Contratado</div>
+          <h6>{{ presentation.price | currency }}</h6>
+          <h6><font-awesome icon="clock" class="mr-2"></font-awesome> {{ presentation.duration }} horas</h6>
         </div>
       </div>
       <hr>
@@ -66,6 +71,12 @@
           </div>
         </div>
       </div> -->
+    </template>
+    <template v-slot:footer v-if="!$empty(presentation)">
+      <div class="horizontal center middle full-height">
+        <form-button @action="handleLoginAs(presentation.contractor.user.id)" class="mr-4">Fazer login como {{ presentation.contractor.user.name }}</form-button>
+        <form-button @action="handleLoginAs(presentation.artist.user.id)">Fazer login como {{ presentation.artist.user.name }}</form-button>
+      </div>
     </template>
   </modal>
 </template>
@@ -90,6 +101,14 @@ export default {
     // ...mapActions('admin', ['blockUser', 'activateUser', 'resendVerification', 'verifyUser']),
     openModal() {
       this.$refs.modal.open()
+    },
+    async handleLoginAs(id) {
+      await this.$auth.loginWith('admin', {
+        data: {
+          token: this.$auth.user.admin_token,
+          id: id
+        }
+      })
     }
   }
 }

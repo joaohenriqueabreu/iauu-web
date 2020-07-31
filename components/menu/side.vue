@@ -4,12 +4,11 @@
       <nuxt-link v-show="!minimized" to="/">
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
-      <div class="hide-mobile ">
+      <div class="hide-mobile hide-menu">
         <font-awesome
           class="minimize"
           :icon="minimized ? 'angle-double-right' : 'angle-double-left'"
-          @click="minimize"
-        >
+          @click="minimize">
         </font-awesome>
       </div>
     </header>
@@ -74,6 +73,16 @@ main {
   header {
     padding-top: 20px;
     height: 20vh;
+
+    .hide-menu {
+      background: $layer1;
+      position: absolute;
+      padding-left: 20px;
+      padding: 10px;
+      top: 5px;
+      right: -40px;
+      text-align: center;
+    }
   }
 
   main {
