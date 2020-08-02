@@ -16,6 +16,7 @@ export const actions = {
     return this.$axios.post('register', credentials)
   },
   async verify({ commit }, verifyToken) {
+    console.log('are we here?')
     const { data } = await this.$axios.post('verify', { token: verifyToken })
     commit('set_token', data)
   },
